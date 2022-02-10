@@ -22,6 +22,7 @@ public class BookingController {
     // Get All users
     @GetMapping("/users")
     public List<User> getAllUsers(){
+
         return userRepository.findAll();
     }
 
