@@ -1,5 +1,5 @@
-
 package app.model;
+
 import javax.persistence.Id;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,9 +41,8 @@ public class User {
         super();
     }
 
-    public User(Long id, String dob, String name, String surname, String ppsn, String address, String phone, String email, String password) {
+    public User(String dob, String name, String surname, String ppsn, String address, String phone, String email, String password) {
         super();
-        this.id = id;
         this.dob = dob;
         this.name = name;
         this.surname = surname;
