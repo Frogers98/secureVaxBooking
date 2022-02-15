@@ -1,0 +1,8 @@
+app\model\User.class
+app\repository\UserRepository.class
+app\exception\UserNotFoundException.class
+app\config\UserConfig.class
+app\exception\UserNotFoundAdvice.class
+app\controller\AdminController.class
+app\Application.class
+app\controller\UserController.class

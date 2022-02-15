@@ -5,58 +5,25 @@ import app.model.User;
 import app.exception.UserNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.PersistenceException;
 import javax.validation.Valid;
 import java.util.List;
 
-@Controller
-@RequestMapping(path = "users")
-public class UserController {
+@RestController
+@RequestMapping(path = "admin")
+public class AdminController {
 
     @Autowired
     UserRepository userRepository;
-
-    @GetMapping("")
-    public String showIndexPage() {
-        return "index";
-    }
-
-    @GetMapping("/register")
-    public String startRegistration(Model model) {
-        model.addAttribute("user", new User());
-        return "register";
-    }
-
-    @PostMapping("/register_attempt")
-    public String registerAttempt(@ModelAttribute("user") User newUser) {
-//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//        String encodedPassword = passwordEncoder.encode(newUser.getPassword());
-//        newUser.setPassword(encodedPassword);
-        System.out.println("Saving user ");
-        System.out.println("Name " + newUser.getName());
-        System.out.println("Last Name " + newUser.getSurname());
-        System.out.println("PPSN " +newUser.getPpsn());
-        System.out.println("DOB " +newUser.getDob());
-        System.out.println("email " +newUser.getEmail());
-        System.out.println("address " +newUser.getAddress());
-        System.out.println("encrypted password " +newUser.getPassword());
-        System.out.println("Phone num " +newUser.getPhone());
-        userRepository.save(newUser);
-        System.out.println("User saved");
-        return "registered_successfully";
-    }
 
     // Test connection to frontend
     @RequestMapping("/welcome")
     public String welcome(){
         return "Welcome!";
     }
-  /*https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial*/
+
     @RequestMapping("/login")
     public String login(){
         // Take username and password
@@ -94,3 +61,4 @@ public class UserController {
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
 }
+
