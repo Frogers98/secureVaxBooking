@@ -34,18 +34,9 @@ public class UserController {
 
     @PostMapping("/register_attempt")
     public String registerAttempt(@ModelAttribute("user") User newUser) {
-//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//        String encodedPassword = passwordEncoder.encode(newUser.getPassword());
-//        newUser.setPassword(encodedPassword);
-        System.out.println("Saving user ");
-        System.out.println("Name " + newUser.getName());
-        System.out.println("Last Name " + newUser.getSurname());
-        System.out.println("PPSN " +newUser.getPpsn());
-        System.out.println("DOB " +newUser.getDob());
-        System.out.println("email " +newUser.getEmail());
-        System.out.println("address " +newUser.getAddress());
-        System.out.println("encrypted password " +newUser.getPassword());
-        System.out.println("Phone num " +newUser.getPhone());
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(newUser.getPassword());
+        newUser.setPassword(encodedPassword);
         userRepository.save(newUser);
         System.out.println("User saved");
         return "registered_successfully";
@@ -64,6 +55,13 @@ public class UserController {
         // Login status= true
         // Redirect to my details page
         return "Welcome!";
+    }
+
+    @GetMapping("/listUsers")
+    public String listUsers(Model model) {
+        List<User> allUsers = userRepository.findAll();
+        model.addAttribute("listUsers", allUsers);
+        return "list_users";
     }
 
     @RequestMapping("/logout")
