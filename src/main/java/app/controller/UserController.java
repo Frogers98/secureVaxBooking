@@ -42,21 +42,6 @@ public class UserController {
         return "registered_successfully";
     }
 
-    // Test connection to frontend
-    @RequestMapping("/welcome")
-    public String welcome(){
-        return "Welcome!";
-    }
-  /*https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial*/
-    @RequestMapping("/login")
-    public String login(){
-        // Take username and password
-        // Check against database
-        // Login status= true
-        // Redirect to my details page
-        return "Welcome!";
-    }
-
     @GetMapping("/listUsers")
     public String listUsers(Model model) {
         List<User> allUsers = userRepository.findAll();
@@ -69,20 +54,6 @@ public class UserController {
         // Login status= false
         // Redirect to home page
         return "Welcome!";
-    }
-
-    // Get All users
-    /* Convert this to Admin only w frontend view OR delete before submission */
-    @GetMapping("/showAll")
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
-    }
-
-    @PostMapping("/createNew")
-    public User newUser(@Valid @RequestBody User newUser)  {
-        // Error check if user already exists - column unique now in model
-
-        return userRepository.save(newUser);
     }
 
     // Get a Single User

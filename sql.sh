@@ -44,4 +44,19 @@ CREATE TABLE IF NOT EXISTS Users(ID INT NOT NULL
 ,PRIMARY KEY (ID)
 ,FOREIGN KEY (NextAppointmentID) REFERENCES Appointments(ID)
 );
+
+CREATE TABLE IF NOT EXISTS `roles` (
+  `role_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`role_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `users_roles` (
+  `user_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  KEY `user_fk_idx` (`user_id`),
+  KEY `role_fk_idx` (`role_id`),
+  CONSTRAINT `role_fk` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`),
+  CONSTRAINT `user_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+);
 EOF
