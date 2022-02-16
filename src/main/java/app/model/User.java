@@ -1,9 +1,6 @@
 package app.model;
 
-import javax.persistence.Id;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -12,6 +9,7 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
+
     @NotBlank
     private String dob;
     @NotBlank
@@ -25,6 +23,7 @@ public class User {
     @NotBlank
     private String phone;
     @NotBlank
+    @Column(unique = true)
     private String email;
 
     private String nextApptId;
@@ -62,16 +61,32 @@ public class User {
         return dob;
     }
 
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSurname() {
         return surname;
     }
 
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
     public String getPpsn() {
         return ppsn;
+    }
+
+    public void setPpsn(String ppsn) {
+        this.ppsn = ppsn;
     }
 
     public String getAddress() {

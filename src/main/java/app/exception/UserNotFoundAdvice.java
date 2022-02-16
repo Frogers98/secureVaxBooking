@@ -10,7 +10,7 @@ public class UserNotFoundAdvice {
     @ResponseBody
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String bookNotFoundHandler(UserNotFoundException ex) {
+    String userNotFoundHandler(UserNotFoundException ex) {
         return ex.getMessage();
     }
 }
