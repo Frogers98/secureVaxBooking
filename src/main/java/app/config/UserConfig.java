@@ -1,5 +1,6 @@
 package app.config;
 
+import app.controller.AppointmentController;
 import app.controller.UserController;
 import app.model.User;
 import app.repository.UserRepository;
@@ -15,7 +16,7 @@ import java.util.List;
 public class UserConfig {
 
     @Bean
-    CommandLineRunner commandLineRunner(UserController controller) {
+    CommandLineRunner userRunner(UserController controller) {
         return args -> {
             User Mariam = new User(
                     "03-07-1990",
@@ -26,9 +27,11 @@ public class UserConfig {
                     "08711111",
                     "mariam.jamal@gmail.com",
                     "password"
+
             );
 
             controller.newUser(Mariam);
+            controller.bookAppointment();
 
         };
     }

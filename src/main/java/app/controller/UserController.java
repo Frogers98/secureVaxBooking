@@ -1,16 +1,25 @@
 package app.controller;
 
+
+import app.UserAptDetails;
+import app.model.Appointment;
 import app.repository.UserRepository;
 import app.model.User;
 import app.exception.UserNotFoundException;
+import org.hibernate.annotations.SQLUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.SqlParameterValue;
+import org.springframework.jdbc.object.SqlUpdate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.PersistenceException;
+import javax.naming.Name;
+import javax.sql.DataSource;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.sql.Types;
 import java.util.List;
 
 @Controller
@@ -18,7 +27,14 @@ import java.util.List;
 public class UserController {
 
     @Autowired
+    private DataSource dataSource;
+    @Autowired
     UserRepository userRepository;
+    @Autowired
+    AppointmentController appointmentController;
+
+    public UserController() {
+    }
 
     @GetMapping("")
     public String showIndexPage() {
@@ -83,6 +99,15 @@ public class UserController {
         return  userRepository.findAll();
     }
 
+    // Get a Single User
+    // currently redundant
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable(value = "id") Long userId)
+            throws UserNotFoundException {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+    }
+
     // altered function to only save user if email not already taken
     @PostMapping
     public void newUser(@Valid @RequestBody User newUser) {
@@ -110,7 +135,7 @@ public class UserController {
     public Boolean getUserByPPSN(String ppsn) {
         var users = getAllUsers();
 
-        var user =  users.stream()
+        var user = users.stream()
                 .filter(t -> ppsn.equals(t.getPpsn()))
                 .findFirst()
                 .orElse(null);
@@ -119,11 +144,15 @@ public class UserController {
         else return true;
     }
 
-    // Get a Single User
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable(value = "id") Long userId)
-            throws UserNotFoundException {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+    public void bookAppointment() throws UserNotFoundException {
+//        userRepository.updateUser(12, 3L);
+        User queryUser = userRepository.findByID(3L);
+        System.out.println(queryUser.getName());
+        showAppointment(3L);
+    }
+
+    public void showAppointment(Long userId) throws UserNotFoundException {
+        List<UserAptDetails> queryUser = userRepository.findAptDetails(userId);
+        System.out.println(queryUser);
     }
 }

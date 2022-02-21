@@ -9,7 +9,6 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
-
     @NotBlank
     private String dob;
     @NotBlank
@@ -25,8 +24,9 @@ public class User {
     @NotBlank
     @Column(unique = true)
     private String email;
-
-    private String nextApptId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "apt_id")
+    private Appointment apt_id;
 
     private String dose1Date;
 
@@ -40,7 +40,14 @@ public class User {
         super();
     }
 
-    public User(String dob, String name, String surname, String ppsn, String address, String phone, String email, String password) {
+    public User(String dob,
+                String name,
+                String surname,
+                String ppsn,
+                String address,
+                String phone,
+                String email,
+                String password) {
         super();
         this.dob = dob;
         this.name = name;
@@ -113,12 +120,13 @@ public class User {
         this.email = email;
     }
 
-    public String getNextApptId() {
-        return nextApptId;
+    public Appointment getNextApptId() {
+        return this.apt_id;
     }
 
-    public void setNextApptId(String apptId) {
-        this.nextApptId = apptId;
+    public void setNextApptId(Appointment appointment) {
+
+        this.apt_id = appointment;
     }
 
     public String getDose1Date() {
