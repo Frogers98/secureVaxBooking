@@ -127,4 +127,14 @@ public class UserController {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
+
+    @GetMapping("/403")
+    public String accessDenied() {
+        return "403";
+    }
+
+    @GetMapping("/edit")
+    public String editUsers() {
+        return "edit_users";
+    }
 }
