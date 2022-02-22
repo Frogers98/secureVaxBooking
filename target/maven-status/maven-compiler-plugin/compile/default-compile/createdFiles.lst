@@ -1,11 +1,16 @@
 app\config\WebSecurityConfig.class
 app\exception\UserNotFoundException.class
+app\model\Reply.class
 app\config\UserConfig.class
 app\exception\UserNotFoundAdvice.class
+app\repository\ReplyRepository.class
+app\repository\PostRepository.class
 app\controller\UserController.class
 app\model\User.class
 app\repository\UserRepository.class
+app\model\Post.class
 app\security\CustomUserDetailsService.class
+app\controller\ForumController.class
 app\controller\AdminController.class
 app\security\CustomUserDetails.class
 app\Application.class
