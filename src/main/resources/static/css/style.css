@@ -89,7 +89,7 @@ section{
     color: #444;
     text-align: center;
     padding: 15em 0;
-    background-image: url("images/vaccine-banner.png"),
+    background-image: url("static/images/vaccine-banner.png"),
     radial-gradient(#eeee, #4FA7AF);
     background-blend-mode: inherit;
     background-attachment: fixed;

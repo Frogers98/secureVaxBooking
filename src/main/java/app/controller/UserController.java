@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.PersistenceException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -22,8 +21,8 @@ public class UserController {
     UserRepository userRepository;
 
     @GetMapping("")
-    public String showIndexPage() {
-        return "index";
+    public String showRegLoginLandingPage() {
+        return "reg_login_landing";
     }
 
     @GetMapping("/register")
@@ -36,10 +35,10 @@ public class UserController {
     public String registerAttempt(@ModelAttribute("user") User newUser) {
         if (getUserByEmail(newUser.getEmail())) {
             System.out.println("An account associated with this email address has already been created.");
-            return "index";
+            return "reg_login_landing";
         }else if (getUserByPPSN(newUser.getPpsn())) {
             System.out.println("An account associated with this PPS number has already been created.");
-            return "index";
+            return "reg_login_landing";
         } else {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
