@@ -1,4 +1,6 @@
-package app.model;
+package app.model.forum;
+
+import app.model.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
