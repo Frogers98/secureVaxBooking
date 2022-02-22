@@ -28,3 +28,4 @@ src/main/resources/application.properties
 # target directory 
 target/**
 target/classes/application.properties
+.idea/*

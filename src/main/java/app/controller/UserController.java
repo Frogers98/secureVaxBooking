@@ -55,7 +55,7 @@ public class UserController {
     public String welcome(){
         return "Welcome!";
     }
-  /*https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial*/
+
     @RequestMapping("/login")
     public String login(){
         // Take username and password
