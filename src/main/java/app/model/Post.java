@@ -1,7 +1,5 @@
 package app.model;
 
-import app.model.User;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -26,8 +24,8 @@ public class Post {
         super();
     }
 
-    public Post(User user_id, String post_title, String post_content) {
-        this.user_id = user_id;
+    public Post(User user, String post_title, String post_content) {
+        this.user = user;
         this.post_title = post_title;
         this.post_content = post_content;
     }
@@ -40,12 +38,12 @@ public class Post {
         this.post_id = post_id;
     }
 
-    public User getUser_id() {
-        return user_id;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser_id(User user_id) {
-        this.user_id = user_id;
+    public void setUser(User user_id) {
+        this.user = user_id;
     }
 
     public String getPost_title() {

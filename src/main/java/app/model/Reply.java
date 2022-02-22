@@ -1,7 +1,5 @@
 package app.model;
 
-import app.model.Post;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -25,8 +23,8 @@ public class Reply {
         super();
     }
 
-    public Reply(Post post_id, String reply_content) {
-        this.post_id = post_id;
+    public Reply(Post post, String reply_content) {
+        this.post = post;
         this.reply_content = reply_content;
     }
 
@@ -38,12 +36,12 @@ public class Reply {
         this.reply_id = reply_id;
     }
 
-    public Post getPost_id() {
-        return post_id;
+    public Post getPost() {
+        return post;
     }
 
-    public void setPost_id(Post post_id) {
-        this.post_id = post_id;
+    public void setPost(Post post_id) {
+        this.post = post_id;
     }
 
     public String getReply_content() {
