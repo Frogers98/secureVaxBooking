@@ -14,7 +14,7 @@ public class Post {
     private Long post_id;
 
     @ManyToOne
-    private User user_id;
+    private User user;
 
     @NotBlank
     private String post_title;
