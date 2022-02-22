@@ -1,0 +1,129 @@
+*,
+*::before,
+*::after{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    font-family: 'Noto Sans JP',
+    sans-serif;
+    line-height: 1.6;
+}
+
+img{
+    max-width: 100%;
+    display: block;
+}
+
+h1,
+h2,
+h3,
+p{
+    margin: 0;
+    color: #444;
+}
+
+.container{
+    width: 85%;
+    max-width: 65em;
+    margin: 0 auto;
+}
+
+.split{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.split> * {
+    flex-basis: 30%;
+    min-width: 15em;
+}
+
+
+.spacing > * + *{
+    margin-top: var(--spacer, 2rem)
+}
+
+.btn{
+    display: inline-block;
+    text-decoration: none;
+    color: var(--clr-text, #fff);
+    padding: .5em 1.25em;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: var(--clr-accent, blue);
+    border-radius: .25em;
+    transition:
+            transform 250ms ease-in-out,
+            opacity 250ms linear;
+}
+
+.btn:hover,
+.btn:focus{
+    transform: scale(1.1);
+    opacity: .9;
+}
+
+.primary-title{
+    font-size: 4rem;
+    font-size: clamp(3rem, 5vw + 1rem,4.5rem);
+    line-height: 1;
+    text-transform: uppercase;
+}
+.section-title{
+    text-align: center;
+    font-size: clamp(2.5rem, 5vw + 1rem, 4rem);
+    line-height: 1;
+    color: #17353d;
+    padding-bottom: 5rem;
+}
+section{
+    padding: 6em 0;
+}
+.benefits{
+    background: #eeee;
+}
+
+.hero{
+    color: #444;
+    text-align: center;
+    padding: 15em 0;
+    background-image: url("images/vaccine-banner.png"),
+    radial-gradient(#eeee, #4FA7AF);
+    background-blend-mode: inherit;
+    background-attachment: fixed;
+}
+
+.featured__item {
+    display: block;
+    gap: 1em;
+    transform: scale(0.95);
+    transition: transform 250ms ease-in-out;
+    text-decoration: none;
+    color: #333;
+    text-align: center;
+}
+
+span{
+    display: block;
+    font-weight: 700;
+    font-size: 2.5rem;
+}
+
+.featured__item:hover,
+.featured__item:focus{
+    transform: scale(1);
+}
+
+/*to revisit*/
+.featured__item::after{
+    content: '';
+    position: absolute;
+    top: 2%;
+    left: 5%;
+    padding: 85% 85% 0 0;
+    background: #4fa7af;
+    border-radius: 50%;
+    z-index: -1;
+}
