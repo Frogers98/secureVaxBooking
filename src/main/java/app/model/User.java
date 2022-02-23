@@ -25,6 +25,10 @@ public class User {
     @NotBlank
     private String phone;
     @NotBlank
+    private String nationality;
+    @NotBlank
+    private String sex;
+    @NotBlank
     @Column(unique = true)
     private String email;
 
@@ -44,7 +48,7 @@ public class User {
         super();
     }
 
-    public User(String dob, String name, String surname, String ppsn, String address, String phone, String email, String password) {
+    public User(String dob, String name, String surname, String ppsn, String address, String phone, String nationality,String sex, String email, String password) {
         super();
         this.dob = dob;
         this.name = name;
@@ -52,6 +56,8 @@ public class User {
         this.ppsn = ppsn;
         this.address = address;
         this.phone = phone;
+        this.nationality = nationality;
+        this.sex = sex;
         this.email = email;
         this.password = password;
     }
@@ -123,6 +129,22 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public String getEmail() {
