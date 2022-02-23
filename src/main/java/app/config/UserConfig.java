@@ -30,9 +30,7 @@ public class UserConfig {
 
             );
 
-            controller.newUser(Mariam);
-            controller.bookAppointment();
-
+            controller.registerAttempt(Mariam);
         };
     }
 }

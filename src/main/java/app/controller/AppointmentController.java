@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.exception.UserNotFoundException;
 import app.model.Appointment;
 import app.model.User;
 import app.repository.AppointmentRepository;
@@ -7,13 +8,13 @@ import org.hibernate.service.spi.InjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 
@@ -31,30 +32,28 @@ public class AppointmentController {
     public List<Appointment> getAllAppointments() { return appointmentRepository.findAll(); }
 
     @PostMapping
-    public void newAppointment(@Valid @RequestBody
-                               String vaccine,
-                               String dose,
-                               String date,
-                               String time,
-                               String venue) {
-
-        Appointment apt = new Appointment(vaccine,
-                                            dose,
-                                            date,
-                                            time,
-                                            venue);
-
-        appointmentRepository.save(apt);
+    public String saveAppointment(Appointment appointment) {
+        if (getAptById(appointment.getVenue(),
+                appointment.getDate(),
+                appointment.getTime())) {
+            System.out.println("An appointment has already been created at this time and date for " + appointment.getVenue() + ".");
+            // should probably replace this with an error page of some form
+            return "index";
+        }
+        appointmentRepository.save(appointment);
+        System.out.println("Appointment booked.");
+        return "appointment_booked";
     }
 
-    public Appointment getAptById(Long apt_id) {
-        var apts = getAllAppointments();
+    // a check to ensure repeat appointments at same time/day/venue
+    public Boolean getAptById(String venue, String time, String date) {
+        var appointments = getAllAppointments();
+        var appointmentCheck = appointments.stream()
+                .filter(v -> venue.equals(v.getVenue()))
+                .filter(v -> time.equals(v.getTime()))
+                .filter(v -> date.equals(v.getDate()));
 
-        var user =  apts.stream()
-                .filter(t -> apt_id.equals(t.getApt_id()))
-                .findFirst()
-                .orElse(null);
-
-        return user;
+        if (appointmentCheck == null) return false;
+        else return true;
     }
 }

@@ -2,24 +2,15 @@ package app.controller;
 
 
 import app.UserAptDetails;
-import app.model.Appointment;
+import app.repository.UserAptDetailsRepository;
 import app.repository.UserRepository;
 import app.model.User;
 import app.exception.UserNotFoundException;
-import org.hibernate.annotations.SQLUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.SqlParameterValue;
-import org.springframework.jdbc.object.SqlUpdate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.naming.Name;
-import javax.sql.DataSource;
-import javax.transaction.Transactional;
-import javax.validation.Valid;
-import java.sql.Types;
 import java.util.List;
 
 @Controller
@@ -27,9 +18,9 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private DataSource dataSource;
-    @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserAptDetailsRepository userAptDetailsRepository;
     @Autowired
     AppointmentController appointmentController;
 
@@ -51,9 +42,11 @@ public class UserController {
     public String registerAttempt(@ModelAttribute("user") User newUser) {
         if (getUserByEmail(newUser.getEmail())) {
             System.out.println("An account associated with this email address has already been created.");
+            // should probably replace this with an error page of some form
             return "index";
         }else if (getUserByPPSN(newUser.getPpsn())) {
             System.out.println("An account associated with this PPS number has already been created.");
+            // should probably replace this with an error page of some form
             return "index";
         } else {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -70,6 +63,7 @@ public class UserController {
     public String welcome(){
         return "Welcome!";
     }
+
   /*https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial*/
     @RequestMapping("/login")
     public String login(){
@@ -108,17 +102,6 @@ public class UserController {
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
-    // altered function to only save user if email not already taken
-    @PostMapping
-    public void newUser(@Valid @RequestBody User newUser) {
-        if (getUserByEmail(newUser.getEmail()))
-            System.out.println("An account associated with this email address has already been created.");
-        else if (getUserByPPSN(newUser.getPpsn()))
-            System.out.println("An account associated with this PPS number has already been created.");
-        else
-            userRepository.save(newUser);
-    }
-
     // I will try to consolidate this and the email check into one method
     public Boolean getUserByEmail(String email) {
         var users = getAllUsers();
@@ -144,15 +127,20 @@ public class UserController {
         else return true;
     }
 
-    public void bookAppointment() throws UserNotFoundException {
-//        userRepository.updateUser(12, 3L);
-        User queryUser = userRepository.findByID(3L);
+    // should this not be getMapping? I'm not sure
+    @GetMapping("/apt/{id}/{apt_id}")
+    public String bookAppointment(@PathVariable (value = "id") Long userId,
+                                  @PathVariable (value = "apt_id") Long apt_id) throws UserNotFoundException {
+        User queryUser = userRepository.findByID(userId);
         System.out.println(queryUser.getName());
+        userRepository.updateUser(apt_id, userId);
         showAppointment(3L);
+        return "appointment_booked";
     }
 
+    // return appointment details of a user - incomplete pending team decisions on functionality
     public void showAppointment(Long userId) throws UserNotFoundException {
-        List<UserAptDetails> queryUser = userRepository.findAptDetails(userId);
-        System.out.println(queryUser);
+        UserAptDetails userAptDetails = userAptDetailsRepository.findAptDetails(userId);
+        System.out.println(userAptDetails.getApt_id() + " " + userAptDetails.getVenue());
     }
 }

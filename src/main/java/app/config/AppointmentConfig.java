@@ -13,12 +13,15 @@ public class AppointmentConfig {
     @Bean
     CommandLineRunner aptRunner(AppointmentController aptController) {
         return args -> {
-            aptController.newAppointment(
+            Appointment appointment = new Appointment(
                     "pfizer",
                     "Dose1",
                     "03-01-2021",
                     "16:00",
                     "Dublin");
+
+            aptController.saveAppointment(appointment);
         };
+
     }
 }
