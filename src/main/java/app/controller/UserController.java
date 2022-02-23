@@ -132,7 +132,7 @@ public class UserController {
     public String bookAppointment(@PathVariable (value = "id") Long userId,
                                   @PathVariable (value = "apt_id") Long apt_id) throws UserNotFoundException {
         User queryUser = userRepository.findByID(userId);
-        System.out.println(queryUser.getName());
+        System.out.println("Altering user: " + queryUser.getName());
         userRepository.updateUser(apt_id, userId);
         showAppointment(3L);
         return "appointment_booked";
