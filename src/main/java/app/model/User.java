@@ -64,6 +64,10 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
     // Attributes need getters and setters
     public Set<Role> getRoles() {
         return roles;

@@ -4,6 +4,7 @@ import app.repository.UserRepository;
 import app.model.User;
 import app.exception.UserNotFoundException;
 
+import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,9 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("")
     public String showRegLoginLandingPage() {
@@ -43,7 +47,8 @@ public class UserController {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
             newUser.setPassword(encodedPassword);
-            userRepository.save(newUser);
+//            userRepository.save(newUser);
+            userService.registerDefaultUser(newUser);
             System.out.println("User saved");
             return "registered_successfully";
         }
