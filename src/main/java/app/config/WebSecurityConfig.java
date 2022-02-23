@@ -48,16 +48,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/users/listUsers").authenticated()
                 .antMatchers("/users/edit").hasAuthority("ADMIN")
+                .antMatchers("/users/listUsers").hasAuthority("ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .usernameParameter("email")
-                .defaultSuccessUrl("/users/listUsers")
+                .defaultSuccessUrl("/")
                 .permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/").permitAll()
                 .and()
-                .exceptionHandling().accessDeniedPage("/users/403");
+                .exceptionHandling().accessDeniedPage("/403");
     }
 
 }

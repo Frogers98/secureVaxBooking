@@ -34,7 +34,7 @@
             <div class="form-group row">
                 <label class="col-4 col-form-label">DOB: </label>
                 <div class="col-8">
-                    <input type="date" th:field="*{dob}" class="form-control" th:required="required" />
+                    <input id="birthday" max="2022-01-01" min="1900-01-01'"  type="date" th:field="*{dob}" class="form-control" th:required="required" />
                 </div>
             </div>
             <div class="form-group row">
@@ -91,4 +91,23 @@
     </form>
 </div>
 </body>
+
+<script>
+    var today = new Date();
+    var yyyy = today.getFullYear();
+    var mm = today.getMonth() + 1; // Add one to compensate for January being 0
+    var dd = today.getDate();
+
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    ageLimit = yyyy -18;
+    newMax = ageLimit + '-' + mm + '-' + dd;
+    document.getElementById("birthday").setAttribute("max", newMax);
+
+</script>
 </html>
