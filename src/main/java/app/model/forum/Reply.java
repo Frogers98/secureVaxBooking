@@ -4,6 +4,7 @@ import app.model.forum.Post;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 @Entity
 @Table(name = "replies")
@@ -21,6 +22,9 @@ public class Reply {
     @NotBlank
     private String reply_content;
 
+    @NotBlank
+    private Date reply_date;
+
     public Reply() {
         super();
     }
@@ -28,6 +32,7 @@ public class Reply {
     public Reply(Post post, String reply_content) {
         this.post = post;
         this.reply_content = reply_content;
+        this.reply_date = new Date();
     }
 
     public Long getReply_id() {
@@ -52,5 +57,13 @@ public class Reply {
 
     public void setReply_content(String reply_content) {
         this.reply_content = reply_content;
+    }
+
+    public Date getReply_date() {
+        return reply_date;
+    }
+
+    public void setReply_date(Date reply_date) {
+        this.reply_date = reply_date;
     }
 }

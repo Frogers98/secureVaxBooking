@@ -4,6 +4,7 @@ import app.model.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 @Entity
 @Table(name = "posts")
@@ -22,6 +23,9 @@ public class Post {
     @NotBlank
     private String post_content;
 
+    @NotBlank
+    private Date post_date;
+
     public Post() {
         super();
     }
@@ -30,6 +34,7 @@ public class Post {
         this.user = user;
         this.post_title = post_title;
         this.post_content = post_content;
+        this.post_date = new Date();
     }
 
     public Long getPost_id() {
@@ -62,5 +67,13 @@ public class Post {
 
     public void setPost_content(String post_content) {
         this.post_content = post_content;
+    }
+
+    public Date getPost_date() {
+        return post_date;
+    }
+
+    public void setPost_date(Date post_date) {
+        this.post_date = post_date;
     }
 }

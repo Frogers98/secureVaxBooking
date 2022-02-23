@@ -1,12 +1,16 @@
 package app.controller;
 
+import app.exception.PostNotFoundException;
+import app.exception.UserNotFoundException;
+import app.model.User;
+import app.model.forum.Post;
 import app.repository.forum.PostRepository;
 import app.repository.forum.ReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("forum")
@@ -18,11 +22,22 @@ public class ForumController {
     @Autowired
     PostRepository postRepository;
 
+    // Add a new post
+    @PostMapping
+    public void newPost(@Valid @RequestBody Post newPost) {
+        postRepository.save(newPost);
+    }
 
+    // Get all posts
     @GetMapping
-    @ResponseBody
-    public String test() {
-        return "test";
+    public @ResponseBody Iterable<Post> getPosts() {
+        return postRepository.findAll();
+    }
+
+    // Get a particular post by id
+    @GetMapping("{id}")
+    public  Post getPost(@PathVariable(value = "id") long id) throws PostNotFoundException {
+        return postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
     }
 
 
