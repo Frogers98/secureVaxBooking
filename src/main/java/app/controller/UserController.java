@@ -3,13 +3,13 @@ package app.controller;
 import app.repository.UserRepository;
 import app.model.User;
 import app.exception.UserNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.PersistenceException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -21,8 +21,8 @@ public class UserController {
     UserRepository userRepository;
 
     @GetMapping("")
-    public String showIndexPage() {
-        return "index";
+    public String showRegLoginLandingPage() {
+        return "reg_login_landing";
     }
 
     @GetMapping("/register")
@@ -35,10 +35,10 @@ public class UserController {
     public String registerAttempt(@ModelAttribute("user") User newUser) {
         if (getUserByEmail(newUser.getEmail())) {
             System.out.println("An account associated with this email address has already been created.");
-            return "index";
+            return "reg_login_landing";
         }else if (getUserByPPSN(newUser.getPpsn())) {
             System.out.println("An account associated with this PPS number has already been created.");
-            return "index";
+            return "reg_login_landing";
         } else {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
@@ -54,13 +54,7 @@ public class UserController {
     public String welcome(){
         return "Welcome!";
     }
-<<<<<<< HEAD
-    /*https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial*/
-=======
 
-    /*https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial*/
-
->>>>>>> fafb2befbff1dee7a016f718850b44a99c46ff59
     @RequestMapping("/login")
     public String login(){
         // Take username and password
@@ -131,5 +125,15 @@ public class UserController {
             throws UserNotFoundException {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
+    }
+
+    @GetMapping("/403")
+    public String accessDenied() {
+        return "403";
+    }
+
+    @GetMapping("/edit")
+    public String editUsers() {
+        return "edit_users";
     }
 }

@@ -2,6 +2,8 @@ package app.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -35,6 +37,8 @@ public class User {
     private String lastLogin;
     @NotBlank
     private String password;
+//
+//    private boolean enabled;
 
     public User() {
         super();
@@ -52,7 +56,23 @@ public class User {
         this.password = password;
     }
 
-    // Some attributes don't have setter methods as they should immutable once created initially (e.g. ppsn, name etc.)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
+    // Attributes need getters and setters
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     public Long getId() {
         return id;
     }
@@ -152,4 +172,12 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+//
+//    public boolean isEnabled() {
+//        return enabled;
+//    }
+//
+//    public void setEnabled(boolean enabled) {
+//        this.enabled = enabled;
+//    }
 }

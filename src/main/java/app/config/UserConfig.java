@@ -25,7 +25,7 @@ public class UserConfig {
                     "Sample Address",
                     "08711111",
                     "mariam.jamal@gmail.com",
-                    "password"
+                    "$2a$10$lnfKWMIrIxvHrwHOdwDUDuTLfVF8e1HGmfLiezCtFb0jpciLYrmoi"
             );
 
             controller.newUser(Mariam);

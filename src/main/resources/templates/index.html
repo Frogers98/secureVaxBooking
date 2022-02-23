@@ -1,19 +1,70 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="ISO-8859-1">
-    <title>Users Index Page</title>
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
-    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;900&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="container text-center">
-    <h1>Please Register or Login to Continue</h1>
-    <h3><a th:href="@{/users/showAll}">List of Users</a></h3>
-    <h3><a th:href="@{/users/register}">Register</a></h3>
-    <h3><a th:href="@{/login}">Login</a></h3>
-</div>
+<header class="hero">
+    <img style="visibility: hidden; display: none" th:src="@{/images/vaccine-banner.png}" alt="" class="hero">
+
+    <div class="container spacing">
+        <h1 class="primary-title">Secure your vaccination with HSE's Best App</h1>
+        <p>    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+        <a a th:href="@{/users/}" class="btn">Log In or Register Now</a>
+    </div>
+</header>
+
+<main>
+    <section class="benefits">
+        <div class="container">
+            <h2 class="section-title">Benefits</h2>
+            <div class="split">
+                <a href="#" class="featured__item">
+                    <img th:src="@{/images/mario.png}" alt="" class="featured-img"><span class="price">+</span>Check Your Health</p>
+                </a>
+                <a href="#" class="featured__item">
+                    <img th:src="@{/images/vaccine.png}" alt="" class="featured-img">
+                    <p class="featured__details"><span class="price">+</span>Book Your Vaccine</p>
+                </a>
+                <a href="#" class="featured__item">
+                    <img th:src="@{/images/mario-fire-suit.png}" alt="" class="featured-img">
+                    <p class="featured__details"><span class="price">=</span>Be Stronger & Ask Anything</p>
+                </a>
+            </div>
+        </div>
+    </section>
+    <section class="social-proof">
+        <div class="container">
+            <h2 class="section-title">Our proofs</h2>
+
+            <article class="proof">
+                <img th:src="@{/images/stats-general.png}" alt="" class="product__image">
+                <h3 class="proof__title"></h3>
+                <p class="product__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                <a href="" class="btn">Read more</a>
+            </article>
+
+            <article class="proof">
+                <img th:src="@{/images/stats-sex.png}" alt="" class="product__image">
+                <h3 class="proof__title"></h3>
+                <p class="product__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                <a href="" class="btn">Read more</a>
+            </article>
+
+            <article class="proof">
+                <img th:src="@{/images/stats-bytype.png}" alt="" class="product__image">
+                <h3 class="proof__title"></h3>
+                <p class="product__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                <a href="" class="btn">Read more</a>
+            </article>
+        </div>
+    </section>
+
+
+</main>
 
 </body>
 </html>
