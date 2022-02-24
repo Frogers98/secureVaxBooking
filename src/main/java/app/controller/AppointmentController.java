@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,7 +34,7 @@ public class AppointmentController {
 
     @PostMapping
     public String saveAppointment(Appointment appointment) {
-        if (getAptById(appointment.getVenue(),
+        if (checkAptAlreadyExists(appointment.getVenue(),
                 appointment.getDate(),
                 appointment.getTime())) {
             System.out.println("An appointment has already been created at this time and date for " + appointment.getVenue() + ".");
@@ -46,14 +47,13 @@ public class AppointmentController {
     }
 
     // a check to ensure repeat appointments at same time/day/venue
-    public Boolean getAptById(String venue, String time, String date) {
+    public Boolean checkAptAlreadyExists(String venue, String date, String time) {
         var appointments = getAllAppointments();
-        var appointmentCheck = appointments.stream()
-                .filter(v -> venue.equals(v.getVenue()))
-                .filter(v -> time.equals(v.getTime()))
-                .filter(v -> date.equals(v.getDate()));
-
-        if (appointmentCheck == null) return false;
-        else return true;
+        for (var apt: appointments) {
+            if (Objects.equals(apt.getVenue(), venue) &&
+                    Objects.equals(apt.getTime(), time) &&
+                    Objects.equals(apt.getDate(), date)) return true;
+        }
+        return false;
     }
 }
