@@ -5,6 +5,8 @@ import app.repository.UserAptDetailsRepository;
 import app.repository.UserRepository;
 import app.model.User;
 import app.exception.UserNotFoundException;
+
+import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,9 @@ public class UserController {
 
     public UserController() {
     }
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("")
     public String showRegLoginLandingPage() {
@@ -52,9 +57,10 @@ public class UserController {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
             newUser.setPassword(encodedPassword);
-            userRepository.save(newUser);
+//            userRepository.save(newUser);
+            userService.registerDefaultUser(newUser);
             System.out.println("User saved");
-            return "registered_successfully";
+            return "success_reg";
         }
     }
 
@@ -128,6 +134,14 @@ public class UserController {
         else return true;
     }
 
+    // Get a Single User
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable(value = "id") Long userId)
+            throws UserNotFoundException {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+    }
+
     // should this not be getMapping? I'm not sure
     // register a user id with an appointment
     @GetMapping("/apt/{id}/{apt_id}")
@@ -144,11 +158,6 @@ public class UserController {
     public void showAppointment(Long userId) throws UserNotFoundException {
         UserAptDetails userAptDetails = userAptDetailsRepository.findAptDetails(userId);
         System.out.println(userAptDetails.getApt_id() + " " + userAptDetails.getVenue());
-    }
-
-    @GetMapping("/403")
-    public String accessDenied() {
-        return "403";
     }
 
     @GetMapping("/edit")
