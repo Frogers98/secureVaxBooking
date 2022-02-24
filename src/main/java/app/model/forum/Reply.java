@@ -15,6 +15,7 @@ public class Reply {
     private Long reply_id;
 
     @OneToOne
+    @JoinColumn(name="post_id")
     private Post post;
 //    @OneToOne
 //    private Admin admin_id;

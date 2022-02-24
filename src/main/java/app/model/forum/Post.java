@@ -20,6 +20,9 @@ public class Post {
     @JoinColumn(name="user_id")
     private User user;
 
+    @OneToOne(mappedBy = "post")
+    private Reply reply;
+
     @NotBlank
     private String post_title;
 
