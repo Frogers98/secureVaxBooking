@@ -14,6 +14,7 @@ public class Reply {
     @GeneratedValue
     private Long reply_id;
 
+    //post_id column that represents the primary key in the posts column
     @OneToOne
     @JoinColumn(name="post_id")
     private Post post;
