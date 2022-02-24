@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
-    @Query("SELECT r FROM Reply r WHERE r.post_id = ?1")
+    @Query("SELECT r FROM Reply r WHERE r.post = ?1")
     Reply findByPostId(long post_id);
 }
