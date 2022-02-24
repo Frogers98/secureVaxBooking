@@ -25,7 +25,7 @@ public class Reply {
     private String reply_content;
 
     @NotBlank
-    private Date reply_date;
+    private String reply_date;
 
     public Reply() {
         super();
@@ -34,7 +34,7 @@ public class Reply {
     public Reply(Post post, String reply_content) {
         this.post = post;
         this.reply_content = reply_content;
-        this.reply_date = new Date();
+        this.reply_date = "2000-01-01";
     }
 
     public Long getReply_id() {
@@ -61,11 +61,11 @@ public class Reply {
         this.reply_content = reply_content;
     }
 
-    public Date getReply_date() {
+    public String getReply_date() {
         return reply_date;
     }
 
-    public void setReply_date(Date reply_date) {
+    public void setReply_date(String reply_date) {
         this.reply_date = reply_date;
     }
 }

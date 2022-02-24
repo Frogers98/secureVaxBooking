@@ -4,9 +4,12 @@
 //import app.controller.UserController;
 //import app.model.User;
 //import app.model.forum.Post;
+//import app.model.forum.Reply;
 //import org.springframework.boot.CommandLineRunner;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
+//
+//import javax.validation.Valid;
 //
 //@Configuration
 //public class ForumConfig {
@@ -36,16 +39,34 @@
 ////            );
 //
 //
-//            user.setUser_id(1L);
+////            user.setUser_id(1L);
 //
 //            Post newPost = new Post(
 //                    user,
-//                    "Third post",
-//                    "Post Content2"
+//                    "First post",
+//                    "Post Content1"
 //            );
 //
-//            controller.newPost(newPost);
+//            newPost.setPost_id(2L);
 //
+////            Post newPost2 = new Post(
+////                    user,
+////                    "Second post",
+////                    "Post 2 Content"
+////            );
+//
+////            Post newPost3 = new Post(
+////                    user,
+////                    "Third post",
+////                    "Post 3 Content"
+////            );
+////
+////            controller.newPost(newPost3);
+//
+//            Reply testReply = new Reply(newPost, "reply content");
+//            controller.newReply(testReply);
 //        };
+//
+//
 //    }
 //}
