@@ -39,6 +39,7 @@ public class UserController {
         return "register";
     }
 
+    // register attempt of user with error checking for duplicate email or ppsn
     @PostMapping("/register_attempt")
     public String registerAttempt(@ModelAttribute("user") User newUser) {
         if (getUserByEmail(newUser.getEmail())) {
@@ -128,6 +129,7 @@ public class UserController {
     }
 
     // should this not be getMapping? I'm not sure
+    // register a user id with an appointment
     @GetMapping("/apt/{id}/{apt_id}")
     public String bookAppointment(@PathVariable (value = "id") Long userId,
                                   @PathVariable (value = "apt_id") Long apt_id) throws UserNotFoundException {
