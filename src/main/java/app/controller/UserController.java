@@ -29,8 +29,8 @@ public class UserController {
     }
 
     @GetMapping("")
-    public String showIndexPage() {
-        return "index";
+    public String showRegLoginLandingPage() {
+        return "reg_login_landing";
     }
 
     @GetMapping("/register")
