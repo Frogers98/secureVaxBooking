@@ -54,7 +54,7 @@ public class UserController {
             newUser.setPassword(encodedPassword);
             userRepository.save(newUser);
             System.out.println("User saved");
-            return "registered_successfully";
+            return "success_reg";
         }
     }
 
