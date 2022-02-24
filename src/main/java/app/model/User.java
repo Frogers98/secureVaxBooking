@@ -13,6 +13,8 @@ public class User {
     @GeneratedValue
     private Long user_id;
 
+    // Each user can have many posts. This is represented by the "user_id" column in the database or the "user"
+    // attribute in the Post class
     @OneToMany(mappedBy="user")
     private Set<Post> posts;
 

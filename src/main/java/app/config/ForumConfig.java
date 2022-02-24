@@ -40,7 +40,7 @@
 //
 //            Post newPost = new Post(
 //                    user,
-//                    "Second post",
+//                    "Third post",
 //                    "Post Content2"
 //            );
 //

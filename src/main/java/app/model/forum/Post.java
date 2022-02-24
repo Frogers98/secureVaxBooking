@@ -14,6 +14,8 @@ public class Post {
     @GeneratedValue
     private Long post_id;
 
+    // Each post has a user, which is represented as a foreign key for the user table using the primary key "user_id"
+    // Posts can belong to many different users, but only one user can be the author of a post
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
