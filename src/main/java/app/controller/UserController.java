@@ -1,5 +1,7 @@
 package app.controller;
 
+import app.UserAptDetails;
+import app.repository.UserAptDetailsRepository;
 import app.repository.UserRepository;
 import app.model.User;
 import app.exception.UserNotFoundException;
