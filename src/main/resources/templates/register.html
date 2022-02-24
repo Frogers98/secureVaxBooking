@@ -27,6 +27,7 @@
 <div class="container text-center">
     <div>
         <h1>User Registration - Sign Up</h1>
+        <h4><a th:href="@{/login}">Already Registered? Click here to Login</a></h4>
     </div>
     <form th:action="@{/users/register_attempt}" th:object="${user}"
           method="post" style="max-width: 600px; margin: 0 auto;">

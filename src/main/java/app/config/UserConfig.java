@@ -25,10 +25,10 @@ public class UserConfig {
                     "Sample Address",
                     "08711111",
                     "mariam.jamal@gmail.com",
-                    "$2a$10$lnfKWMIrIxvHrwHOdwDUDuTLfVF8e1HGmfLiezCtFb0jpciLYrmoi"
+                    "password"
             );
 
-            controller.newUser(Mariam);
+            controller.registerAttempt(Mariam);
 
         };
     }
