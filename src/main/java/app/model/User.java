@@ -1,14 +1,20 @@
 package app.model;
 
+import app.model.forum.Post;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long user_id;
+
+    @OneToMany(mappedBy="user")
+    private Set<Post> posts;
 
     @NotBlank
     private String dob;
@@ -53,8 +59,12 @@ public class User {
     }
 
     // Some attributes don't have setter methods as they should immutable once created initially (e.g. ppsn, name etc.)
-    public Long getId() {
-        return id;
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
     }
 
     public String getDob() {

@@ -15,6 +15,7 @@ public class Post {
     private Long post_id;
 
     @ManyToOne
+    @JoinColumn(name="user_id")
     private User user;
 
     @NotBlank
@@ -24,7 +25,7 @@ public class Post {
     private String post_content;
 
     @NotBlank
-    private Date post_date;
+    private String post_date;
 
     public Post() {
         super();
@@ -34,7 +35,7 @@ public class Post {
         this.user = user;
         this.post_title = post_title;
         this.post_content = post_content;
-        this.post_date = new Date();
+        this.post_date = "2000-01-01";
     }
 
     public Long getPost_id() {
@@ -69,11 +70,11 @@ public class Post {
         this.post_content = post_content;
     }
 
-    public Date getPost_date() {
+    public String getPost_date() {
         return post_date;
     }
 
-    public void setPost_date(Date post_date) {
+    public void setPost_date(String post_date) {
         this.post_date = post_date;
     }
 }

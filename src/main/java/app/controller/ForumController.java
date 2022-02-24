@@ -25,6 +25,8 @@ public class ForumController {
     // Add a new post
     @PostMapping
     public void newPost(@Valid @RequestBody Post newPost) {
+        System.out.println(newPost.getPost_title());
+        System.out.println(newPost.getUser().getName());
         postRepository.save(newPost);
     }
 
