@@ -3,7 +3,6 @@ package app.controller;
 import app.repository.UserRepository;
 import app.model.User;
 import app.exception.UserNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -19,10 +18,17 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserAptDetailsRepository userAptDetailsRepository;
+    @Autowired
+    AppointmentController appointmentController;
+
+    public UserController() {
+    }
 
     @GetMapping("")
-    public String showRegLoginLandingPage() {
-        return "reg_login_landing";
+    public String showIndexPage() {
+        return "index";
     }
 
     @GetMapping("/register")
@@ -119,12 +125,21 @@ public class UserController {
         else return true;
     }
 
-    // Get a Single User
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable(value = "id") Long userId)
-            throws UserNotFoundException {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+    // should this not be getMapping? I'm not sure
+    @GetMapping("/apt/{id}/{apt_id}")
+    public String bookAppointment(@PathVariable (value = "id") Long userId,
+                                  @PathVariable (value = "apt_id") Long apt_id) throws UserNotFoundException {
+        User queryUser = userRepository.findByID(userId);
+        System.out.println("Altering user: " + queryUser.getName());
+        userRepository.updateUser(apt_id, userId);
+        showAppointment(3L);
+        return "appointment_booked";
+    }
+
+    // return appointment details of a user - incomplete pending team decisions on functionality
+    public void showAppointment(Long userId) throws UserNotFoundException {
+        UserAptDetails userAptDetails = userAptDetailsRepository.findAptDetails(userId);
+        System.out.println(userAptDetails.getApt_id() + " " + userAptDetails.getVenue());
     }
 
     @GetMapping("/403")
