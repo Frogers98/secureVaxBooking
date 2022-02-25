@@ -4,6 +4,7 @@ import app.model.forum.Post;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -33,8 +34,9 @@ public class User {
     @NotBlank
     @Column(unique = true)
     private String email;
-
-    private String nextApptId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "apt_id")
+    private Appointment apt_id;
 
     private String dose1Date;
 
@@ -43,12 +45,21 @@ public class User {
     private String lastLogin;
     @NotBlank
     private String password;
+//
+//    private boolean enabled;
 
     public User() {
         super();
     }
 
-    public User(String dob, String name, String surname, String ppsn, String address, String phone, String email, String password) {
+    public User(String dob,
+                String name,
+                String surname,
+                String ppsn,
+                String address,
+                String phone,
+                String email,
+                String password) {
         super();
         this.dob = dob;
         this.name = name;
@@ -58,6 +69,27 @@ public class User {
         this.phone = phone;
         this.email = email;
         this.password = password;
+    }
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
+    // Attributes need getters and setters
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     // Some attributes don't have setter methods as they should immutable once created initially (e.g. ppsn, name etc.)
@@ -125,12 +157,13 @@ public class User {
         this.email = email;
     }
 
-    public String getNextApptId() {
-        return nextApptId;
+    public Appointment getNextApptId() {
+        return this.apt_id;
     }
 
-    public void setNextApptId(String apptId) {
-        this.nextApptId = apptId;
+    public void setNextApptId(Appointment appointment) {
+
+        this.apt_id = appointment;
     }
 
     public String getDose1Date() {
