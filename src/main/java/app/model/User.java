@@ -34,7 +34,8 @@ public class User {
     @NotBlank
     @Column(unique = true)
     private String email;
-    @OneToOne(cascade = CascadeType.ALL)
+//    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "apt_id")
     private Appointment apt_id;
 
