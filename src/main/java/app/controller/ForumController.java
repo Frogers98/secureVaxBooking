@@ -11,9 +11,11 @@ import app.repository.forum.PostRepository;
 import app.repository.forum.ReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("forum")
@@ -25,6 +27,14 @@ public class ForumController {
     @Autowired
     PostRepository postRepository;
 
+    // Return the forum landing page (lists all posts in the forum)
+    @GetMapping
+    public String showPosts(Model model) {
+        List<Post> allPosts = postRepository.findAll();
+        model.addAttribute("forumPosts", allPosts);
+        return "list_forum_posts.html";
+
+    }
     // Add a new post
     @PostMapping("/post")
     public void newPost(@Valid @RequestBody Post newPost) {
