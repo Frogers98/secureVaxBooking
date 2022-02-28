@@ -55,11 +55,12 @@ public class ForumController {
         return postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
     }
 
-    // Add a reply to a particular post
+    // Save a reply to the replies table and update the reply_id column in posts for the relevant post with the reply_id given
     @PostMapping("/reply")
     public void newReply(@Valid @RequestBody Reply reply) {
         System.out.println(reply.getReply_content());
         replyRepository.save(reply);
+        postRepository.updateReplyId(reply.getReply_id(), reply.getPost().getPost_id());
     }
 
     // Get a certain reply by its post id
