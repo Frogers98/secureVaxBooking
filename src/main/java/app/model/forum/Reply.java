@@ -15,8 +15,9 @@ public class Reply {
     private Long reply_id;
 
     //post_id column that represents the primary key in the posts column
-    @OneToOne
-    @JoinColumn(name="post_id")
+
+    // This is not a column but is used for mapping for the reply_id column in the posts table
+    @OneToOne(mappedBy = "reply")
     private Post post;
 //    @OneToOne
 //    private Admin admin_id;
