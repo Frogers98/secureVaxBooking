@@ -20,8 +20,9 @@ public class Post {
     @JoinColumn(name="user_id")
     private User user;
 
-    // This is not a column but is used for mapping for the post_id column in the replies table
-    @OneToOne(mappedBy = "post")
+    //reply_id column that represents the primary key in the replies table
+    @OneToOne
+    @JoinColumn(name="reply_id")
     private Reply reply;
 
     @NotBlank
