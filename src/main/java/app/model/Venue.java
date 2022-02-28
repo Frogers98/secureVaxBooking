@@ -8,31 +8,37 @@ public class Venue {
 
     @Id
     @GeneratedValue
-    private Long venueId;
+    private Long venue_id;
 
     @Column(nullable = false, unique = true, length = 45)
-    private String county;
+    private String venue_name;
 
-    public Venue(String county) {
-        this.county = county;
+    private String venue_address;
+
+    @OneToOne(mappedBy = "venue_id")
+    private Appointment appointment;
+
+    public Venue(String venue_name, String venue_address) {
+        this.venue_name = venue_name;
+        this.venue_address = venue_address;
     }
 
     // empty default constructor
     public Venue() {}
 
     public Long getId() {
-        return venueId;
+        return venue_id;
     }
 
     public void setId(Long id) {
-        this.venueId = id;
+        this.venue_id = id;
     }
 
-    public String getCounty() {
-        return county;
+    public String getVenue_name() {
+        return venue_name;
     }
 
-    public void setCounty(String county) {
-        this.county = county;
+    public void setVenue_name(String county) {
+        this.venue_name = county;
     }
 }

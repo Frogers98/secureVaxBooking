@@ -10,12 +10,12 @@ public class Appointment {
                        String dose,
                        String date,
                        String time,
-                       String venue) {
+                       Venue venue) {
         this.vaccine = vaccine;
         this.dose = dose;
         this.date = date;
         this.time = time;
-        this.venue = venue;
+        this.venue_id = venue;
     }
 
     @Id
@@ -29,8 +29,12 @@ public class Appointment {
     private String date;
     @NotBlank
     private String time;
-    @NotBlank
-    private String venue;
+
+//    @NotBlank
+    @OneToOne
+    @JoinColumn(name = "venue_id")
+    private Venue venue_id;
+
     @OneToOne(mappedBy = "apt_id")
     private User user;
 
@@ -76,12 +80,12 @@ public class Appointment {
         this.time = time;
     }
 
-    public String getVenue() {
-        return venue;
+    public Venue getVenue() {
+        return venue_id;
     }
 
-    public void setVenue(String venue) {
-        this.venue = venue;
+    public void setVenue(Venue venue) {
+        this.venue_id = venue;
     }
 
     public User getUser() {

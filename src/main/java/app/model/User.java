@@ -1,5 +1,7 @@
 package app.model;
 
+import app.model.forum.Post;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
@@ -10,7 +12,13 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long user_id;
+
+    // Each user can have many posts. This is represented by the "user_id" column in the database or the "user"
+    // attribute in the Post class
+    @OneToMany(mappedBy="user")
+    private Set<Post> posts;
+
     @NotBlank
     private String dob;
     @NotBlank
@@ -26,7 +34,8 @@ public class User {
     @NotBlank
     @Column(unique = true)
     private String email;
-    @OneToOne(cascade = CascadeType.ALL)
+//    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "apt_id")
     private Appointment apt_id;
 
@@ -84,8 +93,13 @@ public class User {
         this.roles = roles;
     }
 
-    public Long getId() {
-        return id;
+    // Some attributes don't have setter methods as they should immutable once created initially (e.g. ppsn, name etc.)
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
     }
 
     public String getDob() {
@@ -184,12 +198,4 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-//
-//    public boolean isEnabled() {
-//        return enabled;
-//    }
-//
-//    public void setEnabled(boolean enabled) {
-//        this.enabled = enabled;
-//    }
 }

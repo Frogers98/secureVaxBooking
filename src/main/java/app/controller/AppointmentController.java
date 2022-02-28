@@ -3,6 +3,7 @@ package app.controller;
 import app.exception.UserNotFoundException;
 import app.model.Appointment;
 import app.model.User;
+import app.model.Venue;
 import app.repository.AppointmentRepository;
 import org.hibernate.service.spi.InjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class AppointmentController {
 
     @PostMapping
     public String saveAppointment(Appointment appointment) {
+        System.out.println("In save appointment");
         if (checkAptAlreadyExists(appointment.getVenue(),
                 appointment.getDate(),
                 appointment.getTime())) {
@@ -47,7 +49,7 @@ public class AppointmentController {
     }
 
     // a check to ensure repeat appointments at same time/day/venue
-    public Boolean checkAptAlreadyExists(String venue, String date, String time) {
+    public Boolean checkAptAlreadyExists(Venue venue, String date, String time) {
         var appointments = getAllAppointments();
         for (var apt: appointments) {
             if (Objects.equals(apt.getVenue(), venue) &&

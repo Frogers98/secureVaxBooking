@@ -13,8 +13,10 @@ public class VenueConfig {
     CommandLineRunner venueRunner(VenueController controller) {
         return args -> {
             Venue Dublin = new Venue(
-                    "Dublin"
+                    "Dublin",
+                    "UCD"
             );
+
 
             controller.newVenue(Dublin);
         };

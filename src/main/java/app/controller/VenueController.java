@@ -29,7 +29,7 @@ public class VenueController {
 
     @PostMapping
     public void newVenue(@Valid @RequestBody Venue newVenue) {
-        if (getVenueByName(newVenue.getCounty()))
+        if (getVenueByName(newVenue.getVenue_name()))
             System.out.println("Venue already in database");
         else venueRepository.save(newVenue);
     }
@@ -38,7 +38,7 @@ public class VenueController {
         var venues = getAllVenues();
 
         var venue =  venues.stream()
-                .filter(t -> venueName.equals(t.getCounty()))
+                .filter(t -> venueName.equals(t.getVenue_name()))
                 .findFirst()
                 .orElse(null);
 

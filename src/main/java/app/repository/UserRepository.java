@@ -17,13 +17,13 @@ public interface UserRepository
     @Query("SELECT u FROM User u WHERE u.email = ?1")
     User findByEmail(String email);
 
-    @Query("SELECT u FROM User u WHERE u.id = ?1")
+    @Query("SELECT u FROM User u WHERE u.user_id = ?1")
     User findByID(Long id);
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE users u set apt_id =:apt_id where u.id = :id",
+    @Query(value = "UPDATE users u set apt_id =:apt_id where u.user_id = :user_id",
             nativeQuery = true)
-    void updateUser(@Param("apt_id") Long apt_id, @Param("id") Long id);
+    void updateUser(@Param("apt_id") Long apt_id, @Param("user_id") Long user_id);
 
 }
