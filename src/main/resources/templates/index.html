@@ -43,22 +43,19 @@
 
             <article class="proof">
                 <div id="first"></div>
-<!--                <img th:src="@{/images/stats-general.png}" alt="" class="product__image">-->
                 <h3 class="proof__title"></h3>
                 <p class="product__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                <a href="" class="btn">Read more</a>
+                <button class="btn" id="plain">Plain</button>
+                <button class="btn" id="inverted">Inverted</button>
+                <button class="btn" id="polar">Polar</button>
             </article>
 
             <article class="proof">
                 <div id="second"></div>
-<!--                <img th:src="@{/images/stats-sex.png}" alt="" class="product__image">-->
                 <h3 class="proof__title"></h3>
                 <p class="product__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                <a href="" class="btn">Read more</a>
             </article>
-
             <article class="proof">
-<!--                <img th:src="@{/images/stats-bytype.png}" alt="" class="product__image">-->
                 <div id="third"></div>
                 <h3 class="proof__title"></h3>
                 <p class="product__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
@@ -68,62 +65,156 @@
     </section>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
     <script th:inline="javascript">
-        $(function(){
-            Highcharts.chart('first', {
-                chart: {
-                    type: 'column'
-                },
+        $.ajax({
+            url: "sexchartdata",
+            success: function(result){
+                var categories = JSON.parse(result).categories;
+                var series = JSON.parse(result).series;
+                drawSexChart(categories,series);
+            }
+        })
+        $.ajax({
+            url:"nationchartdata",
+            success: function (result){
+                var nation = JSON.parse(result).nations;
+                var number = JSON.parse(result).numbers;
+                // console.log(result);
+                drawNationChart(nation,number);
+            }
+        })
+        function drawSexChart(category, series) {
+            const chart = Highcharts.chart('first', {
                 title: {
-                    text: 'Organization'
+                    text: 'Chart.update'
                 },
                 subtitle: {
-                    text: 'Details'
+                    text: 'Plain'
                 },
                 xAxis: {
-                    categories: [[${nation}]],
-                    crosshair: true
+                    categories: category
+                },
+                series: [{
+                    type: 'column',
+                    colorByPoint: true,
+                    data: series,
+                    showInLegend: false
+                }]
+            });
+
+            document.getElementById('plain').addEventListener('click', () => {
+                chart.update({
+                    chart: {
+                        inverted: false,
+                        polar: false
+                    },
+                    subtitle: {
+                        text: 'Plain'
+                    }
+                });
+            });
+
+            document.getElementById('inverted').addEventListener('click', () => {
+                chart.update({
+                    chart: {
+                        inverted: true,
+                        polar: false
+                    },
+                    subtitle: {
+                        text: 'Inverted'
+                    }
+                });
+            });
+
+            document.getElementById('polar').addEventListener('click', () => {
+                chart.update({
+                    chart: {
+                        inverted: false,
+                        polar: true
+                    },
+                    subtitle: {
+                        text: 'Polar'
+                    }
+                });
+            });
+        }
+        function drawNationChart(nation,numbers){
+
+            Highcharts.chart('second', {
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: 'Historic World Population by Region'
+                },
+                subtitle: {
+                    text: 'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>'
+                },
+                xAxis: {
+                    categories: nation,
+                    title: {
+                        text: null
+                    }
                 },
                 yAxis: {
                     min: 0,
-                    max:100,
                     title: {
-                        text: 'Count'
+                        text: 'Population',
+                        align: 'high'
+                    },
+                    labels: {
+                        overflow: 'justify'
                     }
                 },
                 tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y:.1f} K</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
+                    valueSuffix: ' people'
                 },
                 plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    },
+                    series: {
+                        color: '#F28F43FF'
                     }
                 },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -40,
+                    y: 80,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor:
+                        Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                    shadow: true
+                },
+                credits: {
+                    enabled: false
+                },
                 series: [{
-                    name: 'Nationalities',
-                    data: [[${sex}]]
+                    name: '2021',
+                    data: numbers
                 }]
+                // , {
+                //     name: 'Year 1900',
+                //     data: [133, 156, 947, 408, 6]
+                // }, {
+                //     name: 'Year 2000',
+                //     data: [814, 841, 3714, 727, 31]
+                // }, {
+                //     name: 'Year 2016',
+                //     data: [1216, 1001, 4436, 738, 40]
+                // }]
             });
-            Highcharts.chart('second', {
-
-                series: [{
-                    data: [4, 3, 5, 6, 2, 3]
-                }]
-            });
-            Highcharts.chart('third', {
-
-                series: [{
-                    data: [3, 3, 3, 3]
-                }]
-            });
-        });
+        }
     </script>
 
 </main>
