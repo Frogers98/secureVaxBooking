@@ -115,7 +115,7 @@ public class ForumController {
         Reply newReply = new Reply(post, reply_content);
         replyRepository.save(newReply);
         postRepository.updateReplyId(newReply.getReply_id(), newReply.getPost().getPost_id());
-        return "index.html";
+        return "redirect:/forum";
     }
 
     // Get a certain reply by its post id (not currently in use but endpoint is here if we need it,
