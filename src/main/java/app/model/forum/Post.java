@@ -4,6 +4,9 @@ import app.model.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -42,7 +45,10 @@ public class Post {
         this.user = user;
         this.post_title = post_title;
         this.post_content = post_content;
-        this.post_date = "2000-01-01";
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String post_date = dateFormat.format(date);
+        this.post_date = post_date;
     }
 
     public Reply getReply() {

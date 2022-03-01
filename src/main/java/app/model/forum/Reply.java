@@ -4,6 +4,9 @@ import app.model.forum.Post;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -35,7 +38,10 @@ public class Reply {
     public Reply(Post post, String reply_content) {
         this.post = post;
         this.reply_content = reply_content;
-        this.reply_date = "2000-01-01";
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String reply_date = dateFormat.format(date);
+        this.reply_date = reply_date;
     }
 
     public Long getReply_id() {
