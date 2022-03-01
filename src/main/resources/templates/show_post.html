@@ -9,15 +9,36 @@
 </head>
 <body>
 <div id="post_page_container">
+
     <div class="card">
         <div class="card-body">
             <h3 class="card-title" th:text="${post.post_title}"></h3>
             <p class="card-text" th:text="${post.post_content}"></p>
         </div>
 
-        <div th:if="${reply != null}" class="card-body">
-            <h3 class="card-title" >Reply Posted <span th:text="${reply.reply_date}"></span></h3>
-            <p class="card-text" th:text="${reply.reply_content}"></p>
+
+        <div th:if="${reply != null}" class="card">
+            <div class="card-body">
+                <h3 class="card-title">Reply Posted <span th:text="${reply.reply_date}"></span></h3>
+                <p class="card-text" th:text="${reply.reply_content}"></p>
+            </div>
+        </div>
+
+        <div th:if="${reply == null}" class="card">
+            <div class="card-body">
+                <form class="form-group" th:action="@{/forum/reply}" method="post">
+                    <h3 class="card-title">Reply to post</h3>
+
+                    <label for="post_id"></label>
+                    <input type="hidden" id="post_id" name="post_id" th:field="${post.post_id}"/>
+
+                    <label for="reply_content"></label>
+                    <textarea class="form-control" id="reply_content" name="reply_content" maxlength="250"
+                              placeholder="Reply Content"></textarea>
+
+                    <button type="submit" class="btn btn-primary mb-2">Submit Reply</button>
+                </form>
+            </div>
         </div>
 
 

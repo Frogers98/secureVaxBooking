@@ -92,16 +92,30 @@ public class ForumController {
             Reply reply = replyOptional.get();
             System.out.println("Reply id for post " + id + " is " + reply.getReply_id());
             model.addAttribute("reply", reply);
+            // Add the post id for this post to the model so we can access it
         }
 
         return "show_post.html";
     }
 
     // Save a reply to the replies table and update the reply_id column in posts for the relevant post with the reply_id given
-    @PostMapping("/reply")
+   // (not accessible by an endpoint, just used by ForumConfig for db population)
     public void newReply(@Valid @RequestBody Reply reply) {
         replyRepository.save(reply);
         postRepository.updateReplyId(reply.getReply_id(), reply.getPost().getPost_id());
+    }
+
+    // Add a new post from a form request. Couldn't get it to accept a Reply object so instead it accepts all the required
+    // parameters for a reply, I grab the relevant post from the db and make a Reply and save it with that Post.
+    @PostMapping("/reply")
+    public String newReplyForm(@RequestParam("post_id") Long post_id, @RequestParam("reply_content") String reply_content) {
+
+        System.out.println("reply received for post " + post_id + ": " + reply_content);
+        Post post = postRepository.getById(post_id);
+        Reply newReply = new Reply(post, reply_content);
+        replyRepository.save(newReply);
+        postRepository.updateReplyId(newReply.getReply_id(), newReply.getPost().getPost_id());
+        return "index.html";
     }
 
     // Get a certain reply by its post id (not currently in use but endpoint is here if we need it,
