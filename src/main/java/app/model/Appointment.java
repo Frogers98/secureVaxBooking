@@ -91,4 +91,17 @@ public class Appointment {
     public void setUser(User user) {
         this.user = user;
     }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "apt_id=" + apt_id +
+                ", vaccine='" + vaccine + '\'' +
+                ", dose='" + dose + '\'' +
+                ", date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                ", venue='" + venue + '\'' +
+                ", user=" + user +
+                '}';
+    }
 }

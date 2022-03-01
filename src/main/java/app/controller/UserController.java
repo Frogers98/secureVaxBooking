@@ -1,6 +1,8 @@
 package app.controller;
 
 import app.UserAptDetails;
+import app.model.Appointment;
+import app.model.Venue;
 import app.repository.UserAptDetailsRepository;
 import app.repository.UserRepository;
 import app.model.User;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -57,7 +60,6 @@ public class UserController {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
             newUser.setPassword(encodedPassword);
-//            userRepository.save(newUser);
             userService.registerDefaultUser(newUser);
             System.out.println("User saved");
             return "success_reg";
@@ -142,6 +144,13 @@ public class UserController {
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
+
+    @GetMapping("/bookAppointment")
+    public String bookingForm(Model model) {
+        model.addAttribute("venue", new Venue());
+        return "book_appointment";
+    }
+
     // should this not be getMapping? I'm not sure
     // register a user id with an appointment
     @GetMapping("/apt/{id}/{apt_id}")
@@ -150,7 +159,7 @@ public class UserController {
         User queryUser = userRepository.findByID(userId);
         System.out.println("Altering user: " + queryUser.getName());
         userRepository.updateUser(apt_id, userId);
-        showAppointment(3L);
+        showAppointment(userId);
         return "appointment_booked";
     }
 

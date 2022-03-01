@@ -8,7 +8,7 @@ public class Venue {
 
     @Id
     @GeneratedValue
-    private Long venueId;
+    private Long venue_id;
 
     @Column(nullable = false, unique = true, length = 45)
     private String county;
@@ -21,11 +21,11 @@ public class Venue {
     public Venue() {}
 
     public Long getId() {
-        return venueId;
+        return venue_id;
     }
 
-    public void setId(Long id) {
-        this.venueId = id;
+    public void setId(Long venue_id) {
+        this.venue_id = venue_id;
     }
 
     public String getCounty() {
@@ -34,5 +34,13 @@ public class Venue {
 
     public void setCounty(String county) {
         this.county = county;
+    }
+
+    @Override
+    public String toString() {
+        return "Venue {" +
+                "venueId=" + venue_id +
+                ", county='" + county + '\'' +
+                '}';
     }
 }
