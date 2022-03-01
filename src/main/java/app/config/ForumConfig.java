@@ -30,6 +30,8 @@ public class ForumConfig {
                     "040404041",
                     "Sample Address",
                     "08711111",
+                    "Irish",
+                    "Male",
                     "John.jamal@gmail.com",
                     "password"
             );
@@ -48,7 +50,7 @@ public class ForumConfig {
 
 //            user.setUser_id(1L);
 
-            userController.newUser(user);
+            userController.registerAttempt(user);
             Thread.sleep(5000);
 
            User john = userRepository.findByEmail("John.jamal@gmail.com");

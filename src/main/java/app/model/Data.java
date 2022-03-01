@@ -11,7 +11,7 @@ public class Data {
     @Column
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long user_id;
 
     @Column
     private String dob;
@@ -22,12 +22,12 @@ public class Data {
     @Column
     private String nationality;
 
-    public Integer getId() {
-        return id;
+    public Long getId() {
+        return user_id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(Long id) {
+        this.user_id = id;
     }
 
     public String getDob() {
@@ -57,7 +57,7 @@ public class Data {
     @Override
     public String toString() {
         return "data{" +
-                "id=" + id +
+                "id=" + user_id +
                 ", dob='" + dob + '\'' +
                 ", sex='" + sex + '\'' +
                 ", Nationality='" + nationality + '\'' +

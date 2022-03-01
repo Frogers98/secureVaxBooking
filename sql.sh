@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS Appointments(UserID INT NOT NULL
 ,FOREIGN KEY (VenueID) REFERENCES Venues(ID)
 );
 
-CREATE TABLE IF NOT EXISTS Users(ID INT NOT NULL
+CREATE TABLE IF NOT EXISTS Users(User_ID INT NOT NULL
 ,DOB VARCHAR(225) NOT NULL
 ,Name VARCHAR(225) NOT NULL
 ,Surname VARCHAR(225) NOT NULL
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS Users(ID INT NOT NULL
 ,NextAppointmentID INT
 ,LastLogin VARCHAR(225)
 ,Password VARCHAR(225)
-,PRIMARY KEY (ID)
+,PRIMARY KEY (User_ID)
 ,FOREIGN KEY (NextAppointmentID) REFERENCES Appointments(ID)
 );
 
@@ -66,6 +66,6 @@ CREATE TABLE IF NOT EXISTS `users_roles` (
   KEY `user_fk_idx` (`user_id`),
   KEY `role_fk_idx` (`role_id`),
   CONSTRAINT `role_fk` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`),
-  CONSTRAINT `user_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  CONSTRAINT `user_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 );
 EOF
