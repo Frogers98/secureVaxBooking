@@ -14,7 +14,7 @@
                 <tr>
                     <td>Post Title</td>
                     <td>Date Added</td>
-                    <td></td>
+                    <td>Reply Posted</td>
                 </tr>
             </thead>
             <tbody>
@@ -26,9 +26,12 @@
                         <span th:text="${post.post_title}"></span></a>
                     </td>
                     <td th:text="${post.post_date}"></td>
-    <!--                <a th:href="@{/pathvars/single/{id}(id = ${item.id})}">-->
-    <!--                    <span th:text="${item.name}"></span>-->
-    <!--                </a>-->
+
+                    <!--If post has a reply then display yes, if not display no-->
+                    <td>
+                    <span th:if="${post.reply != null}" th:text="Yes">Yes</span>
+                    <span th:if="${post.reply == null}" th:text="No">No</span>
+                    </td>
 
                 </tr>
             </tbody>

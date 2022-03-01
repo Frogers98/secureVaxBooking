@@ -45,6 +45,14 @@ public class Post {
         this.post_date = "2000-01-01";
     }
 
+    public Reply getReply() {
+        return reply;
+    }
+
+    public void setReply(Reply reply) {
+        this.reply = reply;
+    }
+
     public Long getPost_id() {
         return post_id;
     }
