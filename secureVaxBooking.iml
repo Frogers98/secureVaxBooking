@@ -4,6 +4,10 @@
     <facet type="web" name="Web">
       <configuration>
         <webroots />
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/src/main/java" />
+          <root url="file://$MODULE_DIR$/src/main/resources" />
+        </sourceRoots>
       </configuration>
     </facet>
     <facet type="jpa" name="JPA">
@@ -11,7 +15,8 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-          <factory-entry name="entityManagerFactory" value="2ffc63bf-1f44-4540-a7fb-5baaf262f501" />
+          <factory-entry name="entityManagerFactory" />
+          <factory-entry name="secureVaxBooking" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>
@@ -26,6 +31,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -127,11 +133,12 @@
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-el:9.0.56" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate.validator:hibernate-validator:6.2.0.Final" level="project" />
     <orderEntry type="library" name="Maven: jakarta.validation:jakarta.validation-api:2.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.33" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:jquery:3.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:bootstrap:4.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:popper.js:1.14.3" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:webjars-locator-core:0.48" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.33" level="project" />
     <orderEntry type="library" name="Maven: io.github.classgraph:classgraph:4.8.115" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.13.1" level="project" />
   </component>

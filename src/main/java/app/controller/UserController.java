@@ -1,15 +1,18 @@
 package app.controller;
 
+import app.UserAptDetails;
+import app.repository.UserAptDetailsRepository;
 import app.repository.UserRepository;
 import app.model.User;
 import app.exception.UserNotFoundException;
+
+import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.PersistenceException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -19,10 +22,20 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserAptDetailsRepository userAptDetailsRepository;
+    @Autowired
+    AppointmentController appointmentController;
+
+    public UserController() {
+    }
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("")
-    public String showIndexPage() {
-        return "index";
+    public String showRegLoginLandingPage() {
+        return "reg_login_landing";
     }
 
     @GetMapping("/register")
@@ -31,21 +44,23 @@ public class UserController {
         return "register";
     }
 
+    // register attempt of user with error checking for duplicate email or ppsn
     @PostMapping("/register_attempt")
     public String registerAttempt(@ModelAttribute("user") User newUser) {
         if (getUserByEmail(newUser.getEmail())) {
             System.out.println("An account associated with this email address has already been created.");
-            return "index";
+            return "reg_login_landing";
         }else if (getUserByPPSN(newUser.getPpsn())) {
             System.out.println("An account associated with this PPS number has already been created.");
-            return "index";
+            return "reg_login_landing";
         } else {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
             newUser.setPassword(encodedPassword);
-            userRepository.save(newUser);
+//            userRepository.save(newUser);
+            userService.registerDefaultUser(newUser);
             System.out.println("User saved");
-            return "registered_successfully";
+            return "success_reg";
         }
     }
 
@@ -54,7 +69,7 @@ public class UserController {
     public String welcome(){
         return "Welcome!";
     }
-  /*https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial*/
+
     @RequestMapping("/login")
     public String login(){
         // Take username and password
@@ -125,5 +140,28 @@ public class UserController {
             throws UserNotFoundException {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
+    }
+
+    // should this not be getMapping? I'm not sure
+    // register a user id with an appointment
+    @GetMapping("/apt/{id}/{apt_id}")
+    public String bookAppointment(@PathVariable (value = "id") Long userId,
+                                  @PathVariable (value = "apt_id") Long apt_id) throws UserNotFoundException {
+        User queryUser = userRepository.findByID(userId);
+        System.out.println("Altering user: " + queryUser.getName());
+        userRepository.updateUser(apt_id, userId);
+        showAppointment(3L);
+        return "appointment_booked";
+    }
+
+    // return appointment details of a user - incomplete pending team decisions on functionality
+    public void showAppointment(Long userId) throws UserNotFoundException {
+        UserAptDetails userAptDetails = userAptDetailsRepository.findAptDetails(userId);
+        System.out.println(userAptDetails.getApt_id() + " " + userAptDetails.getVenue());
+    }
+
+    @GetMapping("/edit")
+    public String editUsers() {
+        return "edit_users";
     }
 }

@@ -28,7 +28,7 @@ public class UserConfig {
                     "password"
             );
 
-            controller.newUser(Mariam);
+            controller.registerAttempt(Mariam);
 
         };
     }
