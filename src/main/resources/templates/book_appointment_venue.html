@@ -10,7 +10,7 @@
 <body>
 
 <div class="container text-center">
-    <p th:text="${dose}"></p>
+    <p th:text="${appointment.dose}"></p>
     <div>
         <h1>Book Appointment</h1>
         <h4>Already Booked? Click here to view details</h4>
@@ -19,21 +19,12 @@
     <form th:action="@{/appointments/bookingSuccessful}" method="post"
            style="max-width: 600px; margin: 0 auto;">
 
-        <div class="m-3">
-            <div class="form-group row">
-                <label class="col-4 col-form-label">Time: </label>
-                <div class="col-8">
-                    <label for="dose"></label>
-                    <input type="hidden" id="dose" name="dose" th:field="${dose}" th:value="${dose}">
-                </div>
-            </div>
-        </div>
+        <label for="dose"></label>
+        <input type="hidden" id="dose" name="dose" th:field="${appointment.dose}" th:value="${dose}">
 
-            <div class="form-group row">
-                <label class="col-4 col-form-label">Time: </label>
-                <label for="venue_id"></label>
-                <input type="text" id="venue_id" name="venue_id" th:field="${venue_id}" th:value="${venue_id}">
-            </div>
+        <label for="venue_id"></label>
+        <input type="text" id="venue_id" name="venue_id" th:field="${venue_id}" th:value="${venue_id}">
+
 
         <div class="m-3">
             <div class="form-group row">
