@@ -41,17 +41,16 @@ public class AppointmentController {
     public List<Appointment> getAllAppointments() { return appointmentRepository.findAll(); }
 
     @PostMapping
-    public String saveAppointment(Appointment appointment) {
+    public Appointment saveAppointment(Appointment appointment) {
         if (checkAptAlreadyExists(appointment.getVenue(),
                 appointment.getDate(),
                 appointment.getTime())) {
             System.out.println("An appointment has already been created at this time and date for " + appointment.getVenue() + ".");
-            // should probably replace this with an error page of some form
-            return "index";
+            return null;
         }
         appointmentRepository.save(appointment);
         System.out.println("Appointment booked.");
-        return "appointment_booked";
+        return appointment;
     }
 
     // a check to ensure repeat appointments at same time/day/venue
@@ -67,11 +66,7 @@ public class AppointmentController {
 
     @PostMapping("/bookAppointmentVenue")
     public String chooseVenue(@ModelAttribute("venue") Venue venueData,
-                              Model model) throws VenueNotFoundException {
-        Venue venue = getVenueById(venueData.getId());
-        Long venue_id = venue.getId();
-        String venue_name = venue.getCounty();
-        String dose = "dose1";
+                              Model model) {
 
         LocalDateTime now = LocalDateTime.now();
         String today = now.toString().split("T")[0];
@@ -81,7 +76,6 @@ public class AppointmentController {
 
 
         model.addAttribute("date", today);
-//        model.addAttribute("dose", dose);
         model.addAttribute("todayApts", todayAppointments);
         model.addAttribute("venue", venueData);
         model.addAttribute("appointment", new Appointment());
@@ -95,13 +89,10 @@ public class AppointmentController {
                                     @RequestParam("id") Long venue_id,
                                     @AuthenticationPrincipal CustomUserDetails userDetails
                                     ) {
-        System.out.println("venue returned: " + venue_id);
-//        System.out.println("dose: " + dose);
-        System.out.println("time: " + time);
+
         String dose = "dose1";
         String userEmail = userDetails.getUsername();
         User user = userRepository.findByEmail(userEmail);
-
         Venue venue = venueRepository.getById(venue_id);
 
         Appointment newAppointment = new Appointment(
@@ -111,22 +102,14 @@ public class AppointmentController {
                 time,
                 venue.getCounty());
 
-//        appointmentRepository.save(newAppointment);
-        Appointment appointment = appointmentRepository.save(newAppointment);
+        Appointment appointment = saveAppointment(newAppointment);
 
-        userRepository.updateUser(appointment.getApt_id(), user.getId());
+        if (appointment == null) return "index.html";
 
-//        model.addAttribute("user", user);
-//        Appointment newAppointment = new Appointment(
-//                appointment.getVaccine(),
-//                appointment.getDose(),
-//                appointment.getDate(),
-//                appointment.getTime(),
-//                appointment.getVenue());
-//
-//        appointmentRepository.save(newAppointment);
-//        model.addAttribute("appointment", appointment);
-        return "booking_successful";
+        else {
+            userRepository.updateUser(appointment.getApt_id(), user.getId());
+            return "booking_successful";
+        }
     }
 
     // Get a Single Venue

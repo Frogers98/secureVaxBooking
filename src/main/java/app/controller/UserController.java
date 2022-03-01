@@ -151,17 +151,6 @@ public class UserController {
         return "book_appointment";
     }
 
-    // should this not be getMapping? I'm not sure
-    // register a user id with an appointment
-    @GetMapping("/apt/{id}/{apt_id}")
-    public String bookAppointment(@PathVariable (value = "id") Long userId,
-                                  @PathVariable (value = "apt_id") Long apt_id) throws UserNotFoundException {
-        User queryUser = userRepository.findByID(userId);
-        System.out.println("Altering user: " + queryUser.getName());
-        userRepository.updateUser(apt_id, userId);
-        showAppointment(userId);
-        return "appointment_booked";
-    }
 
     // return appointment details of a user - incomplete pending team decisions on functionality
     public void showAppointment(Long userId) throws UserNotFoundException {

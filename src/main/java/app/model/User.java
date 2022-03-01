@@ -37,8 +37,7 @@ public class User {
     private String lastLogin;
     @NotBlank
     private String password;
-//
-//    private boolean enabled;
+
 
     public User() {
         super();
@@ -184,12 +183,5 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-//
-//    public boolean isEnabled() {
-//        return enabled;
-//    }
-//
-//    public void setEnabled(boolean enabled) {
-//        this.enabled = enabled;
-//    }
+
 }
