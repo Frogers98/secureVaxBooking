@@ -11,8 +11,10 @@ import app.repository.forum.PostRepository;
 import app.repository.forum.ReplyRepository;
 import app.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
@@ -45,13 +47,28 @@ public class ForumController {
         return "list_forum_posts.html";
 
     }
-    // Add a new post
-    @PostMapping("/post")
+
+
+//     Add a new post (not accessible by an endpoint, just used by ForumConfig for db population
     public void newPost(@Valid @RequestBody Post newPost) {
         postRepository.save(newPost);
     }
 
-    // Get all posts
+    // Add a new post from a form request. Couldn't get it to accept a Post object so instead it accepts all the required
+    // parameters for a post, I grab the relevant user from the db and make a Post and save it with that user.
+    @PostMapping("/post")
+    public String newPostForm(@RequestParam("user_id") Long user_id, @RequestParam("post_title") String post_title,
+                              @RequestParam("post_content") String post_content) {
+
+        System.out.println("submission received from user " + user_id + ": " + post_title);
+        User user = userRepository.findByID(user_id);
+        Post newPost = new Post(user, post_title, post_content);
+        postRepository.save(newPost);
+        return "redirect:/forum";
+    }
+
+
+    // Get all posts, not currently used but added endpoint in case we need it. Can remove if need be for security
     @GetMapping("/post")
     public @ResponseBody Iterable<Post> getPosts() {
         return postRepository.findAll();

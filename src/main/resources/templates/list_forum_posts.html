@@ -39,9 +39,19 @@
     </div>
     <p th:text="${user.user_id}"></p>
     <div class="container">
-        <form class="form-group" th:action="@{/post}" th:object="${post}" method="post">
-            <label for="user"></label>
-            <input type="hidden" id="user" th:field="${user}">
+        <form class="form-group" th:action="@{forum/post}" method="post">
+
+            <label for="user_id"></label>
+            <input type="hidden" id="user_id" name="user_id" th:field="${user.user_id}"/>
+
+            <label for="post_title"></label>
+            <input class="form-control-lg" type="text" id="post_title" name="post_title" placeholder="Post Title"/>
+
+            <label for="post_content"></label>
+            <textarea class="form-control" id="post_content" name="post_content" maxlength="250" placeholder="Post Content"></textarea>
+
+            <button type="submit" class="btn btn-primary mb-2">Submit Post</button>
+
         </form>
     </div>
 </div>
