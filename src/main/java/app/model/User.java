@@ -32,6 +32,10 @@ public class User {
     @NotBlank
     private String phone;
     @NotBlank
+    private String nationality;
+    @NotBlank
+    private String sex;
+    @NotBlank
     @Column(unique = true)
     private String email;
 //    @OneToOne(cascade = CascadeType.ALL)
@@ -59,6 +63,8 @@ public class User {
                 String ppsn,
                 String address,
                 String phone,
+                String nationality,
+                String sex,
                 String email,
                 String password) {
         super();
@@ -68,11 +74,13 @@ public class User {
         this.ppsn = ppsn;
         this.address = address;
         this.phone = phone;
+        this.nationality = nationality;
+        this.sex = sex;
         this.email = email;
         this.password = password;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -148,6 +156,22 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public String getEmail() {
