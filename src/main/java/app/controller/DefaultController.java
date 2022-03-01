@@ -90,4 +90,9 @@ public class DefaultController {
         return jsonObject.toString();
     }
 
+    @GetMapping("/403")
+    public String accessDenied() {
+        return "403";
+    }
+
 }

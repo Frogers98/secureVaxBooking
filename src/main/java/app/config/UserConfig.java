@@ -27,10 +27,10 @@ public class UserConfig {
                     "Irish",
                     "Female",
                     "mariam.jamal@gmail.com",
-                    "$2a$10$lnfKWMIrIxvHrwHOdwDUDuTLfVF8e1HGmfLiezCtFb0jpciLYrmoi"
+                    "password"
             );
 
-            controller.newUser(Mariam);
+            controller.registerAttempt(Mariam);
 
         };
     }

@@ -1,9 +1,12 @@
 package app.controller;
 
+import app.UserAptDetails;
+import app.repository.UserAptDetailsRepository;
 import app.repository.UserRepository;
 import app.model.User;
 import app.exception.UserNotFoundException;
 
+import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,16 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserAptDetailsRepository userAptDetailsRepository;
+    @Autowired
+    AppointmentController appointmentController;
+
+    public UserController() {
+    }
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("")
     public String showRegLoginLandingPage() {
@@ -31,6 +44,7 @@ public class UserController {
         return "register";
     }
 
+    // register attempt of user with error checking for duplicate email or ppsn
     @PostMapping("/register_attempt")
     public String registerAttempt(@ModelAttribute("user") User newUser) {
         if (getUserByEmail(newUser.getEmail())) {
@@ -43,9 +57,10 @@ public class UserController {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
             newUser.setPassword(encodedPassword);
-            userRepository.save(newUser);
+//            userRepository.save(newUser);
+            userService.registerDefaultUser(newUser);
             System.out.println("User saved");
-            return "registered_successfully";
+            return "success_reg";
         }
     }
 
@@ -127,9 +142,22 @@ public class UserController {
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
-    @GetMapping("/403")
-    public String accessDenied() {
-        return "403";
+    // should this not be getMapping? I'm not sure
+    // register a user id with an appointment
+    @GetMapping("/apt/{id}/{apt_id}")
+    public String bookAppointment(@PathVariable (value = "id") Long userId,
+                                  @PathVariable (value = "apt_id") Long apt_id) throws UserNotFoundException {
+        User queryUser = userRepository.findByID(userId);
+        System.out.println("Altering user: " + queryUser.getName());
+        userRepository.updateUser(apt_id, userId);
+        showAppointment(3L);
+        return "appointment_booked";
+    }
+
+    // return appointment details of a user - incomplete pending team decisions on functionality
+    public void showAppointment(Long userId) throws UserNotFoundException {
+        UserAptDetails userAptDetails = userAptDetailsRepository.findAptDetails(userId);
+        System.out.println(userAptDetails.getApt_id() + " " + userAptDetails.getVenue());
     }
 
     @GetMapping("/edit")
