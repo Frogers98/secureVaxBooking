@@ -16,4 +16,7 @@ public interface DataDAO extends JpaRepository<Data,Integer> {
     @Query("SELECT Count(u) FROM Data u WHERE u.nationality = ?1")
     public int getByNationality(String nationality);
 
+    @Query("SELECT Count(u) FROM Data u WHERE u.dob = ?1")
+    public int getByDob(String age);
+
 }

@@ -42,6 +42,11 @@
             <h2 class="section-title">Our proofs</h2>
 
             <article class="proof">
+                <div id="third"></div>
+                <h3 class="proof__title"></h3>
+                <p class="product__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+            </article>
+            <article class="proof">
                 <div id="first"></div>
                 <h3 class="proof__title"></h3>
                 <p class="product__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
@@ -49,17 +54,10 @@
                 <button class="btn" id="inverted">Inverted</button>
                 <button class="btn" id="polar">Polar</button>
             </article>
-
             <article class="proof">
                 <div id="second"></div>
                 <h3 class="proof__title"></h3>
                 <p class="product__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-            </article>
-            <article class="proof">
-                <div id="third"></div>
-                <h3 class="proof__title"></h3>
-                <p class="product__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                <a href="" class="btn">Read more</a>
             </article>
         </div>
     </section>
@@ -84,14 +82,22 @@
             success: function (result){
                 var nation = JSON.parse(result).nations;
                 var number = JSON.parse(result).numbers;
-                // console.log(result);
                 drawNationChart(nation,number);
+            }
+        })
+        $.ajax({
+            url:"agechartdata",
+            success: function (result){
+                var age = JSON.parse(result).age;
+                var number = JSON.parse(result).numbers;
+                // console.log(result);
+                drawAgeChart(age,number);
             }
         })
         function drawSexChart(category, series) {
             const chart = Highcharts.chart('first', {
                 title: {
-                    text: 'Chart.update'
+                    text: 'Chart Number With Sex'
                 },
                 subtitle: {
                     text: 'Plain'
@@ -143,17 +149,14 @@
                 });
             });
         }
-        function drawNationChart(nation,numbers){
+        function drawNationChart(nation,numbers) {
 
             Highcharts.chart('second', {
                 chart: {
                     type: 'bar'
                 },
                 title: {
-                    text: 'Historic World Population by Region'
-                },
-                subtitle: {
-                    text: 'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>'
+                    text: 'Nationality With Numbers'
                 },
                 xAxis: {
                     categories: nation,
@@ -213,6 +216,27 @@
                 //     name: 'Year 2016',
                 //     data: [1216, 1001, 4436, 738, 40]
                 // }]
+            });
+        }
+
+        function drawAgeChart(age,number){
+
+            Highcharts.chart('third', {
+                title: {
+                    text: 'Date of birth & number'
+                },
+                xAxis: {
+                    categories: age
+                },
+                plotOptions: {
+                    series: {
+                        color: '#FF0000'
+                    }
+                },
+
+                series: [{
+                    data: number
+                }]
             });
         }
     </script>

@@ -67,4 +67,27 @@ public class DefaultController {
         jsonObject.add("nations", jsonArrayCategory);
         return jsonObject.toString();
     }
+
+    @RequestMapping("/agechartdata")
+    @ResponseBody
+    public String getAgeDataFromDB(){
+        JsonArray jsonArrayCategory = new JsonArray();
+        JsonArray jsonArraySeries = new JsonArray();
+        JsonObject jsonObject = new JsonObject();
+
+        List<Data> dataList = dataDAO.findAll();
+        Set<String> dobs = new HashSet<>();
+        dataList.forEach(data->{
+            dobs.add(data.getDob());
+        });
+
+        for (String s : dobs){
+            jsonArrayCategory.add(s.substring(s.length()-4));
+            jsonArraySeries.add(dataDAO.getByDob(s));
+        }
+        jsonObject.add("numbers", jsonArraySeries);
+        jsonObject.add("age", jsonArrayCategory);
+        return jsonObject.toString();
+    }
+
 }
