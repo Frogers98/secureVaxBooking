@@ -3,10 +3,14 @@ package app.controller;
 import app.exception.UserNotFoundException;
 import app.exception.VenueNotFoundException;
 import app.model.Appointment;
+import app.model.User;
 import app.model.Venue;
 import app.repository.AppointmentRepository;
+import app.repository.UserRepository;
 import app.repository.VenueRepository;
+import app.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +29,9 @@ public class AppointmentController {
 
     @Autowired
     VenueRepository venueRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping("/list")
     public List listUsers() {
@@ -72,25 +79,44 @@ public class AppointmentController {
         List<String> todayAppointments = todayAppointments();
         System.out.println("Appointments: " + todayAppointments);
 
+
         model.addAttribute("date", today);
-        model.addAttribute("dose", "");
+//        model.addAttribute("dose", dose);
         model.addAttribute("todayApts", todayAppointments);
-        model.addAttribute("venue_id", venue_id);
-        model.addAttribute("venue_name", venue_name);
+        model.addAttribute("venue", venueData);
         model.addAttribute("appointment", new Appointment());
         return "book_appointment_venue";
     }
 
     @PostMapping("/bookingSuccessful")
     public String bookingSuccessful(@RequestParam("date") String date,
-                                    @RequestParam("dose") String dose,
                                     @RequestParam("time") String time,
                                     @RequestParam("vaccine") String vaccine,
-                                    @RequestParam("venue_id") Long venue_id
+                                    @RequestParam("id") Long venue_id,
+                                    @AuthenticationPrincipal CustomUserDetails userDetails
                                     ) {
-
-        System.out.println("dose: " + dose);
+        System.out.println("venue returned: " + venue_id);
+//        System.out.println("dose: " + dose);
         System.out.println("time: " + time);
+        String dose = "dose1";
+        String userEmail = userDetails.getUsername();
+        User user = userRepository.findByEmail(userEmail);
+
+        Venue venue = venueRepository.getById(venue_id);
+
+        Appointment newAppointment = new Appointment(
+                vaccine,
+                dose,
+                date,
+                time,
+                venue.getCounty());
+
+//        appointmentRepository.save(newAppointment);
+        Appointment appointment = appointmentRepository.save(newAppointment);
+
+        userRepository.updateUser(appointment.getApt_id(), user.getId());
+
+//        model.addAttribute("user", user);
 //        Appointment newAppointment = new Appointment(
 //                appointment.getVaccine(),
 //                appointment.getDose(),
