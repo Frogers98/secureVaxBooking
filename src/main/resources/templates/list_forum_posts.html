@@ -37,6 +37,13 @@
             </tbody>
         </table>
     </div>
+    <p th:text="${user.user_id}"></p>
+    <div class="container">
+        <form class="form-group" th:action="@{/post}" th:object="${post}" method="post">
+            <label for="user"></label>
+            <input type="hidden" id="user" th:field="${user}">
+        </form>
+    </div>
 </div>
 </body>
 </html>

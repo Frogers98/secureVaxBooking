@@ -3,14 +3,18 @@ package app.controller;
 import app.exception.PostNotFoundException;
 import app.exception.ReplyNotFoundException;
 import app.exception.ReplyNotFoundExceptionPK;
+import app.model.User;
 import app.model.forum.Post;
 import app.model.forum.Reply;
+import app.repository.UserRepository;
 import app.repository.forum.PostRepository;
 import app.repository.forum.ReplyRepository;
+import app.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -26,11 +30,18 @@ public class ForumController {
     @Autowired
     PostRepository postRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     // Return the forum landing page (lists all posts in the forum)
     @GetMapping
-    public String showPosts(Model model) {
+    public String showPosts(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         List<Post> allPosts = postRepository.findAll();
+        String userEmail = userDetails.getUsername();
+        User user = userRepository.findByEmail(userEmail);
         model.addAttribute("forumPosts", allPosts);
+        model.addAttribute("user", user);
+        System.out.println("logged in user is:" + user.getUser_id());
         return "list_forum_posts.html";
 
     }
@@ -58,6 +69,7 @@ public class ForumController {
             throw new PostNotFoundException(id);
         }
 
+//       No exception thrown if a reply isn't found as we still want to show the post as normal, just not the reply
         Optional<Reply> replyOptional = replyRepository.findByPostId(id);
         if (replyOptional.isPresent()) {
             Reply reply = replyOptional.get();
