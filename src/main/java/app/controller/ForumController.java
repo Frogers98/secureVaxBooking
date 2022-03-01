@@ -3,8 +3,6 @@ package app.controller;
 import app.exception.PostNotFoundException;
 import app.exception.ReplyNotFoundException;
 import app.exception.ReplyNotFoundExceptionPK;
-import app.exception.UserNotFoundException;
-import app.model.User;
 import app.model.forum.Post;
 import app.model.forum.Reply;
 import app.repository.forum.PostRepository;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("forum")
@@ -38,8 +37,6 @@ public class ForumController {
     // Add a new post
     @PostMapping("/post")
     public void newPost(@Valid @RequestBody Post newPost) {
-        System.out.println(newPost.getPost_title());
-        System.out.println(newPost.getUser().getName());
         postRepository.save(newPost);
     }
 
@@ -49,39 +46,54 @@ public class ForumController {
         return postRepository.findAll();
     }
 
-    // Get a particular post by id
+    // Get a particular post by id and return show_post.html. Add the post (and reply) to the model if present
     @GetMapping("/post/{id}")
-    public Post getPost(@PathVariable(value = "id") long id) throws PostNotFoundException {
-        return postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+    public String getPost(@PathVariable(value = "id") long id, Model model) throws PostNotFoundException {
+        Optional<Post> postOptional = postRepository.findById(id);
+        if (postOptional.isPresent()) {
+            Post post = postOptional.get();
+            model.addAttribute("post", post);
+        }
+        else {
+            throw new PostNotFoundException(id);
+        }
+
+        Optional<Reply> replyOptional = replyRepository.findByPostId(id);
+        if (replyOptional.isPresent()) {
+            Reply reply = replyOptional.get();
+            System.out.println("Reply id for post " + id + " is " + reply.getReply_id());
+            model.addAttribute("reply", reply);
+        }
+
+        return "show_post.html";
     }
 
     // Save a reply to the replies table and update the reply_id column in posts for the relevant post with the reply_id given
     @PostMapping("/reply")
     public void newReply(@Valid @RequestBody Reply reply) {
-        System.out.println(reply.getReply_content());
         replyRepository.save(reply);
         postRepository.updateReplyId(reply.getReply_id(), reply.getPost().getPost_id());
     }
 
-    // Get a certain reply by its post id
+    // Get a certain reply by its post id (not currently in use but endpoint is here if we need it,
+    // can remove endpoint for security reasons if we deem it necessary)
     @GetMapping("/reply/{post_id}")
         public Reply getReplyByPostId(@PathVariable(value = "post_id") long post_id) throws ReplyNotFoundException {
-//            return replyRepository.findById(post_id).orElseThrow(() -> new ReplyNotFoundException(post_id));
-       Reply reply = replyRepository.findByPostId(post_id);
-       if (reply == null) {
-           throw new ReplyNotFoundException(post_id);
+       Optional<Reply> replyOptional = replyRepository.findByPostId(post_id);
+       if (replyOptional.isPresent()) {
+           Reply reply = replyOptional.get();
+           return reply;
        }
        else {
-           return reply;
+           throw new ReplyNotFoundException(post_id);
        }
         }
 
-    // Get a certain reply by its reply_id
+    // Get a certain reply by its reply_id (not currently in use but endpoint is here if we need it,
+    // can remove endpoint for security reasons if we deem it necessary)
     @GetMapping("/reply/{reply_id}")
     public Reply getReplyByReplyId(@PathVariable(value = "reply_id") long reply_id) throws ReplyNotFoundExceptionPK {
         return replyRepository.findById(reply_id).orElseThrow(() -> new ReplyNotFoundExceptionPK(reply_id));
     }
-
-
 
     }
