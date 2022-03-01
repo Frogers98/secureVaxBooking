@@ -18,6 +18,18 @@ public class Role {
     private Integer id;
 
     private String name;
+
+    public Role() { }
+
+    public Role(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
     public Integer getId() {
         return id;
     }
