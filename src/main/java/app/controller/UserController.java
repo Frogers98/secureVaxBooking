@@ -66,9 +66,9 @@ public class UserController {
 
     public void registerAdmin(User newUser) {
         if (getUserByEmail(newUser.getEmail())) {
-            System.out.println("An account associated with this email address has already been created.");
+            System.out.println("Admin: An account associated with this email address has already been created.");
         }else if (getUserByPPSN(newUser.getPpsn())) {
-            System.out.println("An account associated with this PPS number has already been created.");
+            System.out.println("Admin: An account associated with this PPS number has already been created.");
         } else {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
@@ -96,6 +96,13 @@ public class UserController {
 
     @GetMapping("/listUsers")
     public String listUsers(Model model) {
+        List<User> allUsers = userRepository.findAll();
+        model.addAttribute("listUsers", allUsers);
+        return "list_users";
+    }
+
+    @GetMapping("/myInfo")
+    public String showMyInfo(Model model) {
         List<User> allUsers = userRepository.findAll();
         model.addAttribute("listUsers", allUsers);
         return "list_users";

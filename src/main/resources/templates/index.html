@@ -21,7 +21,7 @@
 <main>
     <section class="benefits">
         <div sec:authorize="isAuthenticated()">
-            Welcome <b><span sec:authentication="name">Username</span></b>
+            Hello <b><span sec:authentication="name">Username</span></b>
             &nbsp;
             <i><span sec:authentication="principal.authorities">Roles</span></i>
             <form th:action="@{/logout}" method="post">
