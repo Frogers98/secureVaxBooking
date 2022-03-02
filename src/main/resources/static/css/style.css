@@ -25,6 +25,70 @@ p{
     margin: 0;
     color: #444;
 }
+.wrapper {
+    margin: 0 auto;
+    padding: 0 10px;
+    width: 940px;
+}
+nav h2{
+    margin-top: 32px;
+    font-size: 45px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #eeee;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: #006152;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav li {
+    padding-left: 1rem;
+    margin-top: 40px;
+}
+
+nav a {
+    text-decoration: none;
+    font-weight: bold;
+    display: block;
+    text-transform: uppercase;
+    color: #eeee;
+}
+nav a:hover {
+    color: #DF8234;
+}
+
+strong {
+    font-weight: bolder;
+}
+/*
+  Extra small devices (phones, 600px and down)
+*/
+@media only screen and (max-width: 600px) {
+    nav {
+        flex-direction: column;
+    }
+    nav ul {
+        flex-direction: column;
+        padding-top: 0.5rem;
+    }
+    nav li {
+        padding: 0.5rem 0;
+    }
+}
+footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: #eeee;
+}
 
 .container{
     width: 85%;
@@ -54,7 +118,7 @@ p{
     padding: .5em 1.25em;
     font-weight: 700;
     text-transform: uppercase;
-    background: var(--clr-accent, blue);
+    background: var(--clr-accent, #DF8234);
     border-radius: .25em;
     transition:
             transform 250ms ease-in-out,
@@ -91,8 +155,7 @@ section{
     color: #444;
     text-align: center;
     padding: 15em 0;
-    background-image: url("static/images/vaccine-banner.png"),
-    radial-gradient(#eeee, #4FA7AF);
+    background-image: radial-gradient(#eeee, #006152);
     background-blend-mode: inherit;
     background-attachment: fixed;
 }
@@ -125,7 +188,7 @@ span{
     top: 2%;
     left: 5%;
     padding: 85% 85% 0 0;
-    background: #4fa7af;
+    background: rgba(0, 97, 82, 0.7);
     border-radius: 50%;
     z-index: -1;
 }

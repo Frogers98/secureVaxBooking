@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;900&display=swap" rel="stylesheet">
 </head>
 <body>
+<div th:replace="fragments :: nav"></div>
 <header class="hero">
     <img style="visibility: hidden; display: none" th:src="@{/images/vaccine-banner.png}" alt="" class="hero">
 
@@ -192,7 +193,7 @@
                         }
                     },
                     series: {
-                        color: '#F28F43FF'
+                        color: '#4FA7AF'
                     }
                 },
                 legend: {
@@ -214,16 +215,6 @@
                     name: '2021',
                     data: numbers
                 }]
-                // , {
-                //     name: 'Year 1900',
-                //     data: [133, 156, 947, 408, 6]
-                // }, {
-                //     name: 'Year 2000',
-                //     data: [814, 841, 3714, 727, 31]
-                // }, {
-                //     name: 'Year 2016',
-                //     data: [1216, 1001, 4436, 738, 40]
-                // }]
             });
         }
 
@@ -248,8 +239,7 @@
             });
         }
     </script>
-
+<div th:replace="fragments :: footer"></div>
 </main>
-
 </body>
 </html>
