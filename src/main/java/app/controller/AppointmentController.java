@@ -1,6 +1,5 @@
 package app.controller;
 
-import app.exception.UserNotFoundException;
 import app.exception.VenueNotFoundException;
 import app.model.Appointment;
 import app.model.User;
@@ -79,7 +78,7 @@ public class AppointmentController {
         model.addAttribute("todayApts", todayAppointments);
         model.addAttribute("venue", venueData);
         model.addAttribute("appointment", new Appointment());
-        return "book_appointment_venue";
+        return "book_appointment";
     }
 
     @PostMapping("/bookingSuccessful")
