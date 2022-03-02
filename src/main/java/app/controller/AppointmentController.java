@@ -8,6 +8,7 @@ import app.repository.AppointmentRepository;
 import app.repository.UserRepository;
 import app.repository.VenueRepository;
 import app.security.CustomUserDetails;
+import app.test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -54,38 +55,48 @@ public class AppointmentController {
 
     // a check to ensure repeat appointments at same time/day/venue
     public Boolean checkAptAlreadyExists(Venue venue, String date, String time) {
+        System.out.println(venue);
+        System.out.println(date);
+        System.out.println(time);
         var appointments = getAllAppointments();
         for (var apt: appointments) {
             if (Objects.equals(apt.getVenue(), venue) &&
                     Objects.equals(apt.getTime(), time) &&
                     Objects.equals(apt.getDate(), date)) return true;
         }
+        System.out.println("no match");
         return false;
     }
 
     @PostMapping("/bookAppointmentVenue")
-    public String chooseVenue(@ModelAttribute("venue") Venue venueData,
-                              Model model) {
+    public String chooseVenue(@RequestParam("venue_id") String venueData,
+                              @RequestParam("date") String date,
+                              Model model) throws VenueNotFoundException {
 
         LocalDateTime now = LocalDateTime.now();
         String today = now.toString().split("T")[0];
 
-        // list of appointments available today
-        List<String> todayAppointments = todayAppointments();
-        System.out.println("Appointments: " + todayAppointments);
+        // venue matching returned String
+        Venue venue = getVenueById(Long.parseLong(venueData));
 
-        model.addAttribute("date", today);
-        model.addAttribute("todayApts", todayAppointments);
-        model.addAttribute("venue", venueData);
-        model.addAttribute("appointment", new Appointment());
-        return "book_appointment";
+        // get list of available appointments
+        List<String> availableAppointmentTimes = checkAvailableAppointments(venue, date, today);
+
+        if (availableAppointmentTimes.size() > 0) {
+            model.addAttribute("test", new test(date, venueData));
+            model.addAttribute("todayApts", availableAppointmentTimes);
+            model.addAttribute("appointment", new Appointment());
+            return "book_appointment";
+        }
+
+        else return "no_appointments_available";
     }
 
     @PostMapping("/bookingSuccessful")
     public String bookingSuccessful(@RequestParam("date") String date,
                                     @RequestParam("time") String time,
                                     @RequestParam("vaccine") String vaccine,
-                                    @RequestParam("id") Long venue_id,
+                                    @RequestParam("venue_id") Long venue_id,
                                     @AuthenticationPrincipal CustomUserDetails userDetails
                                     ) {
 
@@ -101,9 +112,8 @@ public class AppointmentController {
                 time,
                 venue);
 
-        System.out.println("Appointment successfully created.");
         Appointment appointment = saveAppointment(newAppointment);
-        System.out.println("appointment saved successfully");
+        System.out.println("Appointment saved successfully");
         if (appointment == null) return "index";
 
         else {
@@ -112,28 +122,45 @@ public class AppointmentController {
         }
     }
 
+    private List<String> checkAvailableAppointments(Venue venue, String date, String today) {
+        List<String> availableAppointmentTimes = appointments();
+        if (today.equals(date)) {
+            // list of appointments available today
+            availableAppointmentTimes = todaysAppointments();
+        }
+
+        List<String> availableAppointments = new LinkedList<>();
+        for (String appointment_time: availableAppointmentTimes) {
+            if (!checkAptAlreadyExists(venue, date, appointment_time))
+                availableAppointments.add(appointment_time);
+        }
+        return availableAppointments;
+    }
+
+    public List<String> todaysAppointments() {
+        // get today's date
+        LocalDateTime now = LocalDateTime.now();
+        String currentHour = now.toString().split("T")[1].split(":")[0];
+        List<String> hours = appointments();
+
+        List<String> availableAppointments = new LinkedList<>();
+        for (String hour: hours) {
+            if (Integer.parseInt(currentHour) < Integer.parseInt(hour.split(":")[0]))
+                availableAppointments.add(hour);
+        }
+        return availableAppointments;
+    }
+
+    public List<String> appointments() {
+        return List.of("09:00", "10:00", "11:00",
+                "12:00", "13:00", "14:00", "15:00", "16:00",
+                "17:00", "18:00", "19:00", "20:00", "24:00");
+    }
+
     // Get a Single Venue
     public Venue getVenueById(Long venue_id) throws VenueNotFoundException {
         return venueRepository.findById(venue_id)
                 .orElseThrow(() -> new VenueNotFoundException(venue_id));
     }
 
-    public List<String> todayAppointments() {
-        // get today's date
-        //DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        String currentHour = now.toString().split("T")[1].split(":")[0];
-
-        List<String> hours = List.of("09:00", "10:00", "11:00",
-                "12:00", "13:00", "14:00", "15:00", "16:00",
-                "17:00", "18:00", "19:00", "20:00", "24:00");
-
-        List<String> availableAppointments = new LinkedList<String>();
-        for (String hour: hours) {
-            if (Integer.parseInt(currentHour) < Integer.parseInt(hour.split(":")[0]))
-                availableAppointments.add(hour);
-        }
-
-        return availableAppointments;
-    }
 }

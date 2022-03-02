@@ -51,7 +51,6 @@ public class ForumConfig {
 //            user.setUser_id(1L);
 
             userController.registerAttempt(user);
-            Thread.sleep(5000);
 
            User john = userRepository.findByEmail("John.jamal@gmail.com");
            System.out.println("john id: " + john.getUser_id());
