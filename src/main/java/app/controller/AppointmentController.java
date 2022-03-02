@@ -55,9 +55,6 @@ public class AppointmentController {
 
     // a check to ensure repeat appointments at same time/day/venue
     public Boolean checkAptAlreadyExists(Venue venue, String date, String time) {
-        System.out.println(venue);
-        System.out.println(date);
-        System.out.println(time);
         var appointments = getAllAppointments();
         for (var apt: appointments) {
             if (Objects.equals(apt.getVenue(), venue) &&
@@ -100,10 +97,12 @@ public class AppointmentController {
                                     @AuthenticationPrincipal CustomUserDetails userDetails
                                     ) {
 
-        String dose = "dose1";
         String userEmail = userDetails.getUsername();
         User user = userRepository.findByEmail(userEmail);
         Venue venue = venueRepository.getById(venue_id);
+
+        String dose = "dose1";
+        if (user.getDose1Date() != null) dose = "dose2";
 
         Appointment newAppointment = new Appointment(
                 vaccine,
