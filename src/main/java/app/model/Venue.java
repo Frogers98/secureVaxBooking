@@ -7,7 +7,8 @@ import javax.persistence.*;
 public class Venue {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "venue_id")
     private Long venue_id;
 
     @Column(nullable = false, unique = true, length = 45)
@@ -15,8 +16,8 @@ public class Venue {
 
     private String venue_address;
 
-    @OneToOne(mappedBy = "venue_id")
-    private Appointment appointment;
+//    @JoinColumn("venue_id")
+//    private Appointment appointment;
 
     public Venue(String venue_name, String venue_address) {
         this.venue_name = venue_name;

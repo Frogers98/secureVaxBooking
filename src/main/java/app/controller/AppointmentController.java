@@ -47,6 +47,8 @@ public class AppointmentController {
             System.out.println("An appointment has already been created at this time and date for " + appointment.getVenue() + ".");
             return null;
         }
+        System.out.println("attempting booking");
+        System.out.println(appointment);
         appointmentRepository.save(appointment);
         System.out.println("Appointment booked.");
         return appointment;
@@ -99,14 +101,15 @@ public class AppointmentController {
                 dose,
                 date,
                 time,
-                venue.getCounty());
+                venue);
 
+        System.out.println("Appointment successfully created.");
         Appointment appointment = saveAppointment(newAppointment);
-
-        if (appointment == null) return "index.html";
+        System.out.println("appointment saved successfully");
+        if (appointment == null) return "index";
 
         else {
-            userRepository.updateUser(appointment.getApt_id(), user.getId());
+            userRepository.updateUser(appointment.getApt_id(), user.getUser_id());
             return "booking_successful";
         }
     }

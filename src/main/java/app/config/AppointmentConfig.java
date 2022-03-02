@@ -26,10 +26,7 @@ public class AppointmentConfig {
             );
 
             venueController.newVenue(mayo);
-            Thread.sleep(5000);
-
             Venue venueWithId = venueRepository.findByVenueName("Mayo");
-            Thread.sleep(2000);
 
             Appointment appointment = new Appointment(
                     "pfizer",
@@ -38,9 +35,10 @@ public class AppointmentConfig {
                     "16:00",
                     venueWithId);
 
-
-
+            System.out.println("test");
+            System.out.println(appointment);
             aptController.saveAppointment(appointment);
+            System.out.println("other test");
         };
 
     }

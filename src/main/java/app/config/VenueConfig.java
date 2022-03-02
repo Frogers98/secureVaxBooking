@@ -17,7 +17,6 @@ public class VenueConfig {
                     "UCD"
             );
 
-
             controller.newVenue(Dublin);
         };
     }
