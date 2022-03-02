@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.UserAptDetails;
+import app.model.Venue;
 import app.repository.UserAptDetailsRepository;
 import app.repository.UserRepository;
 import app.model.User;
@@ -57,7 +58,6 @@ public class UserController {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
             newUser.setPassword(encodedPassword);
-//            userRepository.save(newUser);
             userService.registerDefaultUser(newUser);
             System.out.println("User saved");
             return "success_reg";
@@ -157,17 +157,13 @@ public class UserController {
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
-    // should this not be getMapping? I'm not sure
-    // register a user id with an appointment
-    @GetMapping("/apt/{id}/{apt_id}")
-    public String bookAppointment(@PathVariable (value = "id") Long userId,
-                                  @PathVariable (value = "apt_id") Long apt_id) throws UserNotFoundException {
-        User queryUser = userRepository.findByID(userId);
-        System.out.println("Altering user: " + queryUser.getName());
-        userRepository.updateUser(apt_id, userId);
-        showAppointment(3L);
-        return "appointment_booked";
+
+    @GetMapping("/bookAppointment")
+    public String bookingForm(Model model) {
+        model.addAttribute("venue", new Venue());
+        return "select_venue";
     }
+
 
     // return appointment details of a user - incomplete pending team decisions on functionality
     public void showAppointment(Long userId) throws UserNotFoundException {

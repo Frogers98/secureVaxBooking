@@ -14,4 +14,7 @@ public interface VenueRepository
 
     @Query("SELECT v FROM Venue v WHERE v.venue_name = ?1")
     Venue findByVenueName(String venue_name);
+
+    @Query("SELECT v FROM Venue v WHERE v.venue_id = ?1")
+    Venue findByID(Long id);
 }
