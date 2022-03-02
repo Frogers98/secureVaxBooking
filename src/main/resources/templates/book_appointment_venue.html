@@ -10,7 +10,6 @@
 <body>
 
 <div class="container text-center">
-<!--    <p th:text="${appointment.dose}"></p>-->
     <p th:text="${venue.id}"></p>
     <div>
         <h1>Book Appointment</h1>
@@ -21,8 +20,7 @@
            style="max-width: 600px; margin: 0 auto;">
 
         <label for="venue_id"></label>
-        <input type="text" id="venue_id" name="venue_id" th:field="${venue.id}">
-
+        <input type="hidden" id="venue_id" name="venue_id" th:field="${venue.id}">
 
         <div class="m-3">
             <div class="form-group row">

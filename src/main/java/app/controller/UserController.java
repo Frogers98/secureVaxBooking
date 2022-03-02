@@ -1,7 +1,6 @@
 package app.controller;
 
 import app.UserAptDetails;
-import app.model.Appointment;
 import app.model.Venue;
 import app.repository.UserAptDetailsRepository;
 import app.repository.UserRepository;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -163,7 +161,7 @@ public class UserController {
     @GetMapping("/bookAppointment")
     public String bookingForm(Model model) {
         model.addAttribute("venue", new Venue());
-        return "book_appointment";
+        return "select_venue";
     }
 
 
