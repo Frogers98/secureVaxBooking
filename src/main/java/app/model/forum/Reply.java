@@ -4,6 +4,9 @@ import app.model.forum.Post;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -15,8 +18,9 @@ public class Reply {
     private Long reply_id;
 
     //post_id column that represents the primary key in the posts column
-    @OneToOne
-    @JoinColumn(name="post_id")
+
+    // This is not a column but is used for mapping for the reply_id column in the posts table
+    @OneToOne(mappedBy = "reply")
     private Post post;
 //    @OneToOne
 //    private Admin admin_id;
@@ -34,7 +38,10 @@ public class Reply {
     public Reply(Post post, String reply_content) {
         this.post = post;
         this.reply_content = reply_content;
-        this.reply_date = "2000-01-01";
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String reply_date = dateFormat.format(date);
+        this.reply_date = reply_date;
     }
 
     public Long getReply_id() {

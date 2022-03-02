@@ -4,6 +4,9 @@ import app.model.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -20,8 +23,9 @@ public class Post {
     @JoinColumn(name="user_id")
     private User user;
 
-    // This is not a column but is used for mapping for the post_id column in the replies table
-    @OneToOne(mappedBy = "post")
+    //reply_id column that represents the primary key in the replies table
+    @OneToOne
+    @JoinColumn(name="reply_id")
     private Reply reply;
 
     @NotBlank
@@ -41,7 +45,18 @@ public class Post {
         this.user = user;
         this.post_title = post_title;
         this.post_content = post_content;
-        this.post_date = "2000-01-01";
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String post_date = dateFormat.format(date);
+        this.post_date = post_date;
+    }
+
+    public Reply getReply() {
+        return reply;
+    }
+
+    public void setReply(Reply reply) {
+        this.reply = reply;
     }
 
     public Long getPost_id() {
