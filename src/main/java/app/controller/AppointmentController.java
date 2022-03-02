@@ -47,8 +47,7 @@ public class AppointmentController {
             System.out.println("An appointment has already been created at this time and date for " + appointment.getVenue() + ".");
             return null;
         }
-        System.out.println("attempting booking");
-        System.out.println(appointment);
+       
         appointmentRepository.save(appointment);
         System.out.println("Appointment booked.");
         return appointment;
@@ -72,9 +71,9 @@ public class AppointmentController {
         LocalDateTime now = LocalDateTime.now();
         String today = now.toString().split("T")[0];
 
+        // list of appointments available today
         List<String> todayAppointments = todayAppointments();
         System.out.println("Appointments: " + todayAppointments);
-
 
         model.addAttribute("date", today);
         model.addAttribute("todayApts", todayAppointments);
