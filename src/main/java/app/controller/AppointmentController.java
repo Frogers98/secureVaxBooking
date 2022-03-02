@@ -101,8 +101,10 @@ public class AppointmentController {
         User user = userRepository.findByEmail(userEmail);
         Venue venue = venueRepository.getById(venue_id);
 
+        // we need to know the users current dose status
         String dose = "dose1";
         if (user.getDose1Date() != null) dose = "dose2";
+        if (user.getDose2Date() != null) return "dose3";
 
         Appointment newAppointment = new Appointment(
                 vaccine,
