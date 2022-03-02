@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <link th:href="@{/css/style-other.css}" rel="stylesheet" />
 </head>
 <body>
 <!--<div class="container text-center">-->
@@ -26,8 +26,8 @@
 <!--</div>-->
 
 <div class="container">
-    <div>
-        <h1>Register</h1>
+    <div id="wrapper">
+        <h1>Welcome</h1>
     </div>
     <form th:action="@{/users/register_attempt}" th:object="${user}"
           method="post" style="max-width: 600px; margin: 0 auto;">
@@ -35,74 +35,74 @@
             <div class="form-group row">
                 <label class="col-4 col-form-label">DOB: </label>
                 <div class="col-8">
-                    <input id="birthday" max="2022-01-01" min="1900-01-01'"  type="date" th:field="*{dob}" class="form-control" th:required="required" />
+                    <input placeholder="2001-01-01" id="birthday" max="2022-01-01" min="1900-01-01'"  type="date" th:field="*{dob}" class="form-control" th:required="required" />
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-4 col-form-label">First Name: </label>
                 <div class="col-8">
-                    <input type="text" value="John" th:field="*{name}" class="form-control" th:required="required" />
+                    <input placeholder="John" type="text" value="John" th:field="*{name}" class="form-control" th:required="required" />
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-4 col-form-label">Surname: </label>
                 <div class="col-8">
-                    <input type="text" value="Smith" th:field="*{surname}" class="form-control" th:required="required" />
+                    <input type="text" placeholder="Doe" value="Smith" th:field="*{surname}" class="form-control" th:required="required" />
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-4 col-form-label">PPSN: </label>
                 <div class="col-8">
-                    <input type="text" value="1234567IU" th:field="*{ppsn}" class="form-control" th:required="required" />
+                    <input type="text" placeholder="1505044K" value="1234567IU" th:field="*{ppsn}" class="form-control" th:required="required" />
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-4 col-form-label">Address: </label>
                 <div class="col-8">
-                    <input type="text" value="Here and There" th:field="*{address}" class="form-control" th:required="required" />
+                    <input type="text" placeholder="42 Dream Street" value="Here and There" th:field="*{address}" class="form-control" th:required="required" />
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-4 col-form-label">Phone Number: </label>
                 <div class="col-8">
-                    <input type="text" value="0819908877" th:field="*{phone}" class="form-control"  />
+                    <input type="text" placeholder="012 234 5678" value="0819908877" th:field="*{phone}" class="form-control"  />
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-4 col-form-label">Nationality: </label>
                 <div class="col-8">
-                    <input type="text" th:field="*{nationality}" class="form-control" th:required="required" />
+                    <input type="text" placeholder="Earthling" th:field="*{nationality}" class="form-control" th:required="required" />
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-4 col-form-label">Sex: </label>
                 <div class="col-8">
-                    <input type="text" th:field="*{sex}" class="form-control" th:required="required" />
+                    <input type="text" placeholder="Androgynous" th:field="*{sex}" class="form-control" th:required="required" />
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-4 col-form-label">E-mail: </label>
                 <div class="col-8">
-                    <input type="email" value="1@2.com" th:field="*{email}" class="form-control" th:required="required" />
+                    <input type="email" placeholder="1234@cutiepie.ie" value="1@2.com" th:field="*{email}" class="form-control" th:required="required" />
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-4 col-form-label">Password: </label>
                 <div class="col-8">
-                    <input type="password" value="password" th:field="*{password}" class="form-control"
+                    <input type="password" placeholder="big-password" value="password" th:field="*{password}" class="form-control"
                            required minlength="6" maxlength="10" th:required="required"/>
                 </div>
             </div>
 
             <div>
-                <button type="submit" class="btn btn-primary">Sign Up</button>
-                <p>Already Registered?</p>
-                <button th:href="@{/login}" class="btn btn-primary">Log in</button>
+                <a type="submit" class="btn">Sign Up</a>
+
+                <a th:href="@{/login}" style="margin-left: 1.2rem;">Log In?</a>
             </div>
         </div>
     </form>

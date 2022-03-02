@@ -10,8 +10,6 @@
 <body>
 <div th:replace="fragments :: nav"></div>
 <header class="hero">
-    <img style="visibility: hidden; display: none" th:src="@{/images/vaccine-banner.png}" alt="" class="hero">
-
     <div class="container spacing">
         <h1 class="primary-title">Secure your vaccination with HSE's Best App</h1>
         <p>    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
@@ -21,13 +19,15 @@
 
 <main>
     <section class="benefits">
-        <div sec:authorize="isAuthenticated()">
-            Welcome <b><span sec:authentication="name">Username</span></b>
-            &nbsp;
-            <i><span sec:authentication="principal.authorities">Roles</span></i>
-            <form th:action="@{/logout}" method="post">
-                <input type="submit" value="Logout" />
-            </form>
+        <div class="container">
+            <div class="loggedIn" sec:authorize="isAuthenticated()">
+                Welcome <b><span sec:authentication="name">Username</span></b>
+                &nbsp;
+                <i><span sec:authentication="principal.authorities">Roles</span></i>
+                <form th:action="@{/logout}" method="post">
+                    <input class="btn" type="submit" value="Logout" />
+                </form>
+            </div>
         </div>
         <div class="container">
             <h2 class="section-title">Benefits</h2>

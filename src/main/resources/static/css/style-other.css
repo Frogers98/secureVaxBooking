@@ -1,0 +1,165 @@
+/*General stuff*/
+*,
+*::before,
+*::after{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    font-family: 'Noto Sans JP', sans-serif;
+    line-height: 1.6;
+    background-color: rgba(0, 97, 82, 0.5);
+}
+
+h1,
+h2,
+h3,
+p{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    color: #444;
+}
+h1 {
+    font-weight: bold;
+    color: #eeee;
+}
+.container{
+    width: 85%;
+    max-width: 65em;
+    margin: 0 auto;
+}
+#wrapper {
+    margin: 0 auto;
+    padding: 0 10px;
+    width: 600px;
+}
+
+/*Buttons and such*/
+
+.btn{
+    display: inline-block;
+    text-decoration: none;
+    color: #eeee;
+    padding: .5em 1.25em;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: #DF8234;
+    border-radius: .25em;
+    transition:
+            transform 250ms ease-in-out,
+            opacity 250ms linear;
+}
+
+.btn:hover,
+.btn:focus{
+    transform: scale(1.1);
+    opacity: .9;
+}
+
+a {
+    text-decoration: none;
+    color: #ddd;
+    font-size: 18px;
+    outline: none;
+}
+a:hover{
+    text-shadow: 2px 2px 6px #00000040;
+    text-decoration: none;
+}
+a:active{
+    text-decoration: none;
+    text-shadow: none;
+}
+
+/*Nav css*/
+nav .name{
+    margin-top: 32px;
+    font-size: 35px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #eeee;
+}
+nav .name:hover{
+    color: #eeee;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: #006152;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav li {
+    padding-left: 1rem;
+    margin-top: 40px;
+}
+
+nav a {
+    text-decoration: none;
+    font-weight: bold;
+    display: block;
+    text-transform: uppercase;
+    color: #eeee;
+}
+nav a:hover {
+    color: #DF8234;
+}
+
+strong {
+    font-weight: bolder;
+}
+/*
+  Extra small devices (phones, 600px and down)
+*/
+@media only screen and (max-width: 600px) {
+    nav {
+        flex-direction: column;
+    }
+    nav ul {
+        flex-direction: column;
+        padding-top: 0.5rem;
+    }
+    nav li {
+        padding: 0.5rem 0;
+    }
+}
+
+/*Form css*/
+form {
+    border-radius: 5px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    width: 85%;
+    max-width: 65em;
+    margin: 0 auto;
+}
+input[type=text], select, textarea {
+    width: 85%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+}
+
+input[type=submit] {
+    background-color: #DF8234;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+

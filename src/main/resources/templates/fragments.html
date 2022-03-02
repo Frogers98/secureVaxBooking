@@ -8,11 +8,11 @@
 
 <div class="wrapper" th:fragment="html_nav">
     <nav>
-        <h2>HSE our <strong>health</strong> service</h2>
+        <a class="name" th:href="@{/}" style="text-transform: capitalize">HSE our health service</a>
         <ul>
-            <li><a href="#">Item 1</a></li>
-            <li><a href="#">Item 2</a></li>
-            <li><a href="#">Item 3</a></li>
+            <li><a th:href="@{/login}">Log in</a></li>
+            <li><a href="#">Book Vaccination</a></li>
+            <li><a th:href="@{/forum}">FAQs</a></li>
         </ul>
     </nav>
 </div>
