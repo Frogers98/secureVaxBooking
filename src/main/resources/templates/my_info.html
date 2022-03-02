@@ -25,29 +25,36 @@
             <tr>
                 <td>First Dose Booked</td>
                 <td>
-                    <span th:if="${user.dose1Date!=null}" th:text="${user.dose1Date}"></span>
-                    <span th:if="${user.dose1Date==null}" text="No Process Begun">Not Booked</span>
+                    <span th:if="${apt==null}">
+                        Not Booked |
+                        <a  th:href="@{/users/bookAppointment}"> Book Your Vaccine</a>
+                    </span>
+                    <span th:if="${apt!=null and user.dose1Date ==null}" th:text="${apt.getDate()}"></span>
+                    <span th:if="${apt!=null and user.dose1Date!=null}" th:text="${user.dose1Date}"></span>
                 </td>
             </tr>
             <tr>
                 <td>First Dose Received</td>
                 <td>
-                    <span th:if="${user.dose1Date!=null}" th:text="${user.dose1Date}"></span>
-                    <span th:if="${user.dose1Date==null}" text="No Process Begun">Not Received</span>
+                    <span th:if="${user.dose1Date!=null}" th:text="${user.dose1}"></span>
+                    <span th:if="${user.dose1Date==null}">Not Received</span>
                 </td>
             </tr>
             <tr>
                 <td>Second Dose Booked</td>
                 <td>
+                    <span th:if="${user.dose1Date==null}" >Not Booked</span>
+                    <span th:if="${apt!=null and
+                                   user.dose1Date != null and
+                                   user.dose2Date==null}" th:text="${apt.getDate()}"></span>
                     <span th:if="${user.dose2Date!=null}" th:text="${user.dose2Date}"></span>
-                    <span th:if="${user.dose2Date==null}" text="No Process Begun">Not Booked</span>
                 </td>
             </tr>
             <tr>
                 <td>Second Dose Received</td>
                 <td>
-                    <span th:if="${user.dose2Date!=null}" th:text="${user.dose2Date}"></span>
-                    <span th:if="${user.dose2Date==null}" text="No Process Begun">Not Received</span>
+                    <span th:if="${user.dose2Date!=null}" th:text="${user.dose2}"></span>
+                    <span th:if="${user.dose2Date==null}" >Not Received</span>
                 </td>
             </tr>
             </tbody>

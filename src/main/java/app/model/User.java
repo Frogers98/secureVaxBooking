@@ -43,11 +43,14 @@ public class User {
     @JoinColumn(name = "apt_id")
     private Appointment apt_id;
 
+    private String dose1;
+
     private String dose1Date;
+
+    private String dose2;
 
     private String dose2Date;
 
-    private String lastLogin;
     @NotBlank
     private String password;
 
@@ -189,12 +192,30 @@ public class User {
         this.apt_id = appointment;
     }
 
+    public String getDose1() {
+        return dose1;
+    }
+
+    public void setDose1(String dose1) {
+        this.dose1 = dose1;
+    }
+
     public String getDose1Date() {
         return dose1Date;
     }
 
     public void setDose1Date(String dose1Date) {
         this.dose1Date = dose1Date;
+    }
+
+
+
+    public String getDose2() {
+        return dose2;
+    }
+
+    public void setDose2(String dose2) {
+        this.dose2 = dose2;
     }
 
     public String getDose2Date() {
@@ -205,13 +226,7 @@ public class User {
         this.dose2Date = dose2Date;
     }
 
-    public String getLastLogin() {
-        return lastLogin;
-    }
 
-    public void setLastLogin(String lastLogin) {
-        this.lastLogin = lastLogin;
-    }
 
     public String getPassword() {
         return password;

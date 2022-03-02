@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.UserAptDetails;
+import app.model.Appointment;
 import app.model.Venue;
 import app.repository.UserAptDetailsRepository;
 import app.repository.UserRepository;
@@ -108,6 +109,14 @@ public class UserController {
         String userEmail = userDetails.getUsername();
         User user = userRepository.findByEmail(userEmail);
         model.addAttribute("user", user);
+        Appointment nextApt = user.getNextApptId();
+        if (nextApt == null){
+            System.out.println("Next Apt: "  + nextApt);
+        } else{
+            System.out.println("Next Apt: "  + nextApt.toString());
+
+        }
+        model.addAttribute("apt", nextApt);
 //        List<User> allUsers = userRepository.findAll();
 //        model.addAttribute("listUsers", allUsers);
 
