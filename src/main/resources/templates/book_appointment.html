@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Book Appointment</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container text-center">
+    <p th:text="${venue.id}"></p>
+    <div>
+        <h1>Book Appointment</h1>
+        <h4>Already Booked? Click here to view details</h4>
+    </div>
+
+    <form th:action="@{/appointments/bookingSuccessful}" method="post"
+           style="max-width: 600px; margin: 0 auto;">
+
+        <label for="venue_id"></label>
+        <input type="hidden" id="venue_id" name="venue_id" th:field="${venue.id}">
+
+        <div class="m-3">
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Time: </label>
+                <div class="col-8">
+                    <select name="dropdown" th:field="*{appointment.time}" class="form-control" th:required="required">
+                        <option th:each="time : ${todayApts}"
+                                th:value="${time}"
+                                th:text="${time}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-4 col-form-label">Vaccine: </label>
+            <div class="col-8">
+                <select name="dropdown" th:field="*{appointment.vaccine}" class="form-control" th:required="required">
+                    <option value=Pfizer selected>Pfizer</option>
+                    <option value=Moderna selected>Moderna</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-4 col-form-label">Date: </label>
+            <div class="col-8">
+                <select name="dropdown" th:field="*{appointment.date}" class="form-control" th:required="required">
+                    <option th:value="${date}" th:text="${date}"></option>
+                </select>
+            </div>
+        </div>
+
+        <br><br>
+        <input type="submit" value="Create Appointment">
+    </form>
+</div>
+</body>
