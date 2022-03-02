@@ -47,7 +47,7 @@ public class AppointmentController {
             System.out.println("An appointment has already been created at this time and date for " + appointment.getVenue() + ".");
             return null;
         }
-       
+
         appointmentRepository.save(appointment);
         System.out.println("Appointment booked.");
         return appointment;
