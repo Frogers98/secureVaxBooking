@@ -7,8 +7,10 @@ import app.repository.UserRepository;
 import app.model.User;
 import app.exception.UserNotFoundException;
 
+import app.security.CustomUserDetails;
 import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -102,10 +104,21 @@ public class UserController {
     }
 
     @GetMapping("/myInfo")
-    public String showMyInfo(Model model) {
+    public String showMyInfo(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+        String userEmail = userDetails.getUsername();
+        User user = userRepository.findByEmail(userEmail);
+        model.addAttribute("user", user);
+//        List<User> allUsers = userRepository.findAll();
+//        model.addAttribute("listUsers", allUsers);
+
+        return "my_info";
+    }
+
+    @GetMapping("/editUserInfo/{id}")
+    public String editUserInfo(Model model) {
         List<User> allUsers = userRepository.findAll();
         model.addAttribute("listUsers", allUsers);
-        return "list_users";
+        return "edit_user_info";
     }
 
     @RequestMapping("/logout")
