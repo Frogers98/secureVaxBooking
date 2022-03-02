@@ -11,10 +11,16 @@ public class Venue {
     private Long venue_id;
 
     @Column(nullable = false, unique = true, length = 45)
-    private String county;
+    private String venue_name;
 
-    public Venue(String county) {
-        this.county = county;
+    private String venue_address;
+
+    @OneToOne(mappedBy = "venue_id")
+    private Appointment appointment;
+
+    public Venue(String venue_name, String venue_address) {
+        this.venue_name = venue_name;
+        this.venue_address = venue_address;
     }
 
     // empty default constructor
@@ -28,19 +34,19 @@ public class Venue {
         this.venue_id = venue_id;
     }
 
-    public String getCounty() {
-        return county;
+    public String getVenue_name() {
+        return venue_name;
     }
 
-    public void setCounty(String county) {
-        this.county = county;
+    public void setVenue_name(String venue_name) {
+        this.venue_name = venue_name;
     }
 
     @Override
     public String toString() {
         return "Venue {" +
                 "venueId=" + venue_id +
-                ", county='" + county + '\'' +
+                ", county='" + venue_name + '\'' +
                 '}';
     }
 }

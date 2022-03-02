@@ -16,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Controller
@@ -54,7 +53,7 @@ public class AppointmentController {
     }
 
     // a check to ensure repeat appointments at same time/day/venue
-    public Boolean checkAptAlreadyExists(String venue, String date, String time) {
+    public Boolean checkAptAlreadyExists(Venue venue, String date, String time) {
         var appointments = getAllAppointments();
         for (var apt: appointments) {
             if (Objects.equals(apt.getVenue(), venue) &&

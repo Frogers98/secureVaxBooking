@@ -1,5 +1,7 @@
 package app.model;
 
+import app.model.forum.Post;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
@@ -10,7 +12,13 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long user_id;
+
+    // Each user can have many posts. This is represented by the "user_id" column in the database or the "user"
+    // attribute in the Post class
+    @OneToMany(mappedBy="user")
+    private Set<Post> posts;
+
     @NotBlank
     private String dob;
     @NotBlank
@@ -24,9 +32,14 @@ public class User {
     @NotBlank
     private String phone;
     @NotBlank
+    private String nationality;
+    @NotBlank
+    private String sex;
+    @NotBlank
     @Column(unique = true)
     private String email;
-    @OneToOne(cascade = CascadeType.ALL)
+//    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "apt_id")
     private Appointment apt_id;
 
@@ -38,7 +51,6 @@ public class User {
     @NotBlank
     private String password;
 
-
     public User() {
         super();
     }
@@ -49,6 +61,8 @@ public class User {
                 String ppsn,
                 String address,
                 String phone,
+                String nationality,
+                String sex,
                 String email,
                 String password) {
         super();
@@ -58,11 +72,13 @@ public class User {
         this.ppsn = ppsn;
         this.address = address;
         this.phone = phone;
+        this.nationality = nationality;
+        this.sex = sex;
         this.email = email;
         this.password = password;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -83,8 +99,13 @@ public class User {
         this.roles = roles;
     }
 
-    public Long getId() {
-        return id;
+    // Some attributes don't have setter methods as they should immutable once created initially (e.g. ppsn, name etc.)
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
     }
 
     public String getDob() {
@@ -133,6 +154,22 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public String getEmail() {

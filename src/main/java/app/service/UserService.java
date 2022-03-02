@@ -23,4 +23,10 @@ public class UserService {
         userRepo.save(user);
     }
 
+    public void registerAdminUser(User user) {
+        Role roleUser = roleRepo.findByName("ADMIN");
+        user.addRole(roleUser);
+        userRepo.save(user);
+    }
+
 }
