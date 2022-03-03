@@ -11,6 +11,7 @@ import app.exception.UserNotFoundException;
 
 import app.security.CustomUserDetails;
 import app.service.UserService;
+import app.test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,6 +24,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -257,10 +261,12 @@ public class UserController {
 
     @GetMapping("/bookAppointment")
     public String bookingForm(Model model) {
-        model.addAttribute("venue", new Venue());
+        List<String> dates = availableAppointments();
+        model.addAttribute("test", new test());
+        model.addAttribute("venue", new Venue().getId());
+        model.addAttribute("availableDates", dates);
         return "select_venue";
     }
-
 
     // return appointment details of a user - incomplete pending team decisions on functionality
     public void showAppointment(Long userId) throws UserNotFoundException {
@@ -271,5 +277,18 @@ public class UserController {
     @GetMapping("/edit")
     public String editUsers() {
         return "edit_users";
+    }
+
+    public List<String> availableAppointments() {
+        // get today's date
+        LocalDate now = LocalDate.now();
+
+        List<String> availableAppointments = new LinkedList<>();
+
+        for (int day = 0; day < 30; day++)
+            availableAppointments.add(now.plusDays(day).toString());
+
+        System.out.println(availableAppointments);
+        return availableAppointments;
     }
 }

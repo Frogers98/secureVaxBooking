@@ -120,23 +120,23 @@ public class ForumController {
 
     // Get a certain reply by its post id (not currently in use but endpoint is here if we need it,
     // can remove endpoint for security reasons if we deem it necessary)
-    @GetMapping("/reply/{post_id}")
-        public Reply getReplyByPostId(@PathVariable(value = "post_id") long post_id) throws ReplyNotFoundException {
-       Optional<Reply> replyOptional = replyRepository.findByPostId(post_id);
-       if (replyOptional.isPresent()) {
-           Reply reply = replyOptional.get();
-           return reply;
-       }
-       else {
-           throw new ReplyNotFoundException(post_id);
-       }
-        }
+//    @GetMapping("/reply/{post_id}")
+//        public Reply getReplyByPostId(@PathVariable(value = "post_id") long post_id) throws ReplyNotFoundException {
+//       Optional<Reply> replyOptional = replyRepository.findByPostId(post_id);
+//       if (replyOptional.isPresent()) {
+//           Reply reply = replyOptional.get();
+//           return reply;
+//       }
+//       else {
+//           throw new ReplyNotFoundException(post_id);
+//       }
+//        }
 
     // Get a certain reply by its reply_id (not currently in use but endpoint is here if we need it,
     // can remove endpoint for security reasons if we deem it necessary)
-    @GetMapping("/reply/{reply_id}")
-    public Reply getReplyByReplyId(@PathVariable(value = "reply_id") long reply_id) throws ReplyNotFoundExceptionPK {
-        return replyRepository.findById(reply_id).orElseThrow(() -> new ReplyNotFoundExceptionPK(reply_id));
-    }
+//    @GetMapping("/reply/{reply_id}")
+//    public Reply getReplyByReplyId(@PathVariable(value = "reply_id") long reply_id) throws ReplyNotFoundExceptionPK {
+//        return replyRepository.findById(reply_id).orElseThrow(() -> new ReplyNotFoundExceptionPK(reply_id));
+//    }
 
     }
