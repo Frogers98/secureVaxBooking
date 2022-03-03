@@ -11,10 +11,10 @@
 <header class="hero">
     <img style="visibility: hidden; display: none" th:src="@{/images/vaccine-banner.png}" alt="" class="hero">
 
-    <div class="container spacing">
+    <div class="container spacing" >
         <h1 class="primary-title">Secure your vaccination with HSE's Best App</h1>
         <p>    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-        <a a th:href="@{/users/register}" class="btn">Log In or Register Now</a>
+        <a sec:authorize="!isAuthenticated()" a th:href="@{/users/register}" class="btn">Log In or Register Now</a>
     </div>
 </header>
 
@@ -22,7 +22,6 @@
     <section class="benefits">
         <div sec:authorize="isAuthenticated()">
             Hello <b><span sec:authentication="name">Username</span></b>
-            &nbsp;
             <i><span sec:authentication="principal.authorities">Roles</span></i>
             <form th:action="@{/logout}" method="post">
                 <input type="submit" value="Logout" />

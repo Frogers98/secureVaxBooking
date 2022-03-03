@@ -39,7 +39,7 @@ public class User {
     @Column(unique = true)
     private String email;
 //    @OneToOne(cascade = CascadeType.ALL)
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "apt_id")
     private Appointment apt_id;
 
@@ -102,7 +102,6 @@ public class User {
         this.roles = roles;
     }
 
-    // Some attributes don't have setter methods as they should immutable once created initially (e.g. ppsn, name etc.)
     public Long getUser_id() {
         return user_id;
     }
@@ -208,8 +207,6 @@ public class User {
         this.dose1Date = dose1Date;
     }
 
-
-
     public String getDose2() {
         return dose2;
     }
@@ -225,8 +222,6 @@ public class User {
     public void setDose2Date(String dose2Date) {
         this.dose2Date = dose2Date;
     }
-
-
 
     public String getPassword() {
         return password;

@@ -26,4 +26,24 @@ public interface UserRepository
             nativeQuery = true)
     void updateUser(@Param("apt_id") Long apt_id, @Param("user_id") Long user_id);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE User u set u.dose1 = ?1 where u.user_id = ?2")
+    void updateDose1(String dose1, Long user_id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE User u set u.dose1Date = ?1 where u.user_id = ?2")
+    void updateDose1Date(String dose1Date, Long user_id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE User u set u.dose2 = ?1 where u.user_id = ?2")
+    void updateDose2(String dose2, Long user_id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE User u set u.dose2Date = ?1 where u.user_id = ?2")
+    void updateDose2Date(String dose2Date, Long user_id);
+
 }
