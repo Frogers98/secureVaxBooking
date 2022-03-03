@@ -21,12 +21,8 @@
     <section class="benefits">
         <div class="container">
             <div class="loggedIn" sec:authorize="isAuthenticated()">
-                Welcome <b><span sec:authentication="name">Username</span></b>
+                <b>Welcome</b><span sec:authentication="name">Username</span>
                 &nbsp;
-                <i><span sec:authentication="principal.authorities">Roles</span></i>
-                <form th:action="@{/logout}" method="post">
-                    <input class="btn" type="submit" value="Logout" />
-                </form>
             </div>
         </div>
         <div class="container">

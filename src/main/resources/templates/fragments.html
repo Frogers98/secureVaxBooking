@@ -10,9 +10,11 @@
     <nav>
         <a class="name" th:href="@{/}" style="text-transform: capitalize">HSE our health service</a>
         <ul>
-            <li><a th:href="@{/login}">Log in</a></li>
+<!--            <li sec:authorize="isAuthenticated()"><a sec:authentication="name">Username</a></li>-->
+            <li><a sec:authorize="!isAuthenticated()" th:href="@{/login}">Log in</a></li>
             <li><a href="#">Book Vaccination</a></li>
             <li><a th:href="@{/forum}">FAQs</a></li>
+            <li><a style="cursor: pointer;" sec:authorize="isAuthenticated()" th:action="@{/logout}">Log Out</a></li>
         </ul>
     </nav>
 </div>
