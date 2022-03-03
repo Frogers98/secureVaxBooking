@@ -11,4 +11,4 @@ Application can be run by running the application class. Please ensure all depen
 Vaccine bookings can be accessed from the "Book Your Vaccine" button on the homepage or from the navbar.
 Forum can be accessed from the "Be Stronger & Ask Anything" button on the homepage or from the navbar.
 
-![Screenshot of Homepage](https://i.imgur.com/a/lR9FCYk.jpg Screenshot of homepage)
+![Screenshot of Homepage](app_screenshot.png?raw=true Screenshot of Homepage)
