@@ -45,10 +45,10 @@
             <input type="hidden" id="user_id" name="user_id" th:field="${user.user_id}"/>
 
             <label for="post_title"></label>
-            <input class="form-control-lg" type="text" id="post_title" name="post_title" placeholder="Post Title"/>
+            <input class="form-control-lg" type="text" id="post_title" name="post_title" placeholder="Post Title" required/>
 
             <label for="post_content"></label>
-            <textarea class="form-control" id="post_content" name="post_content" maxlength="250" placeholder="Post Content"></textarea>
+            <textarea class="form-control" id="post_content" name="post_content" maxlength="250" placeholder="Post Content" required></textarea>
 
             <button type="submit" class="btn btn-primary mb-2">Submit Post</button>
 
