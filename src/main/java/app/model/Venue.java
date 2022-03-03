@@ -7,7 +7,8 @@ import javax.persistence.*;
 public class Venue {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "venue_id")
     private Long venue_id;
 
     @Column(nullable = false, unique = true, length = 45)
@@ -15,8 +16,8 @@ public class Venue {
 
     private String venue_address;
 
-    @OneToOne(mappedBy = "venue_id")
-    private Appointment appointment;
+//    @JoinColumn("venue_id")
+//    private Appointment appointment;
 
     public Venue(String venue_name, String venue_address) {
         this.venue_name = venue_name;
@@ -30,15 +31,23 @@ public class Venue {
         return venue_id;
     }
 
-    public void setId(Long id) {
-        this.venue_id = id;
+    public void setId(Long venue_id) {
+        this.venue_id = venue_id;
     }
 
     public String getVenue_name() {
         return venue_name;
     }
 
-    public void setVenue_name(String county) {
-        this.venue_name = county;
+    public void setVenue_name(String venue_name) {
+        this.venue_name = venue_name;
+    }
+
+    @Override
+    public String toString() {
+        return "Venue {" +
+                "venueId=" + venue_id +
+                ", county='" + venue_name + '\'' +
+                '}';
     }
 }

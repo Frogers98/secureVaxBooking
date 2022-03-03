@@ -17,7 +17,12 @@ public class VenueConfig {
                     "UCD"
             );
 
+            Venue Mayo = new Venue(
+                    "Mayo",
+                    "Westport"
+            );
 
+            controller.newVenue(Mayo);
             controller.newVenue(Dublin);
         };
     }
