@@ -15,21 +15,57 @@
         <h4>Already Booked? Click here to view details</h4>
     </div>
 
-    <form th:action="@{/appointments/bookAppointmentVenue}" th:object="${venue}"
+    <form th:action="@{/appointments/bookAppointmentVenue}" th:object="${test}"
           method="post" style="max-width: 600px; margin: 0 auto;">
         <div class="m-3">
             <div class="form-group row">
                 <label class="col-4 col-form-label">Appointment Venue: </label>
                 <div class="form-group row">
-                    <select name="dropdown" th:field="*{id}" class="form-control" th:required="required">
+                    <select name="venue_id" th:field="*{venue_id}" class="form-control" th:required="required">
                         <option value = 1 selected>UCD Dublin</option>
                         <option value = 2 selected>Mayo</option>
                     </select>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-4 col-form-label">Date: </label>
+                    <div class="col-8">
+                        <select name="date" th:field="*{date}" class="form-control" th:required="required">
+                            <option th:each="date : ${availableDates}"
+                                    th:value="${date}"
+                                    th:text="${date}">
+                            </option>
+                        </select>
                     </div>
+                </div>
+
                     <br><br>
                     <input type="submit" value="Submit">
                 </div>
             </div>
     </form>
 </div>
+
+<script>
+    var today = new Date();
+    var yyyy = today.getFullYear();
+    var mm = today.getMonth() + 1; // Add one to compensate for months starting at 0
+    var dd = today.getDate(); // Returns day of month, no leading 0
+
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+
+    nextMonth = mm + 1;
+    newMax = yyyy + '-' + nextMonth + '-' + dd;
+    newMin = yyyy + '-' + mm + '-' + dd;
+
+    document.getElementById("date").setAttribute("max", newMax);
+    document.getElementById("date").setAttribute("min", newMin);
+</script>
+
 </body>

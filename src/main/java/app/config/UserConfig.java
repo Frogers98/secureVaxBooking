@@ -24,7 +24,7 @@ public class UserConfig {
                     "040404040",
                     "Sample Address",
                     "08711111",
-                    "Irish",
+                    "irish",
                     "Female",
                     "mariam.jamal@gmail.com",
                     "password"
