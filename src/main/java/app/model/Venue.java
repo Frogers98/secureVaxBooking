@@ -7,7 +7,6 @@ import javax.persistence.*;
 public class Venue {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "venue_id")
     private Long venue_id;
 
@@ -19,7 +18,8 @@ public class Venue {
 //    @JoinColumn("venue_id")
 //    private Appointment appointment;
 
-    public Venue(String venue_name, String venue_address) {
+    public Venue(Long venue_id, String venue_name, String venue_address) {
+        this.venue_id = venue_id;
         this.venue_name = venue_name;
         this.venue_address = venue_address;
     }
