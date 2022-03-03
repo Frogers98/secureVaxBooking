@@ -195,24 +195,3 @@ span{
     border-radius: 50%;
     z-index: -1;
 }
-
-/*user logged in info*/
-.loggedIn{
-    border-radius: 5px;
-    padding-top: 40px;
-    padding-bottom: 40px;
-    width: 85%;
-    max-width: 65em;
-    margin: 0 auto;
-}
-/*input[type=submit] {*/
-/*    background-color: #DF8234;*/
-/*    color: white;*/
-/*    padding: 12px 20px;*/
-/*    border: none;*/
-/*    cursor: pointer;*/
-/*    border-radius: .25em;*/
-/*    transition:*/
-/*            transform 250ms ease-in-out,*/
-/*            opacity 250ms linear;*/
-/*}*/
