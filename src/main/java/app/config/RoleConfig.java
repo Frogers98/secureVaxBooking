@@ -37,7 +37,7 @@ public class RoleConfig {
                     "04123456",
                     "Sample Address",
                     "08745678",
-                    "American",
+                    "american",
                     "Other",
                     "alex@admin.com",
                     "password"
