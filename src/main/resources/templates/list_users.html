@@ -6,18 +6,12 @@
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-    <link th:href="@{/css/style-other.css}" rel="stylesheet" />
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
 </head>
+<div th:replace="fragments :: nav"></div>
 <body>
 <div class="container text-center">
-    <div>
-        <form th:action="@{/logout}" method="post">
-            <p>
-                Welcome <b>[[${#request.userPrincipal.principal.fullName}]]</b>
-            </p>
-            <input type="submit" value="Sign Out" />
-        </form>
-    </div>
+
     <div>
         <h1>List of Users</h1>
     </div>
@@ -26,20 +20,39 @@
         <table class="table table-striped table-bordered">
             <thead class="thead-dark">
             <tr>
-                <th>User ID</th>
+                <th>User ID | Update</th>
                 <th>E-mail</th>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>Appointment</th>
+                <th>Next Appointment</th>
+                <th>First Dose</th>
+                <th>First Dose Date</th>
+                <th>Second Dose</th>
+                <th>Second Dose Date</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="user: ${listUsers}">
-                <td th:text="${user.user_id}">User ID</td>
+                <td>
+                    <a th:href="@{editUserInfo/{id}(id = ${user.user_id})}">
+                        <span th:text="${user.user_id}"></span></a>
+                </td>
                 <td th:text="${user.email}">E-mail</td>
                 <td th:text="${user.name}">First Name</td>
                 <td th:text="${user.surname}">Last Name</td>
-                <td th:text="${user.nextApptId}">Next Appointment</td>
+<!--                Next Appointment-->
+                <td th:unless="${user.nextApptId == null}" th:text="${user.nextApptId.getDate()}">Next Appointment</td>
+                <td th:if="${user.nextApptId == null}">None</td>
+<!--                First Dose Details-->
+                <td th:unless="${user.dose1 == null}" th:text="${user.dose1}">First Dose</td>
+                <td th:if="${user.dose1 == null}">None</td>
+                <td th:unless="${user.dose1Date == null}" th:text="${user.dose1Date}">First Dose Date</td>
+                <td th:if="${user.dose1Date == null}">None</td>
+<!--                Second Dose Details-->
+                <td th:unless="${user.dose2 == null}" th:text="${user.dose2}">Second Dose</td>
+                <td th:if="${user.dose2 == null}">None</td>
+                <td th:unless="${user.dose2Date == null}" th:text="${user.dose2Date}">Second Dose Date</td>
+                <td th:if="${user.dose2Date == null}">None</td>
             </tr>
             </tbody>
         </table>
