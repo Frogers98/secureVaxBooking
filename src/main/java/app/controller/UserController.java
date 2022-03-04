@@ -113,27 +113,23 @@ public class UserController {
         String userEmail = userDetails.getUsername();
         User user = userRepository.findByEmail(userEmail);
         model.addAttribute("user", user);
-        Appointment nextApt = user.getNextApptId();
-        if (nextApt == null){
-            System.out.println("Next Apt: "  + nextApt);
-        } else{
-            System.out.println("Next Apt: "  + nextApt.toString());
-
-        }
+        Appointment nextApt = checkAptExists(user);
         model.addAttribute("apt", nextApt);
         return "my_info";
+    }
+
+    public Appointment checkAptExists(User user) {
+        Appointment nextApt = user.getNextApptId();
+        if (nextApt == null) System.out.println("Next Apt: "  + nextApt);
+        else System.out.println("Next Apt: "  + nextApt.toString());
+        return nextApt;
     }
 
     @GetMapping("/editUserInfo/{id}")
     public String editUserInfo(@PathVariable(value = "id") Long userId, Model model) {
         User user = userRepository.findByID(userId);
         model.addAttribute("user", user);
-        Appointment nextApt = user.getNextApptId();
-        if (nextApt == null){
-            System.out.println("Next Apt: "  + nextApt);
-        } else{
-            System.out.println("Next Apt: "  + nextApt.toString());
-        }
+        Appointment nextApt = checkAptExists(user);
         model.addAttribute("apt", nextApt);
         return "edit_user_info";
     }
@@ -268,11 +264,6 @@ public class UserController {
         return "select_venue";
     }
 
-    // return appointment details of a user - incomplete pending team decisions on functionality
-    public void showAppointment(Long userId) throws UserNotFoundException {
-        UserAptDetails userAptDetails = userAptDetailsRepository.findAptDetails(userId);
-        System.out.println(userAptDetails.getApt_id() + " " + userAptDetails.getVenue());
-    }
 
     @GetMapping("/edit")
     public String editUsers() {
@@ -290,5 +281,14 @@ public class UserController {
 
         System.out.println(availableAppointments);
         return availableAppointments;
+    }
+
+    @GetMapping("cancelAppointment")
+    public String cancelAppointment(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        String userEmail = userDetails.getUsername();
+        User user = userRepository.findByEmail(userEmail);
+        userRepository.cancelUserAppointment(user.getUser_id());
+        appointmentRepository.delete(user.getNextApptId());
+        return "appointment_cancelled";
     }
 }

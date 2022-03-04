@@ -1,6 +1,5 @@
 package app.repository;
 
-import app.UserAptDetails;
 import app.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,7 +23,14 @@ public interface UserRepository
     @Modifying
     @Query(value = "UPDATE users u set apt_id =:apt_id where u.user_id = :user_id",
             nativeQuery = true)
-    void updateUser(@Param("apt_id") Long apt_id, @Param("user_id") Long user_id);
+    void updateUserAppointment(@Param("apt_id") Long apt_id, @Param("user_id") Long user_id);
+
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE users u set u.apt_id = null where u.user_id = :user_id",
+            nativeQuery = true)
+    void cancelUserAppointment(@Param("user_id") Long user_id);
 
     @Transactional
     @Modifying

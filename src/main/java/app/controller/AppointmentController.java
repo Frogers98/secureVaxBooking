@@ -118,7 +118,7 @@ public class AppointmentController {
         if (appointment == null) return "index";
 
         else {
-            userRepository.updateUser(appointment.getApt_id(), user.getUser_id());
+            userRepository.updateUserAppointment(appointment.getApt_id(), user.getUser_id());
             return "booking_successful";
         }
     }
