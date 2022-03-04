@@ -29,6 +29,11 @@
     <div id="wrapper">
         <h1>Welcome</h1>
     </div>
+    <div class="text-center">
+        <h2>
+            <span th:unless="${errorMessage== null}" th:text="${errorMessage}"></span>
+        </h2>
+    </div>
     <form th:action="@{/users/register_attempt}" th:object="${user}"
           method="post" style="max-width: 600px; margin: 0 auto;">
         <div class="m-3">

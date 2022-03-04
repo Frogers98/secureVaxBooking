@@ -61,7 +61,6 @@ public class AppointmentController {
                     Objects.equals(apt.getTime(), time) &&
                     Objects.equals(apt.getDate(), date)) return true;
         }
-        System.out.println("no match");
         return false;
     }
 
