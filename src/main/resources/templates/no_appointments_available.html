@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>No Appointments</title>
+    <link th:href="@{/css/style-other.css}" rel="stylesheet" />
 </head>
 <body>
-<h1>No appointments here at this time.</h1>
+<p style="font-size: 2.5rem;"><b>No appointments here at this time.</b></p>
+<a style="font-size: 1.5rem; color: #CBD03A" th:href="@{/users/bookAppointment}"><b>Click to go back.</b></a>
 </body>
 </html>
