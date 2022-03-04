@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User Information</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+</head>
+<div th:replace="fragments :: nav"></div>
+<body>
+<div class="container text-center">
+    <div>
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <td>Info</td>
+                <td>Status</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Email</td>
+                <td th:text="${user.email}"></td>
+            </tr>
+            <tr>
+                <td>First Dose Date</td>
+                <td>
+                    <span th:if="${apt==null and user.dose1==null}">Not Booked</span>
+                    <span th:if="${apt!=null and user.dose1 ==null}" th:text="${apt.getDate()}"></span>
+                    <span th:if="${user.dose1Date!=null}" th:text="${user.dose1Date}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>First Dose Received</td>
+                <td>
+                    <span th:if="${user.dose1Date!=null}" th:text="${user.dose1}"></span>
+                    <span th:if="${user.dose1Date==null and apt!=null}">
+                        Not Received |
+                        <a  th:href="@{/users/confirmDose1/{id}(id = ${user.user_id})}">
+                            Confirm Receipt</a>
+                    </span>
+                    <span th:if="${user.dose1Date==null and apt==null}">
+                        Not Received
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>Second Dose Date</td>
+                <td>
+                    <span th:if="${user.dose1==null}" >Not Booked</span>
+                    <span th:if="${apt!=null and
+                                   user.dose1 != null and
+                                   user.dose2Date==null}" th:text="${apt.getDate()}"></span>
+                    <span th:if="${user.dose2Date!=null}" th:text="${user.dose2Date}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>Second Dose Received</td>
+                <td>
+                    <span th:if="${user.dose2!=null}" th:text="${user.dose2}"></span>
+                    <span th:if="${user.dose2==null and user.dose1!=null}">
+                        Not Received |
+                        <a  th:href="@{/users/confirmDose2/{id}(id = ${user.user_id})}">
+                            Confirm Receipt</a>
+                    </span>
+                    <span th:if="${user.dose1Date==null and apt==null}">
+                        Not Received
+                    </span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -31,6 +31,7 @@ public class VenueController {
     public void newVenue(@Valid @RequestBody Venue newVenue) {
         if (getVenueByName(newVenue.getVenue_name()))
             System.out.println("Venue already in database");
+
         else venueRepository.save(newVenue);
     }
 

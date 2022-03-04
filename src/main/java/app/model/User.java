@@ -32,22 +32,27 @@ public class User {
     @NotBlank
     private String phone;
     @NotBlank
+    private String nationality;
+    @NotBlank
+    private String sex;
+    @NotBlank
     @Column(unique = true)
     private String email;
 //    @OneToOne(cascade = CascadeType.ALL)
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "apt_id")
     private Appointment apt_id;
 
+    private String dose1;
+
     private String dose1Date;
+
+    private String dose2;
 
     private String dose2Date;
 
-    private String lastLogin;
     @NotBlank
     private String password;
-//
-//    private boolean enabled;
 
     public User() {
         super();
@@ -59,6 +64,8 @@ public class User {
                 String ppsn,
                 String address,
                 String phone,
+                String nationality,
+                String sex,
                 String email,
                 String password) {
         super();
@@ -68,11 +75,13 @@ public class User {
         this.ppsn = ppsn;
         this.address = address;
         this.phone = phone;
+        this.nationality = nationality;
+        this.sex = sex;
         this.email = email;
         this.password = password;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -93,7 +102,6 @@ public class User {
         this.roles = roles;
     }
 
-    // Some attributes don't have setter methods as they should immutable once created initially (e.g. ppsn, name etc.)
     public Long getUser_id() {
         return user_id;
     }
@@ -150,6 +158,22 @@ public class User {
         this.phone = phone;
     }
 
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -167,12 +191,28 @@ public class User {
         this.apt_id = appointment;
     }
 
+    public String getDose1() {
+        return dose1;
+    }
+
+    public void setDose1(String dose1) {
+        this.dose1 = dose1;
+    }
+
     public String getDose1Date() {
         return dose1Date;
     }
 
     public void setDose1Date(String dose1Date) {
         this.dose1Date = dose1Date;
+    }
+
+    public String getDose2() {
+        return dose2;
+    }
+
+    public void setDose2(String dose2) {
+        this.dose2 = dose2;
     }
 
     public String getDose2Date() {
@@ -183,14 +223,6 @@ public class User {
         this.dose2Date = dose2Date;
     }
 
-    public String getLastLogin() {
-        return lastLogin;
-    }
-
-    public void setLastLogin(String lastLogin) {
-        this.lastLogin = lastLogin;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -198,4 +230,5 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

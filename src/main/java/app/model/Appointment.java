@@ -30,9 +30,8 @@ public class Appointment {
     @NotBlank
     private String time;
 
-//    @NotBlank
-    @OneToOne
-    @JoinColumn(name = "venue_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "venue_id", nullable = false)
     private Venue venue_id;
 
     @OneToOne(mappedBy = "apt_id")
@@ -95,4 +94,18 @@ public class Appointment {
     public void setUser(User user) {
         this.user = user;
     }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "apt_id=" + apt_id +
+                ", vaccine='" + vaccine + '\'' +
+                ", dose='" + dose + '\'' +
+                ", date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                ", venue_id=" + venue_id +
+                ", user=" + user +
+                '}';
+    }
+
 }

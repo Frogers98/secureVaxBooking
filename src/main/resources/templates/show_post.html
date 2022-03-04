@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${post.post_title}">test</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <link th:href="@{/css/style-other.css}" rel="stylesheet" />
+</head>
+<body>
+<div id="post_page_container">
+
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title" th:text="${post.post_title}"></h3>
+            <p class="card-text" th:text="${post.post_content}"></p>
+            <p class="card-text font-italic" th:text="${post.post_date}"></p>
+        </div>
+
+
+        <div th:if="${reply != null}" class="card">
+            <div class="card-body">
+                <h3 class="card-title">Reply Posted</h3>
+                <p class="card-text" th:text="${reply.reply_content}"></p>
+                <p class="font-italic card-text" th:text="${reply.reply_date}"></p>
+            </div>
+        </div>
+
+        <div sec:authorize="hasAnyAuthority('ADMIN')" th:if="${reply == null}" class="card">
+            <div class="card-body">
+                <form class="form-group" th:action="@{/forum/reply}" method="post">
+                    <h3 class="card-title">Reply to post</h3>
+
+                    <label for="post_id"></label>
+                    <input type="hidden" id="post_id" name="post_id" th:field="${post.post_id}"/>
+
+                    <label for="reply_content"></label>
+                    <textarea class="form-control" id="reply_content" name="reply_content" maxlength="250"
+                              placeholder="Reply Content" required></textarea>
+
+                    <button type="submit" class="btn btn-primary mb-2">Submit Reply</button>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>
