@@ -65,7 +65,7 @@ nav a {
     color: #eeee;
 }
 nav a:hover {
-    color: #DF8234;
+    color: #CBD03A;
 }
 
 strong {
@@ -103,7 +103,7 @@ strong {
     cursor: pointer;
 }
 .welcome a:hover{
-    color: #DF8234;
+    color: #CBD03A;
 }
 footer {
     display: flex;
