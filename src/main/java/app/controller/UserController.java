@@ -232,6 +232,7 @@ public class UserController {
     public String bookingForm(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
         String userEmail = userDetails.getUsername();
         User user = userRepository.findByEmail(userEmail);
+        if(user.getDose2() != null) return "dose3";
         if (user.getNextApptId() != null) return "cancel_first";
 
         List<String> dates = availableAppointments();

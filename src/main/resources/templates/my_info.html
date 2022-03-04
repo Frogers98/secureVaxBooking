@@ -59,9 +59,9 @@
                         Not Booked |
                         <a  th:href="@{/users/bookAppointment}"> Book Your Vaccine</a>
                     </span>
-                    <span class="span--health" th:if="${apt!=null and user.dose1Date ==null}" th:text="${apt.getDate()}"></span>
+                    <span class="span--health" th:if="${apt!=null and user.dose1Date == null}" th:text="${apt.getDate()}"></span>
                     <span class="span--health" th:if="${user.dose1Date!=null}" th:text="${user.dose1Date}"></span>
-                    <a  th:if="${apt!=null}" th:href="@{/users/confirmAppointmentCancellation}"> Cancel Your Appointment</a>
+                    <a  th:if="${apt!=null and user.dose1 == null}" th:href="@{/users/confirmAppointmentCancellation}"> Cancel Your Appointment</a>
 
                 </td>
             </tr>
@@ -80,6 +80,7 @@
                                    user.dose1Date != null and
                                    user.dose2Date==null}" th:text="${apt.getDate()}"></span>
                     <span class="span--health" th:if="${user.dose2Date!=null}" th:text="${user.dose2Date}"></span>
+                    <a  th:if="${apt!=null and user.dose1 != null}" th:href="@{/users/confirmAppointmentCancellation}"> Cancel Your Appointment</a>
                 </td>
             </tr>
             <tr>
