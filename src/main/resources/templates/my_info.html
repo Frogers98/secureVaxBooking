@@ -3,65 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <title>My Information</title>
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
-    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+<!--    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />-->
+<!--    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>-->
+<!--    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>-->
     <link th:href="@{/css/style.css}" rel="stylesheet" />
 </head>
+<style>
+    #health {
+        margin: 5rem auto;
+        border-collapse: collapse;
+        width: 85%;
+    }
+    #health td, #health th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    #health tr:nth-child(even){background-color: #f2f2f2;}
+    #health tr:hover {background-color: #ddd;}
+    #health th{
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #006152;
+        color: white;
+    }
+    .span--health{
+        display: block;
+        font-weight: 200;
+        font-size: 1rem;
+    }
+</style>
 <body>
 <div th:replace="fragments :: nav"></div>
-<div class="container text-center">
+<div class="container">
+    <p style="text-align: center; font-size: 23px; margin: 5rem auto">
+        Welcome <b>[[${#request.userPrincipal.principal.fullName}]]</b>
+    </p>
     <div>
-        <p>
-            Welcome <b>[[${#request.userPrincipal.principal.fullName}]]</b>
-        </p>
-    </div>
-    <div>
-        <table class="table table-striped table-bordered">
+        <table id="health" class="table table-striped table-bordered">
+
             <thead class="thead-dark">
-            <tr>
-                <td>Info</td>
-                <td>Status</td>
+            <tr style="background-color: rgba(0, 97, 82, 0.7);">
+                <td><b>Info</b></td>
+                <td><b>Status</b></td>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td>Email</td>
-                <td th:text="${user.email}"></td>
+                <td >Email</td>
+                <td class="span--health" th:text="${user.email}"></td>
             </tr>
             <tr>
                 <td>First Dose Booked</td>
                 <td>
-                    <span th:if="${apt==null and user.dose1==null}">
+                    <span class="span--health" th:if="${apt==null and user.dose1==null}">
                         Not Booked |
                         <a  th:href="@{/users/bookAppointment}"> Book Your Vaccine</a>
                     </span>
-                    <span th:if="${apt!=null and user.dose1Date ==null}" th:text="${apt.getDate()}"></span>
-                    <span th:if="${user.dose1Date!=null}" th:text="${user.dose1Date}"></span>
+                    <span class="span--health" th:if="${apt!=null and user.dose1Date ==null}" th:text="${apt.getDate()}"></span>
+                    <span class="span--health" th:if="${user.dose1Date!=null}" th:text="${user.dose1Date}"></span>
                 </td>
             </tr>
             <tr>
                 <td>First Dose Received</td>
                 <td>
-                    <span th:if="${user.dose1Date!=null}" th:text="${user.dose1}"></span>
-                    <span th:if="${user.dose1Date==null}">Not Received</span>
+                    <span class="span--health" th:if="${user.dose1Date!=null}" th:text="${user.dose1}"></span>
+                    <span class="span--health" th:if="${user.dose1Date==null}">Not Received</span>
                 </td>
             </tr>
             <tr>
                 <td>Second Dose Booked</td>
                 <td>
-                    <span th:if="${user.dose1Date==null}" >Not Booked</span>
-                    <span th:if="${apt!=null and
+                    <span class="span--health" th:if="${user.dose1Date==null}" >Not Booked</span>
+                    <span class="span--health" th:if="${apt!=null and
                                    user.dose1Date != null and
                                    user.dose2Date==null}" th:text="${apt.getDate()}"></span>
-                    <span th:if="${user.dose2Date!=null}" th:text="${user.dose2Date}"></span>
+                    <span class="span--health" th:if="${user.dose2Date!=null}" th:text="${user.dose2Date}"></span>
                 </td>
             </tr>
             <tr>
                 <td>Second Dose Received</td>
                 <td>
-                    <span th:if="${user.dose2Date!=null}" th:text="${user.dose2}"></span>
-                    <span th:if="${user.dose2Date==null}" >Not Received</span>
+                    <span class="span--health" th:if="${user.dose2Date!=null}" th:text="${user.dose2}"></span>
+                    <span class="span--health" th:if="${user.dose2Date==null}" >Not Received</span>
                 </td>
             </tr>
             <tr th:if="${user.dose1!=null and user.dose2!=null}">

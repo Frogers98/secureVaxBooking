@@ -33,7 +33,6 @@ h1 {
     width: 85%;
     max-width: 65em;
     margin: 3rem auto;
-    background-color: rgba(0, 97, 82, 0.7);
     border-radius: 1rem;
 }
 #wrapper {
@@ -179,4 +178,23 @@ input[type=submit] {
 
 input[type=submit]:hover {
     background-color: #45a049;
+}
+
+#table {
+    margin: 5rem auto;
+    border-collapse: collapse;
+    width: 85%;
+}
+#table td, #table th {
+    border: 1px solid #333;
+    padding: 8px;
+}
+#table tr:nth-child(even){background-color: #f2f2f2;}
+#table tr:hover {background-color: #ddd;}
+#table th{
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #006152;
+    color: white;
 }
