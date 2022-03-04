@@ -283,8 +283,14 @@ public class UserController {
         return availableAppointments;
     }
 
-    @GetMapping("cancelAppointment")
-    public String cancelAppointment(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    @GetMapping("confirmAppointmentCancellation")
+    public String confirmAppointmentCancellation(@AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        return "confirm_appointment_cancellation";
+    }
+
+    @GetMapping("appointmentCancellation")
+    public String appointmentCancellation(@AuthenticationPrincipal CustomUserDetails userDetails) {
         String userEmail = userDetails.getUsername();
         User user = userRepository.findByEmail(userEmail);
         userRepository.cancelUserAppointment(user.getUser_id());

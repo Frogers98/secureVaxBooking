@@ -43,7 +43,7 @@
                     <span th:if="${user.dose1Date!=null}" th:text="${user.dose1Date}">
                     </span>
 
-                    <a  th:if="${apt!=null}" th:href="@{/users/cancelAppointment}"> Cancel Your Appointment</a>
+                    <a  th:if="${apt!=null}" th:href="@{/users/confirmAppointmentCancellation}"> Cancel Your Appointment</a>
 
                 </td>
             </tr>
