@@ -68,8 +68,16 @@
                     <span class="span--health" th:if="${user.dose1Date!=null}" th:text="${user.dose1}"></span>
                     <span class="span--health" th:if="${user.dose1Date==null and apt!=null}">
                         Not Received |
-                        <a  th:href="@{/users/confirmDose1/{id}(id = ${user.user_id})}">
-                            Confirm Receipt</a>
+                        <form th:action="@{/users/confirmDose1/{id}(id = ${user.user_id})}"
+                              method="post" style="max-width: 600px; margin: 0 auto;">
+                            <select th:name="vaccine">
+                                <option value="Moderna">Moderna</option>
+                                <option value="Pfizer">Pfizer</option>
+                            </select>
+                            <div>
+                                <button type="submit" class="btn">Confirm Receipt</button>
+                            </div>
+                        </form>
                     </span>
                     <span class="span--health" th:if="${user.dose1Date==null and apt==null}">
                         Not Received
@@ -92,8 +100,16 @@
                     <span class="span--health" th:if="${user.dose2!=null}" th:text="${user.dose2}"></span>
                     <span class="span--health" th:if="${user.dose2==null and user.dose1!=null}">
                         Not Received |
-                        <a  th:href="@{/users/confirmDose2/{id}(id = ${user.user_id})}">
-                            Confirm Receipt</a>
+                        <form th:action="@{/users/confirmDose2/{id}(id = ${user.user_id})}"
+                              method="post" style="max-width: 600px; margin: 0 auto;">
+                            <select th:name="vaccine">
+                                <option value="Moderna">Moderna</option>
+                                <option value="Pfizer">Pfizer</option>
+                            </select>
+                            <div>
+                                <button type="submit" class="btn">Confirm Receipt</button>
+                            </div>
+                        </form>
                     </span>
                     <span class="span--health" th:if="${user.dose1Date==null and apt==null}">
                         Not Received
