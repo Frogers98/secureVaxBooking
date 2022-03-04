@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Forum</title>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
@@ -10,7 +10,7 @@
 <div th:replace="fragments :: nav"></div>
 <body>
 
-    <div class="container">
+    <div class="post-container">
         <form th:action="@{forum/post}" method="post">
 
             <label for="user_id"></label>
@@ -21,9 +21,8 @@
             <input class="form-control" type="text" id="post_title" name="post_title" placeholder="Post Title" required/>
 
             <label for="post_content"></label>
-            <textarea class="form-control" id="post_content" name="post_content" maxlength="250" placeholder="Post Content" required></textarea>
-            <input type="submit" value="Submit">
-
+            <textarea class="form-control" id="post_content" name="post_content" maxlength="250" placeholder="Post Content" required>[[${#request.userPrincipal.principal.fullName}]]:</textarea>
+            <input class="input-button" type="submit" value="Submit">
         </form>
     </div>
 <section class="user--questions">

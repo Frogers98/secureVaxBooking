@@ -12,15 +12,11 @@
         <ul>
 <!--            <li sec:authorize="isAuthenticated()"><a sec:authentication="name">Username</a></li>-->
             <li><a sec:authorize="!isAuthenticated()" th:href="@{/login}">Log in</a></li>
-            <li>
-                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
-                    <input type="submit" value="Logout" />
-                </form>
-            </li>
             <li><a sec:authorize="hasAnyAuthority('USER')"  th:href="@{/users/myInfo}">Vax Record</a></li>
             <li><a sec:authorize="hasAnyAuthority('USER')"  th:href="@{/users/bookAppointment}">Book Vaccination</a></li>
             <li><a th:href="@{/forum}">Forum</a></li>
             <li><a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/users/listUsers}">Admin: User List</a></li>
+            <li><a sec:authorize="isAuthenticated()" th:href="@{/logout}">Log out</a></li>
         </ul>
     </nav>
 </div>

@@ -86,6 +86,25 @@ strong {
         padding: 0.5rem 0;
     }
 }
+
+/* code for the welcome div */
+.welcome{
+    font-size: 32px;
+}
+.welcome a{
+    text-decoration: none;
+    font-weight: bold;
+    color: #eeee;
+    text-transform: capitalize;
+    font-size: 23px;
+    margin-bottom: 6rem;
+}
+.welcome a:hover a:focus{
+    cursor: pointer;
+}
+.welcome a:hover{
+    color: #DF8234;
+}
 footer {
     display: flex;
     justify-content: space-between;

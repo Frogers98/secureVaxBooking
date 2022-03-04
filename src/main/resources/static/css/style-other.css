@@ -27,7 +27,14 @@ h1 {
 .container{
     width: 85%;
     max-width: 65em;
-    margin: 0 auto;
+    margin: 3rem auto;
+}
+.post-container{
+    width: 85%;
+    max-width: 65em;
+    margin: 3rem auto;
+    background-color: rgba(0, 97, 82, 0.7);
+    border-radius: 1rem;
 }
 #wrapper {
     margin: 0 auto;
@@ -55,6 +62,17 @@ h1 {
 .btn:focus{
     transform: scale(1.1);
     opacity: .9;
+}
+
+.input-button{
+    display: inline-block;
+    text-decoration: none;
+    color: #eeee;
+    padding: .5em 1.25em;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: #DF8234;
+    border-radius: .25em;
 }
 
 a {
@@ -162,4 +180,3 @@ input[type=submit] {
 input[type=submit]:hover {
     background-color: #45a049;
 }
-
