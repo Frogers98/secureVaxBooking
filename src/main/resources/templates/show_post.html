@@ -1,51 +1,54 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title th:text="${post.post_title}">test</title>
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
-    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <link th:href="@{/css/style-other.css}" rel="stylesheet" />
 </head>
+<style>
+    body{
+        background-color: white;
+    }
+    .message {margin-bottom: 15px; }
+    .card-title{color: black; font-weight: bolder;}
+    .card-text { padding-left: 20px; margin-left: 30px; font-style:italic; color:black; }
+</style>
+<div th:replace="fragments :: nav"></div>
 <body>
-<div id="post_page_container">
-
-    <div class="card">
-        <div class="card-body">
-            <h3 class="card-title" th:text="${post.post_title}"></h3>
-            <p class="card-text" th:text="${post.post_content}"></p>
-            <p class="card-text font-italic" th:text="${post.post_date}"></p>
-        </div>
-
-
-        <div th:if="${reply != null}" class="card">
+    <div class="post-container">
+        <div class="message">
             <div class="card-body">
-                <h3 class="card-title">Reply Posted</h3>
-                <p class="card-text" th:text="${reply.reply_content}"></p>
-                <p class="font-italic card-text" th:text="${reply.reply_date}"></p>
+                <h3 class="card-title" th:text="${post.post_title}"></h3>
+                <p class="card-text" th:text="${post.post_content}"></p>
+                <p style="color: #0048A8"  th:text="${post.post_date}"></p>
+            </div>
+            <div style="clear:both;"></div>
+            <div th:if="${reply != null}" class="message">
+                <div class="card-body">
+                    <h3 class="card-title">Reply</h3>
+                    <p class="card-text" th:text="${reply.reply_content}"></p>
+                    <p style="color: #0048A8" th:text="${reply.reply_date}"></p>
+                </div>
             </div>
         </div>
 
-        <div sec:authorize="hasAnyAuthority('ADMIN')" th:if="${reply == null}" class="card">
-            <div class="card-body">
-                <form class="form-group" th:action="@{/forum/reply}" method="post">
-                    <h3 class="card-title">Reply to post</h3>
+        <div style="clear:both;"></div>
+        <div sec:authorize="hasAnyAuthority('ADMIN')" th:if="${reply == null}" class="message">
+            <form th:action="@{/forum/reply}" method="post">
+                <h3 class="card-title">Reply to post</h3>
 
-                    <label for="post_id"></label>
-                    <input type="hidden" id="post_id" name="post_id" th:field="${post.post_id}"/>
+                <label for="post_id"></label>
+                <input type="hidden" id="post_id" name="post_id" th:field="${post.post_id}"/>
 
-                    <label for="reply_content"></label>
-                    <textarea class="form-control" id="reply_content" name="reply_content" maxlength="250"
-                              placeholder="Reply Content" required></textarea>
-
-                    <button type="submit" class="btn btn-primary mb-2">Submit Reply</button>
-                </form>
-            </div>
+                <label for="reply_content"></label>
+                <textarea class="form-control" id="reply_content" name="reply_content" maxlength="250"
+                          placeholder="Reply Content" required>Admin: </textarea>
+                <input class="input-button" type="submit" value="Submit">
+            </form>
         </div>
-
 
     </div>
-</div>
 </body>
 </html>

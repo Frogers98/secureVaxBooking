@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Forum</title>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
@@ -7,10 +7,24 @@
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
     <link th:href="@{/css/style-other.css}" rel="stylesheet" />
 </head>
+<style>
+    body{
+        background-color: white;
+    }
+    .span--click{
+        display: block;
+        font-weight: 500;
+        font-size: 1rem;
+        color:orange;
+    }
+    a{
+        text-decoration: none;
+    }
+</style>
 <div th:replace="fragments :: nav"></div>
 <body>
 
-    <div class="container">
+    <div class="post-container">
         <form th:action="@{forum/post}" method="post">
 
             <label for="user_id"></label>
@@ -21,20 +35,19 @@
             <input class="form-control" type="text" id="post_title" name="post_title" placeholder="Post Title" required/>
 
             <label for="post_content"></label>
-            <textarea class="form-control" id="post_content" name="post_content" maxlength="250" placeholder="Post Content" required></textarea>
-            <input type="submit" value="Submit">
-
+            <textarea class="form-control" id="post_content" name="post_content" maxlength="250" placeholder="Post Content" required>[[${#request.userPrincipal.principal.fullName}]]:</textarea>
+            <input class="input-button" type="submit" value="Submit">
         </form>
     </div>
 <section class="user--questions">
     <div class="container">
         <div>
-            <table class="table table-striped table-bordered">
+            <table id="health" class="table table-striped table-bordered">
                 <thead class="thead-dark">
-                    <tr>
-                        <td>Post Title</td>
-                        <td>Date Added</td>
-                        <td>Reply Posted</td>
+                    <tr style="background-color: rgba(0,97,82,0.7);">
+                        <td style="font-weight: bolder">Click Title to view</td>
+                        <td style="font-weight: bolder">Date Added</td>
+                        <td style="font-weight: bolder">Reply Posted</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,7 +56,7 @@
 
                         <td>
                             <a th:href="@{forum/post/{id}(id = ${post.post_id})}">
-                            <span th:text="${post.post_title}"></span></a>
+                            <span class="span--click" th:text="${post.post_title}"></span></a>
                         </td>
                         <td th:text="${post.post_date}"></td>
 
