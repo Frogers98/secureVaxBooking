@@ -55,19 +55,25 @@ public class UserController {
 
     @GetMapping("/register")
     public String startRegistration(Model model) {
+        String errorMessage = null;
         model.addAttribute("user", new User());
+        model.addAttribute("errorMessage", errorMessage);
         return "register";
     }
 
     // register attempt of user with error checking for duplicate email or ppsn
     @PostMapping("/register_attempt")
-    public String registerAttempt(@ModelAttribute("user") User newUser) {
+    public String registerAttempt(@ModelAttribute("user") User newUser, Model model) {
         if (getUserByEmail(newUser.getEmail())) {
             System.out.println("An account associated with this email address has already been created.");
-            return "reg_login_landing";
+            String errorMessage = "An account associated with this email address has already been created.";
+            model.addAttribute("errorMessage", errorMessage);
+            return "register";
         }else if (getUserByPPSN(newUser.getPpsn())) {
             System.out.println("An account associated with this PPS number has already been created.");
-            return "reg_login_landing";
+            String errorMessage = "An account associated with this PPS number has already been created.";
+            model.addAttribute("errorMessage", errorMessage);
+            return "register";
         } else {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
