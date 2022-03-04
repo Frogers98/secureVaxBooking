@@ -92,15 +92,6 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/login")
-    public String login(){
-        // Take username and password
-        // Check against database
-        // Login status= true
-        // Redirect to my details page
-        return "Welcome!";
-    }
-
     @GetMapping("/listUsers")
     public String listUsers(Model model) {
         List<User> allUsers = userRepository.findAll();
@@ -134,16 +125,14 @@ public class UserController {
         return "edit_user_info";
     }
 
-    @GetMapping("/confirmDose1/{user_id}")
+    @RequestMapping("/confirmDose1/{user_id}")
     public String confirmDose1(@PathVariable(value = "user_id") Long userId,
+                               @RequestParam(value = "vaccine") String vaccine,
                                Model model) {
         User user = userRepository.findByID(userId);
-
         Appointment attendedApt = user.getNextApptId();
-
+        /* Time organising */
         String oldDate = attendedApt.getDate();
-//        String oldDatetime = attendedApt.getDate() + " " + attendedApt.getTime();
-//            System.out.println("Old Date time " + oldDatetime);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date newDate = new java.util.Date();
         try {
@@ -156,7 +145,9 @@ public class UserController {
         c.add(Calendar.DATE, 21); // Adding 3 weeks
         String futureDate = sdf.format(c.getTime());
         System.out.println(futureDate);
-        String confirmedDose = attendedApt.getVaccine();
+
+        /* Appointment Organising*/
+        String confirmedDose = vaccine;
         String attendedDate = attendedApt.getDate();
         System.out.println("Setting user null");
         user.setNextApptId(null);
@@ -182,12 +173,13 @@ public class UserController {
         return "redirect:/users/editUserInfo/" + userId.toString();
     }
 
-    @GetMapping("/confirmDose2/{user_id}")
+    @RequestMapping("/confirmDose2/{user_id}")
     public String confirmDose2(@PathVariable(value = "user_id") Long userId,
+                               @RequestParam(value = "vaccine") String vaccine,
                                Model model) {
         User user = userRepository.findByID(userId);
         Appointment attendedApt = user.getNextApptId();
-        String confirmedDose = attendedApt.getVaccine();
+        String confirmedDose = vaccine;
         String attendedDate = attendedApt.getDate();
         System.out.println("Setting user null");
         user.setNextApptId(null);
@@ -198,28 +190,11 @@ public class UserController {
         return "redirect:/users/editUserInfo/" + userId.toString();
     }
 
-    @RequestMapping("/logout")
-    public String logout(){
-        // Login status= false
-        // Redirect to home page
-        return "Welcome!";
-    }
-
     // Get All users
     public List<User> getAllUsers(){
         return  userRepository.findAll();
     }
 
-//    // altered function to only save user if email not already taken
-//    @PostMapping
-//    public void newUser(@Valid @RequestBody User newUser) {
-//        if (getUserByEmail(newUser.getEmail()))
-//            System.out.println("An account associated with this email address has already been created.");
-//        else if (getUserByPPSN(newUser.getPpsn()))
-//            System.out.println("An account associated with this PPS number has already been created.");
-//        else
-//            userRepository.save(newUser);
-//    }
 
     // I will try to consolidate this and the email check into one method
     public Boolean getUserByEmail(String email) {
@@ -246,14 +221,6 @@ public class UserController {
         else return true;
     }
 
-//    // Get a Single User
-//    @GetMapping("/{id}")
-//    public User getUserById(@PathVariable(value = "id") Long userId)
-//            throws UserNotFoundException {
-//        return userRepository.findById(userId)
-//                .orElseThrow(() -> new UserNotFoundException(userId));
-//    }
-
 
     @GetMapping("/bookAppointment")
     public String bookingForm(Model model) {
@@ -264,11 +231,6 @@ public class UserController {
         return "select_venue";
     }
 
-
-    @GetMapping("/edit")
-    public String editUsers() {
-        return "edit_users";
-    }
 
     public List<String> availableAppointments() {
         // get today's date
