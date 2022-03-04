@@ -246,24 +246,19 @@ public class UserController {
         else return true;
     }
 
-//    // Get a Single User
-//    @GetMapping("/{id}")
-//    public User getUserById(@PathVariable(value = "id") Long userId)
-//            throws UserNotFoundException {
-//        return userRepository.findById(userId)
-//                .orElseThrow(() -> new UserNotFoundException(userId));
-//    }
-
 
     @GetMapping("/bookAppointment")
-    public String bookingForm(Model model) {
+    public String bookingForm(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        String userEmail = userDetails.getUsername();
+        User user = userRepository.findByEmail(userEmail);
+        if (user.getNextApptId() != null) return "cancel_first";
+
         List<String> dates = availableAppointments();
         model.addAttribute("test", new test());
         model.addAttribute("venue", new Venue().getId());
         model.addAttribute("availableDates", dates);
         return "select_venue";
     }
-
 
     @GetMapping("/edit")
     public String editUsers() {
@@ -284,8 +279,7 @@ public class UserController {
     }
 
     @GetMapping("confirmAppointmentCancellation")
-    public String confirmAppointmentCancellation(@AuthenticationPrincipal CustomUserDetails userDetails) {
-
+    public String confirmAppointmentCancellation() {
         return "confirm_appointment_cancellation";
     }
 
