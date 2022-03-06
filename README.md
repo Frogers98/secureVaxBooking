@@ -9,12 +9,15 @@ Hassan -25% - Home page, Graphs Component and style of web application.
 
 Eugene -25% - Security components of web app and authentication/authorisation
 
+Notes:
 
-Application can be run by running the application class. 
-Please ensure all dependencies in the pom file are resolved before running
-Create a database with name ``hse`` manually before running the application.
+- Application can be run by running the application class. 
 
-Update the application.properties file to contain your username and password copy from below:
+- Please ensure all dependencies in the pom file are resolved before running
+
+- Create a database with name ``hse`` manually before running the application.
+
+- Update the application.properties file to contain your username and password copy from below:
 ```
 # if port 8080 is busy otherwise comment out
 server.port=
@@ -32,4 +35,4 @@ Any accounts created through the app will be regular accounts, but an admin acco
 
 Vaccine bookings can be accessed from the "Book Your Vaccine" button on the homepage or from the navbar.
 Forum can be accessed from the "Be Stronger & Ask Anything" button on the homepage or from the navbar.
-![app screenshot](https://user-images.githubusercontent.com/71187088/156617443-78173107-a35b-4118-a6ba-3eea99fd1096.png)
+![Screenshot 2022-03-06 at 12-38-07 Home](https://user-images.githubusercontent.com/72608789/156923840-e55bac90-ed4d-40ec-b98a-bcd9e9dae4b9.png)
