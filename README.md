@@ -9,12 +9,15 @@ Hassan -25% - Home page, Graphs Component and style of web application.
 
 Eugene -25% - Security components of web app and authentication/authorisation
 
+Notes:
 
-Application can be run by running the application class. 
-Please ensure all dependencies in the pom file are resolved before running
-Create a database with name ``hse`` manually before running the application.
+- Application can be run by running the application class. 
 
-Update the application.properties file to contain your username and password copy from below:
+- Please ensure all dependencies in the pom file are resolved before running
+
+- Create a database with name ``hse`` manually before running the application.
+
+- Update the application.properties file to contain your username and password copy from below:
 ```
 # if port 8080 is busy otherwise comment out
 server.port=
