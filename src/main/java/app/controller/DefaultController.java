@@ -82,7 +82,7 @@ public class DefaultController {
         });
 
         for (String s : dobs){
-            jsonArrayCategory.add(s.substring(s.length()-4));
+            jsonArrayCategory.add(s.substring(0,4));
             jsonArraySeries.add(dataDAO.getByDob(s));
         }
         jsonObject.add("numbers", jsonArraySeries);
