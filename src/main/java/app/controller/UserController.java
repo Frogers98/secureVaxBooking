@@ -1,17 +1,15 @@
 package app.controller;
 
-import app.UserAptDetails;
 import app.model.Appointment;
 import app.model.Venue;
 import app.repository.AppointmentRepository;
 import app.repository.UserAptDetailsRepository;
 import app.repository.UserRepository;
 import app.model.User;
-import app.exception.UserNotFoundException;
 
 import app.security.CustomUserDetails;
 import app.service.UserService;
-import app.test;
+import app.VenueAndDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,13 +17,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -230,26 +226,40 @@ public class UserController {
 
     @GetMapping("/bookAppointment")
     public String bookingForm(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        String userEmail = userDetails.getUsername();
-        User user = userRepository.findByEmail(userEmail);
+        User user = currentUser(userDetails);
         if(user.getDose2() != null) return "dose3";
         if (user.getNextApptId() != null) return "cancel_first";
 
-        List<String> dates = availableAppointments();
-        model.addAttribute("test", new test());
+        List<String> dates = availableAppointments(user);
+        model.addAttribute("test", new VenueAndDate());
         model.addAttribute("venue", new Venue().getId());
         model.addAttribute("availableDates", dates);
         return "select_venue";
     }
 
-    public List<String> availableAppointments() {
+    public List<String> availableAppointments(User user) {
         // get today's date
         LocalDate now = LocalDate.now();
-
         List<String> availableAppointments = new LinkedList<>();
 
-        for (int day = 0; day < 30; day++)
-            availableAppointments.add(now.plusDays(day).toString());
+        // check today vs first dose date
+        if (user.getDose1Date() != null) {
+            // get user's apt1 date
+            LocalDate apt1 = LocalDate.parse(user.getDose1Date());
+            int dateDifference = now.compareTo(apt1);
+            System.out.println(dateDifference);
+
+            // don't populate with any dates that fall within 21 days of apt1 date
+            if (dateDifference < 20) {
+                for (int day = 21 - dateDifference; day < 30; day++)
+                    availableAppointments.add(now.plusDays(day).toString());
+            }
+        }
+
+        else {
+            for (int day = 0; day < 30; day++)
+                availableAppointments.add(now.plusDays(day).toString());
+        }
 
         System.out.println(availableAppointments);
         return availableAppointments;
@@ -267,5 +277,10 @@ public class UserController {
         userRepository.cancelUserAppointment(user.getUser_id());
         appointmentRepository.delete(user.getNextApptId());
         return "appointment_cancelled";
+    }
+
+    public User currentUser(CustomUserDetails userDetails) {
+        String userEmail = userDetails.getUsername();
+        return userRepository.findByEmail(userEmail);
     }
 }

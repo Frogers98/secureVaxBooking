@@ -8,7 +8,7 @@ import app.repository.AppointmentRepository;
 import app.repository.UserRepository;
 import app.repository.VenueRepository;
 import app.security.CustomUserDetails;
-import app.test;
+import app.VenueAndDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -79,7 +79,7 @@ public class AppointmentController {
         List<String> availableAppointmentTimes = checkAvailableAppointments(venue, date, today);
 
         if (availableAppointmentTimes.size() > 0) {
-            model.addAttribute("test", new test(date, venueData));
+            model.addAttribute("test", new VenueAndDate(date, venueData));
             model.addAttribute("todayApts", availableAppointmentTimes);
             model.addAttribute("appointment", new Appointment());
             return "book_appointment";
