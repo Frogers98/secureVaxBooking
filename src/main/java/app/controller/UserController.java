@@ -241,28 +241,26 @@ public class UserController {
         // get today's date
         LocalDate now = LocalDate.now();
         List<String> availableAppointments = new LinkedList<>();
+        int startingDay = calculateStartingLimit(user, now);
 
+        for (int day = startingDay; day < 30; day++)
+            availableAppointments.add(now.plusDays(day).toString());
+
+        System.out.println(availableAppointments);
+        return availableAppointments;
+    }
+
+    private int calculateStartingLimit(User user, LocalDate now) {
         // check today vs first dose date
         if (user.getDose1Date() != null) {
             // get user's apt1 date
             LocalDate apt1 = LocalDate.parse(user.getDose1Date());
             int dateDifference = now.compareTo(apt1);
-            System.out.println(dateDifference);
 
-            // don't populate with any dates that fall within 21 days of apt1 date
-            if (dateDifference < 20) {
-                for (int day = 21 - dateDifference; day < 30; day++)
-                    availableAppointments.add(now.plusDays(day).toString());
-            }
+            if (dateDifference < 21) return 21 - dateDifference;
+            else return 0;
         }
-
-        else {
-            for (int day = 0; day < 30; day++)
-                availableAppointments.add(now.plusDays(day).toString());
-        }
-
-        System.out.println(availableAppointments);
-        return availableAppointments;
+        return 0;
     }
 
     @GetMapping("confirmAppointmentCancellation")
