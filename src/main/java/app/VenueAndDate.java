@@ -1,13 +1,13 @@
 package app;
 
-public class test {
+public class VenueAndDate {
     private String date;
     private String venue_id;
 
-    public test() {
+    public VenueAndDate() {
     }
 
-    public test(String date, String venue_id) {
+    public VenueAndDate(String date, String venue_id) {
         this.date = date;
         this.venue_id = venue_id;
     }

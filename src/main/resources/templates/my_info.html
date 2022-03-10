@@ -75,6 +75,10 @@
             <tr>
                 <td>Second Dose Booked</td>
                 <td>
+                    <span class="span--health" th:if="${apt==null and user.dose2==null and user.dose1 != null}">
+                        Not Booked |
+                        <a  th:href="@{/users/bookAppointment}"> Book Your Vaccine</a>
+                    </span>
                     <span class="span--health" th:if="${user.dose1Date==null}" >Not Booked</span>
                     <span class="span--health" th:if="${apt!=null and
                                    user.dose1Date != null and
