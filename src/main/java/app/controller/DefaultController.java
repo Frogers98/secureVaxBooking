@@ -95,4 +95,9 @@ public class DefaultController {
         return "403";
     }
 
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
+
 }
