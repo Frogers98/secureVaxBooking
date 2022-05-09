@@ -4,6 +4,7 @@ import app.model.forum.Post;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -81,6 +82,15 @@ public class User {
         this.password = password;
     }
 
+    // These columns were added while following the following guide:
+    // https://www.codejava.net/frameworks/spring-boot/spring-security-limit-login-attempts-example
+    @Column(name = "account_non_locked")
+    private boolean accountNonLocked;
+    @Column(name = "failed_attempt")
+    private int failedAttempt;
+    @Column(name = "lock_time")
+    private Date lockTime;
+
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
@@ -93,6 +103,29 @@ public class User {
         this.roles.add(role);
     }
 
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
+    public int getFailedAttempt() {
+        return failedAttempt;
+    }
+
+    public void setFailedAttempt(int failAttempts) {
+        this.failedAttempt = failAttempts;
+    }
+
+    public void setLockTime(Date lockTime) {
+        this.lockTime = lockTime;
+    }
+
+    public Date getLockTime() {
+        return lockTime;
+    }
     // Attributes need getters and setters
     public Set<Role> getRoles() {
         return roles;
