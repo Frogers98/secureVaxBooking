@@ -263,7 +263,7 @@ public class User {
         return oneTimePassword;
     }
 
-    public void setOneTimePassword(String password) {
+    public void setOneTimePassword(String oneTimePassword) {
         this.oneTimePassword = oneTimePassword;
     }
 
