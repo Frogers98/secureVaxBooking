@@ -9,6 +9,8 @@ import app.repository.UserRepository;
 import app.repository.VenueRepository;
 import app.security.CustomUserDetails;
 import app.VenueAndDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -32,6 +34,8 @@ public class AppointmentController {
     @Autowired
     UserRepository userRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(DefaultController.class);
+
     @GetMapping("/list")
     public List listUsers() {
         return getAllAppointments();
@@ -44,12 +48,16 @@ public class AppointmentController {
         if (checkAptAlreadyExists(appointment.getVenue(),
                 appointment.getDate(),
                 appointment.getTime())) {
-            System.out.println("An appointment has already been created at this time and date for " + appointment.getVenue() + ".");
+            String errorMessage = "An appointment has already been created at this time and date for " + appointment.getVenue() + ".";
+            System.out.println(errorMessage);
+            logger.error(errorMessage);
             return null;
         }
 
         appointmentRepository.save(appointment);
-        System.out.println("Appointment booked.");
+        String successMessage = "Appointment booked.";
+        System.out.println(successMessage);
+        logger.info(successMessage);
         return appointment;
     }
 
@@ -113,7 +121,9 @@ public class AppointmentController {
                 venue);
 
         Appointment appointment = saveAppointment(newAppointment);
-        System.out.println("Appointment saved successfully");
+        String successMessage = "Appointment saved successfully";
+        System.out.println(successMessage);
+        logger.info(successMessage);
         if (appointment == null) return "index";
 
         else {
