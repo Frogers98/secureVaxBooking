@@ -1,6 +1,7 @@
 package app.model;
 
 import app.model.forum.Post;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -61,6 +62,7 @@ public class User {
     private String oneTimePassword;
 
     @Column(name = "otp_requested_time")
+    @DateTimeFormat
     private Date otpRequestedTime;
 
 
