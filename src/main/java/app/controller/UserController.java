@@ -1,5 +1,7 @@
 package app.controller;
 
+import app.exception.VenueNotFoundException;
+import app.exception.bookAppointmentException;
 import app.model.Appointment;
 import app.model.Venue;
 import app.repository.AppointmentRepository;
@@ -74,6 +76,8 @@ public class UserController {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
             newUser.setPassword(encodedPassword);
+            String encodedPPSN = passwordEncoder.encode(newUser.getPpsn());
+            newUser.setPpsn(encodedPPSN);
             userService.registerDefaultUser(newUser);
             System.out.println("User saved");
             return "success_reg";
@@ -225,15 +229,21 @@ public class UserController {
 
 
     @GetMapping("/bookAppointment")
-    public String bookingForm(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = currentUser(userDetails);
-        if(user.getDose2() != null) return "dose3";
-        if (user.getNextApptId() != null) return "cancel_first";
+    public String bookingForm(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) throws bookAppointmentException {
+        try {
+            User user = currentUser(userDetails);
+            if (user.getDose2() != null) return "dose3";
+            if (user.getNextApptId() != null) return "cancel_first";
+            List<String> dates = availableAppointments(user);
 
-        List<String> dates = availableAppointments(user);
-        model.addAttribute("test", new VenueAndDate());
-        model.addAttribute("venue", new Venue().getId());
-        model.addAttribute("availableDates", dates);
+            model.addAttribute("test", new VenueAndDate());
+            model.addAttribute("venue", new Venue().getId());
+            model.addAttribute("availableDates", dates);
+        } catch (Exception e) {
+            throw new bookAppointmentException();
+
+        }
+
         return "select_venue";
     }
 
