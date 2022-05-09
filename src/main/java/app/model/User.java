@@ -70,15 +70,14 @@ public class User {
         if (this.getOneTimePassword() == null) {
             return false;
         }
-
-        long currentTimeInMillis = System.currentTimeMillis();
+        // Get current time in milliseconds
+        long currentTimeInMilliseconds = System.currentTimeMillis();
         long otpRequestedTimeInMillis = this.otpRequestedTime.getTime();
 
-        if (otpRequestedTimeInMillis + OTP_DURATION < currentTimeInMillis) {
-            // OTP expires
+        // Compare two times, return false if already expired
+        if (otpRequestedTimeInMillis + OTP_DURATION < currentTimeInMilliseconds) {
             return false;
         }
-
         return true;
     }
 
