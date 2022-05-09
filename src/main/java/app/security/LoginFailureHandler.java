@@ -1,5 +1,6 @@
 package app.security;
 
+import app.model.User;
 import app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
@@ -27,23 +28,13 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
         String failureRedirectURL = "/login?error&email=" + email;
         if (exception.getMessage().contains("OTP")){
             failureRedirectURL = "/login?otp=true&email=" + email;
+        } else {
+            User user = userRepository.findByEmail(email);
+            if (user.isOTPRequired() && user != null){
+                failureRedirectURL = "/login?otp=true&email=" + email;
+            }
         }
 
-//        request.setAttribute("email", email);
-//
-//        String redirectURL = "/login?error&email=" + email;
-//
-//        if (exception.getMessage().contains("OTP")) {
-//            redirectURL = "/login?otp=true&email=" + email;
-//        } else {
-//            Customer customer = customerService.getCustomerByEmail(email);
-//            if (customer.isOTPRequired()) {
-//                redirectURL = "/login?otp=true&email=" + email;
-//            }
-//        }
-//
-//        super.setDefaultFailureUrl(redirectURL);
-//        System.out.println("Failure Handler, email: " + email);
         super.setDefaultFailureUrl(failureRedirectURL);
         super.onAuthenticationFailure(request, response, exception);
     }
