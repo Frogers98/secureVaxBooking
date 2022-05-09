@@ -35,6 +35,9 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
     UserRepository userRepository;
 
     @Autowired
+    JavaMailSender mailSender;
+
+    @Autowired
     public void setAuthenticationManager(AuthenticationManager authManager) {
         super.setAuthenticationManager(authManager);
     }
@@ -98,6 +101,7 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
         sendOTP(user, OTP);
     }
 
+    /* Sends out email to user's email address containing One Time Passcode */
     private void sendOTP(User user, String OTP) throws MessagingException, UnsupportedEncodingException {
         System.out.println("Sending");
 
@@ -115,8 +119,5 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
         mailSender.send(message);
         System.out.println("Sent");
     }
-
-    @Autowired
-    JavaMailSender mailSender;
 
 }

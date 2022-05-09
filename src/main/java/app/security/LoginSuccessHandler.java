@@ -1,5 +1,7 @@
 package app.security;
 
+import app.model.User;
+import app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
@@ -13,22 +15,22 @@ import java.io.IOException;
 @Component
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
-//    @Autowired
-//    private CustomerServices customerService;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
 
-//        CustomerUserDetails customerDetails
-//                = (CustomerUserDetails) authentication.getPrincipal();
-//
-//        Customer customer = customerDetails.getCustomer();
-//
-//        if (customer.isOTPRequired()) {
-//            customerService.clearOTP(customer);
-//        }
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        User user = userDetails.getUser();
+        if(user.isOTPRequired()){
+            user.setOneTimePassword(null);
+            user.setOtpRequestedTime(null);
+            userRepository.save(user);
+            System.out.println("One Time Password is erased from db");
+        }
 
         System.out.println("Success handler");
         super.onAuthenticationSuccess(request, response, authentication);
