@@ -2,6 +2,8 @@ package app.config;
 
 import javax.sql.DataSource;
 
+import app.security.CustomLoginFailureHandler;
+import app.security.CustomLoginSuccessHandler;
 import app.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private CustomLoginFailureHandler loginFailureHandler;
+
+    @Autowired
+    private CustomLoginSuccessHandler loginSuccessHandler;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -54,16 +62,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/forum").hasAnyAuthority("ADMIN", "USER")
                 .antMatchers("/users/myInfo").hasAnyAuthority( "USER")
                 .antMatchers("/users/myInfo").hasAnyAuthority( "USER")
+                .antMatchers("/login").permitAll()
+                .antMatchers("/").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .usernameParameter("email")
+                .failureHandler(loginFailureHandler)
+                .successHandler(loginSuccessHandler)
+                .permitAll()
+//                .loginPage("/login")
 //                .loginProcessingUrl("/login_process")
 //                .usernameParameter("email")
 //                .defaultSuccessUrl("/")
 //                .failureUrl("/login.html?error=true")
 //                .failureHandler(autenticationFailureHandler())
-                .permitAll()
+//                .permitAll()
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
