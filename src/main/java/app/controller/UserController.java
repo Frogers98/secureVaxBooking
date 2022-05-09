@@ -74,6 +74,8 @@ public class UserController {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
             newUser.setPassword(encodedPassword);
+            String encodedPPSN = passwordEncoder.encode(newUser.getPpsn());
+            newUser.setPpsn(encodedPPSN);
             userService.registerDefaultUser(newUser);
             System.out.println("User saved");
             return "success_reg";
