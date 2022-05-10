@@ -10,6 +10,9 @@ import app.model.User;
 import app.security.CustomUserDetails;
 import app.service.UserService;
 import app.VenueAndDate;
+import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,6 +41,8 @@ public class UserController {
     @Autowired
     AppointmentRepository appointmentRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(DefaultController.class);
+
     public UserController() {
     }
 
@@ -64,10 +69,13 @@ public class UserController {
             System.out.println("An account associated with this email address has already been created.");
             String errorMessage = "An account associated with this email address has already been created.";
             model.addAttribute("errorMessage", errorMessage);
+            logger.error(errorMessage);
             return "register";
         }else if (getUserByPPSN(newUser.getPpsn())) {
             System.out.println("An account associated with this PPS number has already been created.");
             String errorMessage = "An account associated with this PPS number has already been created.";
+            logger.error(errorMessage);
+            logger.trace("tracing the same PPS number");
             model.addAttribute("errorMessage", errorMessage);
             return "register";
         } else {
@@ -77,6 +85,7 @@ public class UserController {
             String encodedPPSN = passwordEncoder.encode(newUser.getPpsn());
             newUser.setPpsn(encodedPPSN);
             userService.registerDefaultUser(newUser);
+            logger.info("New account has been registered.");
             System.out.println("User saved");
             return "success_reg";
         }
@@ -93,6 +102,7 @@ public class UserController {
             newUser.setPassword(encodedPassword);
             userService.registerAdminUser(newUser);
             System.out.println("Admin User saved");
+            logger.info("New Admin account has been registered.");
         }
     }
 
@@ -100,6 +110,7 @@ public class UserController {
     public String listUsers(Model model) {
         List<User> allUsers = userRepository.findAll();
         model.addAttribute("listUsers", allUsers);
+        logger.warn("List of Users has been Accessed.");
         return "list_users";
     }
 
@@ -110,6 +121,8 @@ public class UserController {
         model.addAttribute("user", user);
         Appointment nextApt = checkAptExists(user);
         model.addAttribute("apt", nextApt);
+        logger.warn("My Info page accessed of ID: "+ user.getUser_id());
+
         return "my_info";
     }
 
@@ -126,6 +139,8 @@ public class UserController {
         model.addAttribute("user", user);
         Appointment nextApt = checkAptExists(user);
         model.addAttribute("apt", nextApt);
+        logger.warn("Editing user information page is accessed of ID: " + userId);
+
         return "edit_user_info";
     }
 
@@ -173,7 +188,7 @@ public class UserController {
         System.out.println("Updating dose info");
         userRepository.updateDose1(confirmedDose, userId); // Update dose on users table
         userRepository.updateDose1Date(attendedDate, userId); // Update dose date on users table
-
+        logger.info("User dosage number one confirmed of ID: " + userId);
         return "redirect:/users/editUserInfo/" + userId.toString();
     }
 
@@ -191,6 +206,7 @@ public class UserController {
         appointmentRepository.delete(attendedApt); // Delete old appointment
         userRepository.updateDose2(confirmedDose, userId); // Update dose on users table
         userRepository.updateDose2Date(attendedDate, userId); // Update dose date on users table
+        logger.info("User dosage number two confirmed of ID: " + userId);
         return "redirect:/users/editUserInfo/" + userId.toString();
     }
 
@@ -236,6 +252,7 @@ public class UserController {
         model.addAttribute("test", new VenueAndDate());
         model.addAttribute("venue", new Venue().getId());
         model.addAttribute("availableDates", dates);
+        logger.info("Appointment booking page accessed by userID: " + user.getUser_id());
         return "select_venue";
     }
 
@@ -267,6 +284,7 @@ public class UserController {
 
     @GetMapping("confirmAppointmentCancellation")
     public String confirmAppointmentCancellation() {
+        logger.info("Appointment Cancellation");
         return "confirm_appointment_cancellation";
     }
 
@@ -276,6 +294,7 @@ public class UserController {
         User user = userRepository.findByEmail(userEmail);
         userRepository.cancelUserAppointment(user.getUser_id());
         appointmentRepository.delete(user.getNextApptId());
+        logger.info("Appointment Cancellation Confirmed by userID: " + user.getUser_id());
         return "appointment_cancelled";
     }
 
