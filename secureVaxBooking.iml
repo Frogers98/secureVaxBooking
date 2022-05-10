@@ -16,7 +16,7 @@
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="entityManagerFactory" />
-          <factory-entry name="secureVaxBooking" value="952dd257-23de-43a5-8417-4aa8f892f87b" />
+          <factory-entry name="secureVaxBooking" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>
