@@ -32,6 +32,10 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
+
+        if (user.isOTPRequired()){
+            return user.getOneTimePassword();
+        }
         return user.getPassword();
     }
 
@@ -63,6 +67,10 @@ public class CustomUserDetails implements UserDetails {
 
     public String getFullName() {
         return user.getName() + " " + user.getSurname();
+    }
+
+    public User getUser(){
+        return this.user;
     }
 
 }

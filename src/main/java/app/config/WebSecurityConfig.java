@@ -2,11 +2,15 @@ package app.config;
 
 import javax.sql.DataSource;
 
+import app.security.BeforeAuthenticationFilter;
 import app.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -56,6 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/users/myInfo").hasAnyAuthority( "USER")
                 .anyRequest().permitAll()
                 .and()
+                .addFilterBefore(beforeAuthenticationFilter, BeforeAuthenticationFilter.class)
                 .formLogin()
                 .loginPage("/login")
 //                .loginProcessingUrl("/login_process")
@@ -72,5 +77,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().accessDeniedPage("/403");
     }
+
+//    Set up bean authentication manager for 2factor authentication
+    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    //    For 2factor authentication
+    @Autowired
+    @Lazy
+    private BeforeAuthenticationFilter beforeAuthenticationFilter;
 
 }
