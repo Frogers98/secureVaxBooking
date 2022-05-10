@@ -24,12 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.Random;
 
 @Component
 public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
-//    @Autowired
-//    private CustomerServices customerService;
 
     @Autowired
     UserRepository userRepository;
@@ -70,9 +68,12 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
         // Check if user exists
         if (user != null) {
             if (user.isOTPRequired()){
+                // Forward on login request if OTP set to true (will check password against one time passcode)
                 return super.attemptAuthentication(request, response);
             }
+            // Else
             try {
+                // Generate and send One Time Passcode, effectively setting OTP to true
                 generateOTP(user);
                 throw new InsufficientAuthenticationException("OTP");
             } catch (MessagingException | UnsupportedEncodingException e) {
@@ -84,13 +85,12 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
        return super.attemptAuthentication(request, response);
     }
 
-    private float getGoogleRecaptchaScore() {
-        return 1;
-    }
 
     /* Generates a random one time passcode, sends to database for later matching */
     private void generateOTP(User user) throws MessagingException, UnsupportedEncodingException {
-        String OTP = RandomString.make(8);
+        Random rnd = new Random();
+        int n = 100000 + rnd.nextInt(900000);
+        String OTP = Integer.toString(n);
         System.out.println("Generated OTP = " + OTP);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedOTP = passwordEncoder.encode(OTP);
@@ -111,8 +111,8 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
         helper.setFrom("securevaxbooking@gmail.com", "Vax Booking");
         helper.setTo(user.getEmail());
         String subject = "One Time Password for Vax Booking";
-        String content = "<p>Hello " + user.getName() + ", please use this one time passcode to complete login:  <br> <b>" +
-                OTP + "<b><br> This code will expire in 5 minutes </p>";
+        String content = "<p>Hello " + user.getName() + ", please use this one time passcode to complete login:  <br> <br> <b>" +
+                OTP + "<b><br><br> This code will expire in 5 minutes </b></b></p>";
         helper.setSubject(subject);
         helper.setText(content, true);
         System.out.println("Still sending");
