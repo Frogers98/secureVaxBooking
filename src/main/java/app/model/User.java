@@ -85,7 +85,7 @@ public class User {
     // These columns were added while following the following guide:
     // https://www.codejava.net/frameworks/spring-boot/spring-security-limit-login-attempts-example
     @Column(name = "account_non_locked")
-    private boolean accountNonLocked;
+    private boolean accountNonLocked = true;
     @Column(name = "failed_attempt")
     private int failedAttempt;
     @Column(name = "lock_time")

@@ -53,6 +53,7 @@ public interface UserRepository
     void updateDose2Date(String dose2Date, Long user_id);
 
     // adapted from https://www.codejava.net/frameworks/spring-boot/spring-security-limit-login-attempts-example
+    @Transactional
     @Query("UPDATE User u SET u.failedAttempt = ?1 WHERE u.email = ?2")
     @Modifying
     public void updateFailedAttempts(int failAttempts, String email);
