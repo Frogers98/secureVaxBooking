@@ -32,6 +32,10 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
+
+        if (user.isOTPRequired()){
+            return user.getOneTimePassword();
+        }
         return user.getPassword();
     }
 
@@ -47,7 +51,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return user.isAccountNonLocked();
+        return true;
     }
 
     @Override
@@ -65,7 +69,8 @@ public class CustomUserDetails implements UserDetails {
         return user.getName() + " " + user.getSurname();
     }
 
-    public User getUser() {
-        return user;
+    public User getUser(){
+        return this.user;
     }
+
 }

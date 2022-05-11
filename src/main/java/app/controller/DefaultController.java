@@ -4,6 +4,8 @@ import app.model.Data;
 import app.repository.DataDAO;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,9 @@ import java.util.Set;
 
 @Controller
 public class DefaultController {
+
+    private static final Logger logger = LoggerFactory.getLogger(DefaultController.class);
+
 
     @Autowired
     private DataDAO dataDAO;
@@ -92,6 +97,7 @@ public class DefaultController {
 
     @GetMapping("/403")
     public String accessDenied() {
+        logger.error("403 - access denied");
         return "403";
     }
 

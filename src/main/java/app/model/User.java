@@ -1,6 +1,7 @@
 package app.model;
 
 import app.model.forum.Post;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +12,8 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User {
+    private static final long OTP_DURATION = 5 * 60 * 1000;   // 5 minutes
+
     @Id
     @GeneratedValue
     private Long user_id;
@@ -54,6 +57,29 @@ public class User {
 
     @NotBlank
     private String password;
+
+    @Column(name = "one_time_password")
+    private String oneTimePassword;
+
+    @Column(name = "otp_requested_time")
+    @DateTimeFormat
+    private Date otpRequestedTime;
+
+
+    public boolean isOTPRequired() {
+        if (this.getOneTimePassword() == null) {
+            return false;
+        }
+        // Get current time in milliseconds
+        long currentTimeInMilliseconds = System.currentTimeMillis();
+        long otpRequestedTimeInMillis = this.otpRequestedTime.getTime();
+
+        // Compare two times, return false if already expired
+        if (otpRequestedTimeInMillis + OTP_DURATION < currentTimeInMilliseconds) {
+            return false;
+        }
+        return true;
+    }
 
     public User() {
         super();
@@ -264,4 +290,19 @@ public class User {
         this.password = password;
     }
 
+    public String getOneTimePassword() {
+        return oneTimePassword;
+    }
+
+    public void setOneTimePassword(String oneTimePassword) {
+        this.oneTimePassword = oneTimePassword;
+    }
+
+    public Date getOtpRequestedTime() {
+        return otpRequestedTime;
+    }
+
+    public void setOtpRequestedTime(Date otpRequestedTime) {
+        this.otpRequestedTime = otpRequestedTime;
+    }
 }

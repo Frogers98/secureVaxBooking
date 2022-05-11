@@ -5,9 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
 @SpringBootApplication
 public class Application implements WebMvcConfigurer {
-
 
     public void addViewController(ViewControllerRegistry registry)
     {
