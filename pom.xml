@@ -98,9 +98,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.passay</groupId>
+            <artifactId>passay</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+
     </dependencies>
-
-
 
     <build>
         <plugins>

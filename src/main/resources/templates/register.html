@@ -306,11 +306,11 @@
             <div class="form-group row">
                 <label class="col-4 col-form-label">Password: </label>
                 <div class="col-8">
-                    <input type="password" placeholder="big-password" value="password" th:field="*{password}" class="form-control"
-                           required minlength="6" maxlength="10" th:required="required"/>
+                    <input type="password" id="password" placeholder="big-password" value="password" th:field="*{password}" class="form-control"
+                            th:required="required"/>
                 </div>
-            </div>
 
+            </div>
             <div>
                 <button type="submit" class="btn">Sign Up</button>
 
@@ -318,9 +318,16 @@
             </div>
         </div>
     </form>
+
 </div>
 </body>
+
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="../jQuery-Plugin-For-Password-Strength-Checker-and-Indicator-Password-Strength/password_strength/password_strength_lightweight.js"></script>
+<link rel="stylesheet" href="../jQuery-Plugin-For-Password-Strength-Checker-and-Indicator-Password-Strength/password_strength/password_strength.css">
+
 <script>
+
     var today = new Date();
     var yyyy = today.getFullYear();
     var mm = today.getMonth() + 1; // Add one to compensate for months starting at 0
@@ -339,4 +346,6 @@
     document.getElementById("birthday").setAttribute("max", newMax);
 
 </script>
+
+
 </html>
