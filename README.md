@@ -36,7 +36,7 @@ spring.jpa.hibernate.ddl-auto = update
 ```
 spring:
   mail:
-    host: 
+    host: smtp.gmail.com
     username: 
     password: 
     port: 587
