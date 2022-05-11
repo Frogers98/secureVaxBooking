@@ -73,14 +73,21 @@ public class UserController {
             model.addAttribute("errorMessage", errorMessage);
             logger.error(errorMessage);
             return "register";
-        }else if (getUserByPPSN(newUser.getPpsn())) {
+        } if (getUserByPPSN(newUser.getPpsn())) {
             System.out.println("An account associated with this PPS number has already been created.");
             String errorMessage = "An account associated with this PPS number has already been created.";
             logger.error(errorMessage);
             logger.trace("tracing the same PPS number");
             model.addAttribute("errorMessage", errorMessage);
             return "register";
-        } else {
+        } if (!ppsnValid(newUser.getPpsn())) {
+            String errorMessage = "Invalid PPSN.";
+            System.out.println(errorMessage);
+            logger.error(errorMessage);
+            model.addAttribute("errorMessage", errorMessage);
+            return "register";
+        }
+        else {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
             newUser.setPassword(encodedPassword);
@@ -109,6 +116,10 @@ public class UserController {
             System.out.println("Admin User saved");
             logger.info("New Admin account has been registered.");
         }
+    }
+
+    public boolean ppsnValid(String ppsn) {
+        return ppsn.length() == 8 && Character.isLetter(ppsn.charAt(7));
     }
 
     @GetMapping("/listUsers")
