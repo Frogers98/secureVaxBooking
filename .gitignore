@@ -26,6 +26,9 @@ hs_err_pid*
 # properties files
 src/main/resources/application.properties
 
+# Encryption Key
+resource.txt
+
 # target directory 
 target/**
 target/classes/application.properties

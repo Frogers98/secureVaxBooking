@@ -15,7 +15,7 @@ import java.util.Base64;
 public class AttributeEncryptor implements AttributeConverter<String, String> {
 
     private static final String AES = "AES";
-    private static final String SECRET = "power-rangers-forever";
+    private static final String SECRET = "power-rangers-f4";
 
     private final Key key;
 
