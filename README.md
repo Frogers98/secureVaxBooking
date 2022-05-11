@@ -32,7 +32,7 @@ spring.sql.init.mode=always
 spring.jpa.hibernate.ddl-auto = update
 ```
 
-- Include application.yml file, with the following:
+- Include application.yml file, including a host, username (email address), and a password for the email address, with the following:
 ```
 spring:
   mail:
