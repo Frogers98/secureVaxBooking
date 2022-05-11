@@ -25,22 +25,38 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                                        AuthenticationException exception) throws IOException, ServletException, UsernameNotFoundException {
+                                        AuthenticationException exception) throws IOException, ServletException {
+        String failureRedirectURL = "/login?error";
         String email = request.getParameter("username");
         System.out.println("email used is " + email);
-        try {
-            User user = userService.getByEmail(email);
 
-        System.out.println(user.getName());
+        User user = userService.getByEmail(email);
+
+
         System.out.println("entered login failure handler");
         if (user != null) {
+            System.out.println(user.getName());
             System.out.println("user is not null");
             if (user.isAccountNonLocked()) {
+
+                // Euegenes stuff
+                System.out.println("Failure Handler, email: " + email);
+                failureRedirectURL = "/login?error&email=" + email;
+                if (exception.getMessage().contains("OTP")) {
+                    failureRedirectURL = "/login?otp=true&email=" + email;
+                } else {
+                    if (user.isOTPRequired() && user != null) {
+                        failureRedirectURL = "/login?otp=true&email=" + email;
+                    }
+                }
+
+                // Check number of failed attempts of account logging in
                 if (user.getFailedAttempt() < UserService.MAX_FAILED_ATTEMPTS - 1) {
                     System.out.println("login attempt failed, less than 3 failed attempts");
                     userService.increaseFailedAttempts(user);
                 } else {
                     System.out.println("login attempt failed, more than 3 failed attempts");
+                    userService.increaseFailedAttempts(user);
                     userService.lock(user);
                     exception = new LockedException("Your account has been locked due to 3 failed attempts."
                             + " It will be unlocked after 24 hours.");
@@ -53,11 +69,19 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
             }
 
         }
-        } catch (Exception e) {
-            throw new UsernameNotFoundException("username: " + email + " could not be found");
+
+
+        System.out.println("Failure Handler, email: " + email);
+        failureRedirectURL = "/login?error&email=" + email;
+        if (exception.getMessage().contains("OTP")) {
+            failureRedirectURL = "/login?otp=true&email=" + email;
+        } else {
+            if (user != null && user.isOTPRequired()) {
+                failureRedirectURL = "/login?otp=true&email=" + email;
+            }
         }
 
-        super.setDefaultFailureUrl("/login?error");
+        super.setDefaultFailureUrl(failureRedirectURL);
         super.onAuthenticationFailure(request, response, exception);
     }
 
