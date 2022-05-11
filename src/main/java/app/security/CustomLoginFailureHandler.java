@@ -45,7 +45,7 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
                 if (exception.getMessage().contains("OTP")) {
                     failureRedirectURL = "/login?otp=true&email=" + email;
                 } else {
-                    if (user.isOTPRequired() && user != null) {
+                    if (user != null && user.isOTPRequired()) {
                         failureRedirectURL = "/login?otp=true&email=" + email;
                     }
                 }
