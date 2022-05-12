@@ -292,10 +292,14 @@
             <div class="form-group row">
                 <label class="col-4 col-form-label">Password: </label>
                 <div class="col-8">
+                    <input type="password" id="password" placeholder="big-password" value="password" th:field="*{password}"
+                    onkeyup="CheckPasswordStrength(this.value)" class="form-control" th:required="required"/>
 
-                    <input type="password" id="password" placeholder="big-password" value="password" th:field="*{password}" onkeyup="CheckPasswordStrength(this.value)" class="form-control"
-                    th:required="required"/>
                     <input type="checkbox" onclick="myFunction()">Show Password
+
+                    <div class="popup">
+                        <span class="popuptext" id="myPopup">Popup text...</span>
+                    </div>
 
                     <br>
                     <div><span  id="password_strength"></span></div>
@@ -328,7 +332,6 @@
 
     function clear() {
         document.getElementById("perrors").innerHTML = '';
-
     }
 
     var today = new Date();
@@ -348,8 +351,18 @@
     newMax = ageLimit + '-' + mm + '-' + dd;
     document.getElementById("birthday").setAttribute("max", newMax);
 
+    let popupString = '';
+    let pswd_dict = {
+        caps: "At least one capital letter. <b>",
+        lower: "At least one lower case. <b>",
+        special: "At least one special character. <b>",
+        numeric: "At least one number. <b>"
+    };
+
+
     function CheckPasswordStrength(password) {
         var password_strength = document.getElementById("password_strength");
+        var popup = document.getElementById("myPopup");
 
         //TextBox left blank.
         if (password.length === 0) {
@@ -358,7 +371,7 @@
         }
 
         //Regular Expressions.
-        var regex = new Array();
+        var regex = [];
         regex.push("[A-Z]"); //Uppercase Alphabet.
         regex.push("[a-z]"); //Lowercase Alphabet.
         regex.push("[0-9]"); //Digit.
@@ -370,19 +383,32 @@
 // (?=.*[!@#$%^&*])	The string must contain at least one special character, but we are escaping reserved RegEx characters to avoid conflict
 // (?=.{8,})	The string must be eight characters or longer
         var passed = 0;
+        var checks = ["caps", "lower", "numeric", "special"];
+        var unpassedChecks = [];
 
         //Validate for each Regular Expression.
-        for (var i = 0; i < regex.length; i++) {
+        for (let i = 0; i < regex.length; i++) {
             if (new RegExp(regex[i]).test(password)) {
                 passed++;
-            }
+            } else unpassedChecks.push(i);
         }
+
+        for (let j = 0; j < unpassedChecks.length; j++) {
+            popupString += pswd_dict[checks[unpassedChecks[j]]];
+            console.log(popupString);
+        }
+
+        popup.innerHTML = popupString;
+        console.log(unpassedChecks.length);
+        console.log(unpassedChecks);
+        if (unpassedChecks.length > 0) popup.classList.toggle("show");
+        if (unpassedChecks.length === 0) popup.classList.toggle("hide");
+        popupString = "";
 
         //Validate for length of Password.
         if (passed > 2 && password.length > 8) {
             passed++;
         }
-
 
 
         //Display status.
