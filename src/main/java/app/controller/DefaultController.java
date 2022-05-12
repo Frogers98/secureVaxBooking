@@ -1,7 +1,9 @@
 package app.controller;
 
 import app.model.Data;
+import app.model.User;
 import app.repository.DataDAO;
+import app.repository.UserRepository;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.slf4j.Logger;
@@ -24,6 +26,9 @@ public class DefaultController {
 
     @Autowired
     private DataDAO dataDAO;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("")
     public String basePage() {
@@ -80,7 +85,8 @@ public class DefaultController {
         JsonArray jsonArraySeries = new JsonArray();
         JsonObject jsonObject = new JsonObject();
 
-        List<Data> dataList = dataDAO.findAll();
+//        List<Data> dataList = dataDAO.findAll();
+        List<User> dataList = userRepository.findAll();
         Set<String> dobs = new HashSet<>();
         dataList.forEach(data->{
             dobs.add(data.getDob());

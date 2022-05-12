@@ -107,6 +107,7 @@ public class UserController {
     public void registerAdmin(User newUser) {
         if (getUserByEmail(newUser.getEmail())) {
             System.out.println("Admin: An account associated with this email address has already been created.");
+            System.out.println(newUser.getDob());
         }else if (getUserByPPSN(newUser.getPpsn())) {
             System.out.println("Admin: An account associated with this PPS number has already been created.");
         } else {

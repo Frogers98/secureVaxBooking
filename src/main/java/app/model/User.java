@@ -2,6 +2,7 @@ package app.model;
 
 import app.PasswordConstraintValidator;
 import app.model.forum.Post;
+import org.hibernate.annotations.ColumnTransformer;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -33,16 +34,19 @@ public class User {
     private Set<Post> posts;
 
     @NotBlank
+    @Convert(converter = AttributeEncryptor.class)
     private String dob;
     @NotBlank
     private String name;
     @NotBlank
     private String surname;
     @NotBlank
+    @Convert(converter = AttributeEncryptor.class)
     private String ppsn;
     @NotBlank
     private String address;
     @NotBlank
+    @Convert(converter = AttributeEncryptor.class)
     private String phone;
     @NotBlank
     private String nationality;
