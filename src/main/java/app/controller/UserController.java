@@ -1,7 +1,6 @@
 package app.controller;
 
 import app.PasswordConstraintValidator;
-import app.exception.VenueNotFoundException;
 import app.exception.bookAppointmentException;
 import app.model.Appointment;
 import app.model.Venue;
@@ -13,7 +12,6 @@ import app.model.User;
 import app.security.CustomUserDetails;
 import app.service.UserService;
 import app.VenueAndDate;
-import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +29,7 @@ import java.util.Date;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping(path = "users")
@@ -72,22 +71,26 @@ public class UserController {
         String pwdRequirements = PasswordConstraintValidator.CheckValid(newUser.getPassword());
 
         if (getUserByEmail(newUser.getEmail())) {
-            System.out.println("An account associated with this email address has already been created.");
             String errorMessage = "An account associated with this email address has already been created.";
-            model.addAttribute("errorMessage", errorMessage);
-            logger.error(errorMessage);
+            errorMessage(errorMessage, model);
             return "register";
+
         } else if (getUserByPPSN(newUser.getPpsn())) {
-            System.out.println("An account associated with this PPS number has already been created.");
             String errorMessage = "An account associated with this PPS number has already been created.";
-            logger.error(errorMessage);
+            errorMessage(errorMessage, model);
             logger.trace("tracing the same PPS number");
-            model.addAttribute("errorMessage", errorMessage);
             return "register";
+
         } else if (!pwdRequirements.equals("1")) {
             System.out.println(pwdRequirements);
             model.addAttribute("errorMessage", pwdRequirements);
             return "register";
+
+        } if (!ppsnValid(newUser.getPpsn())) {
+            String errorMessage = "Invalid PPSN.";
+            errorMessage(errorMessage, model);
+            return "register";
+
         } else {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
@@ -320,5 +323,16 @@ public class UserController {
     public User currentUser(CustomUserDetails userDetails) {
         String userEmail = userDetails.getUsername();
         return userRepository.findByEmail(userEmail);
+    }
+
+    public boolean ppsnValid(String ppsn) {
+        String letters = ppsn.substring(0, 7);
+        return ppsn.length() == 8 && Character.isLetter(ppsn.charAt(7)) && Pattern.matches("[0-9]+", letters);
+    }
+
+    public void errorMessage(String errorMessage, Model model) {
+        System.out.println(errorMessage);
+        model.addAttribute("errorMessage", errorMessage);
+        logger.error(errorMessage);
     }
 }
