@@ -24,7 +24,7 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
     private final Cipher decryptCipher;
 
     public AttributeEncryptor() throws Exception {
-        Path filePath = Path.of("src/main/java/app/config/resource.txt");
+        Path filePath = Path.of("src/main/java/app/model/resource.txt");
         String content = Files.readString(filePath);
         System.out.println("Resource.txt says: " + content);
         key = new SecretKeySpec(content.getBytes(), AES);
