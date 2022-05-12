@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
@@ -63,23 +64,28 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
        String email = request.getParameter("username");
+
         System.out.println("attemptAuthentication, email: " + email);
         User user = userRepository.findByEmail(email);
         // Check if user exists
         if (user != null) {
+            if (!user.isAccountNonLocked()){
+                throw new InsufficientAuthenticationException("Account Locked");
+            }
             if (user.isOTPRequired()){
                 // Forward on login request if OTP set to true (will check password against one time passcode)
                 return super.attemptAuthentication(request, response);
             }
-            // Else
-            try {
-                // Generate and send One Time Passcode, effectively setting OTP to true
-                generateOTP(user);
-                throw new InsufficientAuthenticationException("OTP");
-            } catch (MessagingException | UnsupportedEncodingException e) {
-                e.printStackTrace();
-                throw new AuthenticationServiceException("OTP could not be sent");
-            }
+//            // Else
+//                try {
+//                    // Generate and send One Time Passcode, effectively setting OTP to true
+//                    generateOTP(user);
+//                    throw new InsufficientAuthenticationException("OTP");
+//                } catch (MessagingException | UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                    throw new AuthenticationServiceException("OTP could not be sent");
+//                }
+
 
         }
        return super.attemptAuthentication(request, response);
