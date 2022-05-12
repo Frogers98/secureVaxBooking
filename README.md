@@ -64,7 +64,7 @@ spring:
             enable: true
  ```
             
-- Include a file named `resource.txt` in the `src/main/java/app/model` directory containing a string of 16 bytes. This is used as a key source for your database encryption and decryption.
+- Include a file named `resource.txt` in the `src/main/java/app/model` directory containing a string of 16 bytes (for instance 'power-rangers-f4'). This is used as a key source for your database encryption and decryption.
 
 Any accounts created through the app will be regular accounts, but an admin account is created by the application on the backend the first time it runs. This can be accessed by logging in with <alex@admin.com> with the password 'password', to access the admin functionalities of the app.
 
