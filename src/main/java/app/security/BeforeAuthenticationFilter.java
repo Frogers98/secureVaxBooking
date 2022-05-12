@@ -82,7 +82,6 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
             if (incorrectLogin != null) {
                 if (!incorrectLogin.isIpNonLocked()){
                     long lockTimeInMillis = incorrectLogin.getLockTime().getTime();
-                    long currentTimeInMillis = System.currentTimeMillis();
 
                     Date date = new Date(lockTimeInMillis + LOCK_TIME_DURATION);
 
@@ -92,7 +91,6 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
             if (!user.isAccountNonLocked()){
                 long lockTimeInMillis = user.getLockTime().getTime();
-                long currentTimeInMillis = System.currentTimeMillis();
                 Date date = new Date(lockTimeInMillis + LOCK_TIME_DURATION);
                 throw new InsufficientAuthenticationException("Account: " + user.getEmail() + " locked until " + date);
             }
@@ -100,16 +98,6 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 // Forward on login request if OTP set to true (will check password against one time passcode)
                 return super.attemptAuthentication(request, response);
             }
-//            // Else
-//                try {
-//                    // Generate and send One Time Passcode, effectively setting OTP to true
-//                    generateOTP(user);
-//                    throw new InsufficientAuthenticationException("OTP");
-//                } catch (MessagingException | UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                    throw new AuthenticationServiceException("OTP could not be sent");
-//                }
-
 
         }
        return super.attemptAuthentication(request, response);

@@ -55,6 +55,7 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
             // maybe be moved to another part of this class so it can still run even if the account being
             // accessed is already blocked
             IncorrectLogin incorrectLogin = incorrectLoginRepo.findByip(ipAddress);
+
             if (incorrectLogin == null) {
                 // If this ip address hasn't attempted to login before then create a new entry in the db
                 incorrectLogin = new IncorrectLogin(ipAddress);
@@ -91,6 +92,8 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
                     }
                 }
 
+            }
+
                 if (user.isAccountNonLocked()) {
 
                     // Euegenes stuff
@@ -106,10 +109,10 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
 
                     // Check number of failed attempts of account logging in
                     if (user.getFailedAttempt() < UserService.MAX_FAILED_ATTEMPTS - 1) {
-                        System.out.println("login attempt failed, less than 3 failed attempts");
+                        System.out.println("login attempt failed, less than 3 failed attempts: " + user.getFailedAttempt());
                         userService.increaseFailedAttempts(user);
                     } else {
-                        System.out.println("login attempt failed, more than 3 failed attempts");
+                        System.out.println("login attempt failed, more than 3 failed attempts: " + user.getFailedAttempt());
                         userService.increaseFailedAttempts(user);
                         userService.lock(user);
                         exception = new LockedException("Your account has been locked due to 3 failed attempts."
@@ -125,19 +128,9 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
             }
 
 
-//        System.out.println("Failure Handler, email: " + email);
-//        failureRedirectURL = "/login?error&email=" + email;
-//        if (exception.getMessage().contains("OTP")) {
-//            failureRedirectURL = "/login?otp=true&email=" + email;
-//        } else {
-//            if (user != null && user.isOTPRequired()) {
-//                failureRedirectURL = "/login?otp=true&email=" + email;
-//            }
-//        }
-
             super.setDefaultFailureUrl(failureRedirectURL);
             super.onAuthenticationFailure(request, response, exception);
         }
 
     }
-}
+
