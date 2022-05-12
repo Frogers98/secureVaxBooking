@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Error</title>
+  <link th:href="@{/css/style-other.css}" rel="stylesheet" />
+</head>
+<body>
+<div style="text-align: center; margin: 18rem auto">
+    <h2>Woops, something went wrong!</h2>
+    <div th:if="${param.error}">
+        <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+    </div>
+    <h3>Try reloading the site, or logging out and back in :) </h3>
+</div>
+</body>
+</html>

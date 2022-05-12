@@ -8,10 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
+import app.controller.DefaultController;
 import app.model.IncorrectLogin;
 import app.model.User;
 import app.repository.IncorrectLoginRepo;
 import app.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
@@ -24,6 +27,9 @@ import org.springframework.stereotype.Component;
 public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
     private static final long LOCK_TIME_DURATION = 24 * 60 * 60 * 1000; // 1 day
+
+    private static final Logger logger = LoggerFactory.getLogger(DefaultController.class);
+
     @Autowired
     private UserService userService;
 
@@ -60,6 +66,7 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
                 // If this ip address hasn't attempted to login before then create a new entry in the db
                 incorrectLogin = new IncorrectLogin(ipAddress);
                 incorrectLoginRepo.save(incorrectLogin);
+                logger.warn("New IP address logged as failing login attempt: " + ipAddress);
             } else {
 
                 int numAttemptsIP = incorrectLogin.getNumAttempts();
@@ -68,6 +75,7 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
 
                     if (numAttemptsIP < 2) {
                         System.out.println("login attempt failed, less than 3 failed attempts from this ip");
+                        logger.warn("IP address logged as failing login attempt again: " + ipAddress);
                         incorrectLoginRepo.updateFailedAttempts(numAttemptsIP + 1, ipAddress);
                     }
                     if (numAttemptsIP >= 2) {
@@ -75,6 +83,7 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
                         incorrectLogin.setIpNonLocked(false);
                         incorrectLogin.setLockTime(new Date());
                         incorrectLoginRepo.save(incorrectLogin);
+                        logger.warn("IP address locked after failing login 3 times: " + ipAddress);
                         exception = new LockedException("Your ip address has been locked due to 3 failed attempts from this ip");
                     }
                 } else {
@@ -88,7 +97,7 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
 
                         incorrectLoginRepo.delete(incorrectLogin);
                         exception = new LockedException("Your ip address has been unlocked. Please try to login again.");
-
+                        logger.info("IP address no longer locked after sign-in attempt - lock-out duration elapsed: " + ipAddress);
                     }
                 }
 
@@ -111,16 +120,19 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
                     if (user.getFailedAttempt() < UserService.MAX_FAILED_ATTEMPTS - 1) {
                         System.out.println("login attempt failed, less than 3 failed attempts: " + user.getFailedAttempt());
                         userService.increaseFailedAttempts(user);
+                        logger.warn("Account logged as failing login attempt: " + email);
                     } else {
                         System.out.println("login attempt failed, more than 3 failed attempts: " + user.getFailedAttempt());
                         userService.increaseFailedAttempts(user);
                         userService.lock(user);
+                        logger.warn("Account locked after failing 3 login attempts: " + email);
                         exception = new LockedException("Your account has been locked due to 3 failed attempts."
                                 + " It will be unlocked after 24 hours.");
                     }
                 } else if (!user.isAccountNonLocked()) {
                     System.out.println("Account is locked");
                     if (userService.unlockWhenTimeExpired(user)) {
+                        logger.info("Account no longer locked after sign-in attempt - lock-out duration elapsed: " + email);
                         exception = new LockedException("Your account has been unlocked. Please try to login again.");
                     }
                 }

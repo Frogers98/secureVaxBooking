@@ -11,11 +11,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import app.controller.DefaultController;
 import app.model.IncorrectLogin;
 import app.model.User;
 import app.repository.IncorrectLoginRepo;
 import app.repository.UserRepository;
 import app.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -29,6 +32,8 @@ import org.springframework.stereotype.Component;
 // Adapted from https://www.codejava.net/frameworks/spring-boot/spring-security-limit-login-attempts-example
 @Component
 public class CustomLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(DefaultController.class);
 
     @Autowired
     private UserService userService;
@@ -78,6 +83,8 @@ public class CustomLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         if (user.getFailedAttempt() > 0) {
             userService.resetFailedAttempts(user.getEmail());
         }
+
+        logger.info("Successful login, email: " + user.getEmail() + " | ip address: " + ipAddress);
 
         super.onAuthenticationSuccess(request, response, authentication);
     }
