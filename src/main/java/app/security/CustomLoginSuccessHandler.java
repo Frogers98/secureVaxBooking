@@ -11,7 +11,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import app.model.IncorrectLogin;
 import app.model.User;
+import app.repository.IncorrectLoginRepo;
 import app.repository.UserRepository;
 import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class CustomLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private UserRepository userRepository;
 
     @Autowired
+    private IncorrectLoginRepo incorrectLoginRepo;
+
+    @Autowired
     JavaMailSender mailSender;
 
     @Override
@@ -43,7 +48,16 @@ public class CustomLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         CustomUserDetails userDetails =  (CustomUserDetails) authentication.getPrincipal();
         System.out.println("entered login success handler");
 
-        User user = userDetails.getUser();
+        // Reset ip address num attempts
+        String ipAddress = request.getRemoteAddr();
+        System.out.println("ip address: " + ipAddress);
+        IncorrectLogin incorrectLogin = incorrectLoginRepo.findByip(ipAddress);
+        if (incorrectLogin != null) {
+            // If this ip address has been recorded as attempting fail logins delete the entry
+            incorrectLoginRepo.delete(incorrectLogin);
+        }
+
+            User user = userDetails.getUser();
 
         if (!user.isOTPRequired()){
             try {

@@ -1,6 +1,8 @@
 package app.security;
 
+import app.model.IncorrectLogin;
 import app.model.User;
+import app.repository.IncorrectLoginRepo;
 import app.repository.UserRepository;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +32,15 @@ import java.util.Random;
 @Component
 public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    private static final long LOCK_TIME_DURATION = 24 * 60 * 60 * 1000; // 1 day
     @Autowired
     UserRepository userRepository;
 
     @Autowired
     JavaMailSender mailSender;
+
+    @Autowired
+    IncorrectLoginRepo incorrectLoginRepo;
 
     @Autowired
     public void setAuthenticationManager(AuthenticationManager authManager) {
@@ -69,23 +75,29 @@ public class BeforeAuthenticationFilter extends UsernamePasswordAuthenticationFi
         User user = userRepository.findByEmail(email);
         // Check if user exists
         if (user != null) {
+            // Reset ip address num attempts
+            String ipAddress = request.getRemoteAddr();
+            System.out.println("ip address: " + ipAddress);
+            IncorrectLogin incorrectLogin = incorrectLoginRepo.findByip(ipAddress);
+            if (incorrectLogin != null) {
+                if (!incorrectLogin.isIpNonLocked()){
+                    long lockTimeInMillis = incorrectLogin.getLockTime().getTime();
+
+                    Date date = new Date(lockTimeInMillis + LOCK_TIME_DURATION);
+
+                    throw new InsufficientAuthenticationException("ip address: " + ipAddress +  " locked until " + date);
+                }
+            }
+
             if (!user.isAccountNonLocked()){
-                throw new InsufficientAuthenticationException("Account Locked");
+                long lockTimeInMillis = user.getLockTime().getTime();
+                Date date = new Date(lockTimeInMillis + LOCK_TIME_DURATION);
+                throw new InsufficientAuthenticationException("Account: " + user.getEmail() + " locked until " + date);
             }
             if (user.isOTPRequired()){
                 // Forward on login request if OTP set to true (will check password against one time passcode)
                 return super.attemptAuthentication(request, response);
             }
-//            // Else
-//                try {
-//                    // Generate and send One Time Passcode, effectively setting OTP to true
-//                    generateOTP(user);
-//                    throw new InsufficientAuthenticationException("OTP");
-//                } catch (MessagingException | UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                    throw new AuthenticationServiceException("OTP could not be sent");
-//                }
-
 
         }
        return super.attemptAuthentication(request, response);

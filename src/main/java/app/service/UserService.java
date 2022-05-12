@@ -1,7 +1,9 @@
 package app.service;
 
+import app.model.IncorrectLogin;
 import app.model.Role;
 import app.model.User;
+import app.repository.IncorrectLoginRepo;
 import app.repository.RoleRepository;
 import app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private IncorrectLoginRepo incorrectLoginRepo;
 
     @Autowired
     RoleRepository roleRepo;
@@ -70,6 +75,23 @@ public class UserService {
 
         return false;
     }
+
+//    public boolean unlockWhenTimeExpired(IncorrectLogin incorrectLogin) {
+//        long lockTimeInMillis = incorrectLogin.getLockTime().getTime();
+//        long currentTimeInMillis = System.currentTimeMillis();
+//
+//        if (lockTimeInMillis + LOCK_TIME_DURATION < currentTimeInMillis) {
+//            incorrectLogin.setIpNonLocked(true);
+//            incorrectLogin.setLockTime(null);
+//            incorrectLogin.setNumAttempts(0);
+//
+//            incorrectLoginRepo.save(incorrectLogin);
+//
+//            return true;
+//        }
+//
+//        return false;
+//    }
 
     public User getByEmail(String email) {
         User user = userRepo.findByEmail(email);
