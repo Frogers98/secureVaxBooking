@@ -284,10 +284,20 @@ public class UserController {
         // get today's date
         LocalDate now = LocalDate.now();
         List<String> availableAppointments = new LinkedList<>();
-        int startingDay = calculateStartingLimit(user, now);
+        String[] calendar = new String[]{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 
-        for (int day = startingDay; day < 30; day++)
-            availableAppointments.add(now.plusDays(day).toString());
+        for (int day = 0; day < 30; day++) {
+            List<String> date = List.of(now.plusDays(day).toString().split("-"));
+            StringBuilder dateString = new StringBuilder();
+
+            for (int i = 2; i >= 0; i--) {
+                String unit = date.get(i);
+                if (i == 1) unit = calendar[Integer.parseInt(unit) - 1];
+                dateString.append(unit).append(" ");
+            }
+
+            availableAppointments.add(dateString.toString());
+        }
 
         System.out.println(availableAppointments);
         return availableAppointments;

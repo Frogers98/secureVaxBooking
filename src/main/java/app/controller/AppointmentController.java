@@ -77,6 +77,8 @@ public class AppointmentController {
                               @RequestParam("date") String date,
                               Model model) throws VenueNotFoundException {
 
+        date = reverseDate(date);
+        System.out.println("selected date: " + date);
         LocalDateTime now = LocalDateTime.now();
         String today = now.toString().split("T")[0];
 
@@ -94,6 +96,24 @@ public class AppointmentController {
         }
 
         else return "no_appointments_available";
+    }
+
+    public static String reverseDate(String date) {
+        String[] calendar = new String[]{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        System.out.println(date);
+        String[] selectedDate = date.split(" ");
+        StringBuilder dateString = new StringBuilder();
+
+        for (int i = 2; i >= 0; i--) {
+            String unit = selectedDate[i];
+            if (i == 1) {
+                for (int j = 0; j < calendar.length; j++)
+                    if (calendar[j].equals(unit)) unit = String.valueOf(j);
+            }
+            dateString.append(unit);
+            if (i > 0 ) dateString.append("-");
+        }
+        return dateString.toString();
     }
 
     @PostMapping("/bookingSuccessful")
