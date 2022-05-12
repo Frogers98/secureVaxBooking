@@ -1,13 +1,22 @@
 package app.model;
 
+import app.PasswordConstraintValidator;
 import app.model.forum.Post;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.Constraint;
+import javax.validation.Payload;
 import javax.validation.constraints.NotBlank;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Entity
 @Table(name = "users")

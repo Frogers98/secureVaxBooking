@@ -25,6 +25,7 @@ hs_err_pid*
 
 # properties files
 src/main/resources/application.properties
+src/main/resources/application.yml
 
 # target directory 
 target/**
