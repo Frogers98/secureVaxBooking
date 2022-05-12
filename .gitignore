@@ -28,7 +28,7 @@ src/main/resources/application.properties
 src/main/resources/application.yml
 
 # Encryption Key
-resource.txt
+src/main/java/app/model/resource.txt
 
 # target directory 
 target/**

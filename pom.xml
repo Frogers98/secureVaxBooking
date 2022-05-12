@@ -67,12 +67,12 @@
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity5</artifactId>
         </dependency>
-<!--        For email use-->
+        <!--        For email use-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-<!--        Three dependencies below just used for styling frontend-->
+        <!--        Three dependencies below just used for styling frontend-->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
