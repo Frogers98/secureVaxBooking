@@ -9,21 +9,7 @@
     <link th:href="@{/css/style-other.css}" rel="stylesheet" />
 </head>
 <body>
-<!--<div class="container text-center">-->
-<!--    <form th:action="@{/users/register_attempt}" th:object="${user}" method="post">-->
-<!--        <input type="text" th:field="*{dob}" placeholder="dob"/>-->
-<!--        <input type ="text" th:field="*{name} " placeholder="name">-->
-<!--        <input type="text" th:field="*{surname}" placeholder="sur"/>-->
-<!--        <input type ="text" th:field="*{ppsn}" placeholder="ppsn">-->
-<!--        <input type="text" th:field="*{address}" placeholder="addr"/>-->
-<!--        <input type ="text" th:field="*{phone}" placeholder="phone">-->
-<!--        <input type="text" th:field="*{email}" placeholder="email"/>-->
-<!--        <input type ="text" th:field="*{password}" placeholder="pass">-->
-<!--        <div>-->
-<!--            <button type="submit" class="btn btn-primary">Sign Up</button>-->
-<!--        </div>-->
-<!--    </form>-->
-<!--</div>-->
+
 
 <div class="container">
     <div id="wrapper">
@@ -31,7 +17,7 @@
     </div>
     <div class="text-center">
         <h2>
-            <span th:unless="${errorMessage== null}" th:text="${errorMessage}"></span>
+            <span style="color: red; font-size: 18px" th:unless="${errorMessage== null}" th:text="${errorMessage}"></span>
         </h2>
     </div>
     <form th:action="@{/users/register_attempt}" th:object="${user}"

@@ -34,7 +34,7 @@ public class PasswordConstraintValidator {
             StringBuilder sb = new StringBuilder("Invalid Password: ");
             List <String> results = validator.getMessages(result);
             for (int i = 0; i < results.size(); i++)
-                sb.append(results.get(i));
+                sb.append(results.get(i) + " ");
             return sb.toString();
         }
     }
