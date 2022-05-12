@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.PasswordConstraintValidator;
 import app.exception.VenueNotFoundException;
 import app.exception.bookAppointmentException;
 import app.model.Appointment;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -66,19 +68,25 @@ public class UserController {
 
     // register attempt of user with error checking for duplicate email or ppsn
     @PostMapping("/register_attempt")
-    public String registerAttempt(@ModelAttribute("user") User newUser, Model model) {
+    public String registerAttempt(@ModelAttribute("user") User newUser, Model model) throws IOException {
+        String pwdRequirements = PasswordConstraintValidator.CheckValid(newUser.getPassword());
+
         if (getUserByEmail(newUser.getEmail())) {
             System.out.println("An account associated with this email address has already been created.");
             String errorMessage = "An account associated with this email address has already been created.";
             model.addAttribute("errorMessage", errorMessage);
             logger.error(errorMessage);
             return "register";
-        }else if (getUserByPPSN(newUser.getPpsn())) {
+        } else if (getUserByPPSN(newUser.getPpsn())) {
             System.out.println("An account associated with this PPS number has already been created.");
             String errorMessage = "An account associated with this PPS number has already been created.";
             logger.error(errorMessage);
             logger.trace("tracing the same PPS number");
             model.addAttribute("errorMessage", errorMessage);
+            return "register";
+        } else if (!pwdRequirements.equals("1")) {
+            System.out.println(pwdRequirements);
+            model.addAttribute("errorMessage", pwdRequirements);
             return "register";
         } else {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

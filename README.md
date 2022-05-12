@@ -31,6 +31,23 @@ spring.jpa.defer-datasource-initialization=true
 spring.sql.init.mode=always
 spring.jpa.hibernate.ddl-auto = update
 ```
+
+- Include application.yml file, including a host, username (email address), and a password for the email address, with the following:
+```
+spring:
+  mail:
+    host: smtp.gmail.com
+    username: 
+    password: 
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+ ```
+            
 Any accounts created through the app will be regular accounts, but an admin account is created by the application on the backend the first time it runs. This can be accessed by logging in with <alex@admin.com> with the password 'password', to access the admin functionalities of the app.
 
 Vaccine bookings can be accessed from the "Book Your Vaccine" button on the homepage or from the navbar.
