@@ -39,7 +39,8 @@
                 <div class="form-group row">
                     <label class="col-4 col-form-label" for="password">Password</label>
                     <div class="col-8">
-                        <input type="text" id="password" name="password" th:placeholder="${param.otp != null ? 'OTP' : 'Password'}" class="form-control">
+                        <input type="password" id="password" name="password" th:placeholder="${param.otp != null ? 'OTP' : 'Password'}" class="form-control">
+                        <input type="checkbox" onclick="myFunction()">Show Password
                     </div>
                 </div>
                 <div class="form-action">
@@ -53,4 +54,22 @@
 </div>
 
 </body>
+
+<script>
+
+    function myFunction() {
+        const x = document.getElementById("password");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+        clear()
+    }
+
+    function clear() {
+        document.getElementById("perrors").innerHTML = '';
+    }
+
+</script>
 </html>
