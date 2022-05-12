@@ -64,6 +64,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.headers()
+                .contentSecurityPolicy("style-src 'self'; script-src 'self'; form-action 'self'");
+        
         http.authorizeRequests()
                 .antMatchers("/users/editUserInfo/*").hasAuthority("ADMIN")
                 .antMatchers("/users/listUsers").hasAuthority("ADMIN")
