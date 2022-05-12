@@ -7,6 +7,8 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.AttributeConverter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.util.Base64;
@@ -15,7 +17,6 @@ import java.util.Base64;
 public class AttributeEncryptor implements AttributeConverter<String, String> {
 
     private static final String AES = "AES";
-    private static final String SECRET = "power-rangers-f4";
 
     private final Key key;
 
@@ -23,7 +24,10 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
     private final Cipher decryptCipher;
 
     public AttributeEncryptor() throws Exception {
-        key = new SecretKeySpec(SECRET.getBytes(), AES);
+        Path filePath = Path.of("src/main/java/app/config/resource.txt");
+        String content = Files.readString(filePath);
+        System.out.println("Resource.txt says: " + content);
+        key = new SecretKeySpec(content.getBytes(), AES);
         encryptCipher = Cipher.getInstance(AES);
         encryptCipher.init(Cipher.ENCRYPT_MODE, key);
         decryptCipher = Cipher.getInstance(AES);
