@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.PasswordConstraintValidator;
+import app.exception.VenueNotFoundException;
 import app.exception.bookAppointmentException;
 import app.model.Appointment;
 import app.model.Venue;
