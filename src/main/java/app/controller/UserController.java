@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.PasswordConstraintValidator;
 import app.exception.VenueNotFoundException;
 import app.exception.bookAppointmentException;
 import app.model.Appointment;
@@ -12,7 +13,6 @@ import app.model.User;
 import app.security.CustomUserDetails;
 import app.service.UserService;
 import app.VenueAndDate;
-import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,6 +30,7 @@ import java.util.Date;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping(path = "users")
@@ -66,28 +68,31 @@ public class UserController {
 
     // register attempt of user with error checking for duplicate email or ppsn
     @PostMapping("/register_attempt")
-    public String registerAttempt(@ModelAttribute("user") User newUser, Model model) {
+    public String registerAttempt(@ModelAttribute("user") User newUser, Model model) throws IOException {
+        String pwdRequirements = PasswordConstraintValidator.CheckValid(newUser.getPassword());
+
         if (getUserByEmail(newUser.getEmail())) {
-            System.out.println("An account associated with this email address has already been created.");
             String errorMessage = "An account associated with this email address has already been created.";
-            model.addAttribute("errorMessage", errorMessage);
-            logger.error(errorMessage);
+            errorMessage(errorMessage, model);
             return "register";
-        } if (getUserByPPSN(newUser.getPpsn())) {
-            System.out.println("An account associated with this PPS number has already been created.");
+
+        } else if (getUserByPPSN(newUser.getPpsn())) {
             String errorMessage = "An account associated with this PPS number has already been created.";
-            logger.error(errorMessage);
+            errorMessage(errorMessage, model);
             logger.trace("tracing the same PPS number");
-            model.addAttribute("errorMessage", errorMessage);
             return "register";
+
+        } else if (!pwdRequirements.equals("1")) {
+            System.out.println(pwdRequirements);
+            model.addAttribute("errorMessage", pwdRequirements);
+            return "register";
+
         } if (!ppsnValid(newUser.getPpsn())) {
             String errorMessage = "Invalid PPSN.";
-            System.out.println(errorMessage);
-            logger.error(errorMessage);
-            model.addAttribute("errorMessage", errorMessage);
+            errorMessage(errorMessage, model);
             return "register";
-        }
-        else {
+
+        } else {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(newUser.getPassword());
             newUser.setPassword(encodedPassword);
@@ -106,6 +111,7 @@ public class UserController {
     public void registerAdmin(User newUser) {
         if (getUserByEmail(newUser.getEmail())) {
             System.out.println("Admin: An account associated with this email address has already been created.");
+            System.out.println(newUser.getDob());
         }else if (getUserByPPSN(newUser.getPpsn())) {
             System.out.println("Admin: An account associated with this PPS number has already been created.");
         } else {
@@ -116,10 +122,6 @@ public class UserController {
             System.out.println("Admin User saved");
             logger.info("New Admin account has been registered.");
         }
-    }
-
-    public boolean ppsnValid(String ppsn) {
-        return ppsn.length() == 8 && Character.isLetter(ppsn.charAt(7));
     }
 
     @GetMapping("/listUsers")
@@ -323,5 +325,16 @@ public class UserController {
     public User currentUser(CustomUserDetails userDetails) {
         String userEmail = userDetails.getUsername();
         return userRepository.findByEmail(userEmail);
+    }
+
+    public boolean ppsnValid(String ppsn) {
+        String letters = ppsn.substring(0, 7);
+        return ppsn.length() == 8 && Character.isLetter(ppsn.charAt(7)) && Pattern.matches("[0-9]+", letters);
+    }
+
+    public void errorMessage(String errorMessage, Model model) {
+        System.out.println(errorMessage);
+        model.addAttribute("errorMessage", errorMessage);
+        logger.error(errorMessage);
     }
 }

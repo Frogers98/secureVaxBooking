@@ -9,21 +9,7 @@
     <link th:href="@{/css/style-other.css}" rel="stylesheet" />
 </head>
 <body>
-<!--<div class="container text-center">-->
-<!--    <form th:action="@{/users/register_attempt}" th:object="${user}" method="post">-->
-<!--        <input type="text" th:field="*{dob}" placeholder="dob"/>-->
-<!--        <input type ="text" th:field="*{name} " placeholder="name">-->
-<!--        <input type="text" th:field="*{surname}" placeholder="sur"/>-->
-<!--        <input type ="text" th:field="*{ppsn}" placeholder="ppsn">-->
-<!--        <input type="text" th:field="*{address}" placeholder="addr"/>-->
-<!--        <input type ="text" th:field="*{phone}" placeholder="phone">-->
-<!--        <input type="text" th:field="*{email}" placeholder="email"/>-->
-<!--        <input type ="text" th:field="*{password}" placeholder="pass">-->
-<!--        <div>-->
-<!--            <button type="submit" class="btn btn-primary">Sign Up</button>-->
-<!--        </div>-->
-<!--    </form>-->
-<!--</div>-->
+
 
 <div class="container">
     <div id="wrapper">
@@ -31,7 +17,7 @@
     </div>
     <div class="text-center">
         <h2>
-            <span th:unless="${errorMessage== null}" th:text="${errorMessage}"></span>
+            <span style="color: red; font-size: 18px" th:unless="${errorMessage== null}" th:text="${errorMessage}"></span>
         </h2>
     </div>
     <form th:action="@{/users/register_attempt}" th:object="${user}"
@@ -85,7 +71,7 @@
             <div class="form-group row">
                 <label class="col-4 col-form-label">Nationality: </label>
                 <div class="col-8">
-                    <select placeholder="Earthling" th:field="*{nationality}" class="form-control" th:required="required" name="nationality">
+                    <select id="nationality" placeholder="Earthling" th:field="*{nationality}" class="form-control" th:required="required" name="nationality">
                         <option selected="selected" value="irish">Irish</option>
                         <option value="afghan">Afghan</option>
                         <option value="albanian">Albanian</option>
@@ -288,7 +274,7 @@
                 <label class="col-4 col-form-label">Sex: </label>
                 <div class="col-8">
 
-                    <select placeholder="Androgynous" th:field="*{sex}" class="form-control" th:required="required" name="sex">
+                    <select id="sex" placeholder="Androgynous" th:field="*{sex}" class="form-control" th:required="required" name="sex">
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
@@ -300,14 +286,21 @@
                 <label class="col-4 col-form-label">E-mail: </label>
                 <div class="col-8">
 
-                    <input type="email" placeholder="1234@cutiepie.ie" value="1@2.com" th:field="*{email}" class="form-control" th:required="required" />
+                    <input id="email" type="email" placeholder="1234@cutiepie.ie" value="1@2.com" th:field="*{email}" class="form-control" th:required="required" />
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-4 col-form-label">Password: </label>
                 <div class="col-8">
-                    <input type="password" placeholder="big-password" value="password" th:field="*{password}" class="form-control"
-                           required minlength="6" maxlength="10" th:required="required"/>
+
+                    <input type="password" id="password" placeholder="big-password" value="password" th:field="*{password}" onkeyup="CheckPasswordStrength(this.value)" class="form-control"
+                    th:required="required"/>
+                    <input type="checkbox" onclick="myFunction()">Show Password
+
+                    <br>
+                    <div><span  id="password_strength"></span></div>
+                    <br>
+
                 </div>
             </div>
 
@@ -318,9 +311,26 @@
             </div>
         </div>
     </form>
+
 </div>
 </body>
+
 <script>
+    function myFunction() {
+        const x = document.getElementById("password");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+        clear()
+    }
+
+    function clear() {
+        document.getElementById("perrors").innerHTML = '';
+
+    }
+
     var today = new Date();
     var yyyy = today.getFullYear();
     var mm = today.getMonth() + 1; // Add one to compensate for months starting at 0
@@ -338,5 +348,75 @@
     newMax = ageLimit + '-' + mm + '-' + dd;
     document.getElementById("birthday").setAttribute("max", newMax);
 
+    function CheckPasswordStrength(password) {
+        var password_strength = document.getElementById("password_strength");
+
+        //TextBox left blank.
+        if (password.length === 0) {
+            password_strength.innerHTML = "";
+            return;
+        }
+
+        //Regular Expressions.
+        var regex = new Array();
+        regex.push("[A-Z]"); //Uppercase Alphabet.
+        regex.push("[a-z]"); //Lowercase Alphabet.
+        regex.push("[0-9]"); //Digit.
+        regex.push("[$@$!%*#?&]"); //Special Character.
+        //regex.push("(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?=.{8,32})");
+// (?=.*[a-z])   The string must contain at least 1 lowercase alphabetical character
+// (?=.*[A-Z])	The string must contain at least 1 uppercase alphabetical character
+// (?=.*[0-9])	The string must contain at least 1 numeric character
+// (?=.*[!@#$%^&*])	The string must contain at least one special character, but we are escaping reserved RegEx characters to avoid conflict
+// (?=.{8,})	The string must be eight characters or longer
+        var passed = 0;
+
+        //Validate for each Regular Expression.
+        for (var i = 0; i < regex.length; i++) {
+            if (new RegExp(regex[i]).test(password)) {
+                passed++;
+            }
+        }
+
+        //Validate for length of Password.
+        if (passed > 2 && password.length > 8) {
+            passed++;
+        }
+
+
+
+        //Display status.
+        var color = "";
+        var strength = "";
+        switch (passed) {
+            case 0:
+            case 1:
+                strength = "Very Weak";
+                color = "darkred";
+                break;
+            case 2:
+                strength = "Weak";
+                color = "red";
+                break;
+            case 3:
+                strength = "Fair";
+                color = "darkorange";
+                break;
+            case 4:
+                strength = "Strong";
+                color = "green";
+                break;
+            case 5:
+                strength = "Very Strong";
+                color = "darkgreen";
+                break;
+        }
+        password_strength.innerHTML = strength;
+        password_strength.style.color = color;
+    }
+
+
 </script>
+
+
 </html>
