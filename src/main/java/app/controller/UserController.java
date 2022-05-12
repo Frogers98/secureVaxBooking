@@ -303,18 +303,6 @@ public class UserController {
         return availableAppointments;
     }
 
-    private int calculateStartingLimit(User user, LocalDate now) {
-        // check today vs first dose date
-        if (user.getDose1Date() != null) {
-            // get user's apt1 date
-            LocalDate apt1 = LocalDate.parse(user.getDose1Date());
-            int dateDifference = now.compareTo(apt1);
-
-            if (dateDifference < 21) return 21 - dateDifference;
-            else return 0;
-        }
-        return 0;
-    }
 
     @GetMapping("confirmAppointmentCancellation")
     public String confirmAppointmentCancellation() {
