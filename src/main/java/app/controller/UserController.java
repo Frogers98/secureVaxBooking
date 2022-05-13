@@ -262,6 +262,8 @@ public class UserController {
 
     @GetMapping("/bookAppointment")
     public String bookingForm(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) throws bookAppointmentException {
+        if (userDetails == null) return "login";
+
         try {
             User user = currentUser(userDetails);
             if (user.getDose2() != null) return "dose3";
@@ -274,7 +276,6 @@ public class UserController {
             logger.info("Appointment booking page accessed by userID: " + user.getUser_id());
         } catch (Exception e) {
             throw new bookAppointmentException();
-
         }
 
         return "select_venue";

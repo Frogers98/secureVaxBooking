@@ -1,5 +1,8 @@
 package app.config;
 
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
 import javax.sql.DataSource;
 
 import app.security.CustomLoginFailureHandler;
@@ -25,6 +28,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.security.Principal;
 import java.util.Properties;
 
 @Configuration
@@ -69,9 +73,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers()
                 .contentSecurityPolicy("style-src 'self'; form-action 'self'");
 
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .invalidSessionUrl("/timeout");
+        http.logout(logout -> logout
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/")
+                    .invalidateHttpSession(true)
+            );
         
         http.authorizeRequests()
                 .antMatchers("/users/editUserInfo/*").hasAuthority("ADMIN")
@@ -81,8 +87,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/forum").hasAnyAuthority("ADMIN", "USER")
                 .antMatchers("/users/myInfo").hasAnyAuthority( "USER")
                 .antMatchers("/users/myInfo").hasAnyAuthority( "USER")
-//                .antMatchers("/login").permitAll()
-//                .antMatchers("/").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(beforeAuthenticationFilter, BeforeAuthenticationFilter.class)
@@ -90,22 +94,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .failureHandler(loginFailureHandler)
                 .successHandler(loginSuccessHandler)
-                .permitAll()
-//                .loginPage("/login")
-//                .loginProcessingUrl("/login_process")
-//                .usernameParameter("email")
-//                .defaultSuccessUrl("/")
-//                .failureUrl("/login.html?error=true")
-//                .failureHandler(autenticationFailureHandler())
-//                .permitAll()
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/")
-                .permitAll()
-                .and()
-                .exceptionHandling().accessDeniedPage("/403");
+                .permitAll();
     }
+
 
 //    Set up bean authentication manager for 2factor authentication
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
