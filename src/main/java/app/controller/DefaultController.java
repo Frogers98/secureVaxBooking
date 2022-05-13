@@ -117,5 +117,10 @@ public class DefaultController {
         return "error";
     }
 
+    @GetMapping("/timeout")
+    public String timeout() {
+        return "timeout";
+    }
+
 
 }
