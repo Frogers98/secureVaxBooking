@@ -356,7 +356,8 @@
         caps: "At least one capital letter. <b>",
         lower: "At least one lower case. <b>",
         special: "At least one special character. <b>",
-        numeric: "At least one number. <b>"
+        numeric: "At least one number.\n",
+        length: "Between 8 and 32 characters. \n"
     };
 
 
@@ -383,7 +384,7 @@
 // (?=.*[!@#$%^&*])	The string must contain at least one special character, but we are escaping reserved RegEx characters to avoid conflict
 // (?=.{8,})	The string must be eight characters or longer
         var passed = 0;
-        var checks = ["caps", "lower", "numeric", "special"];
+        var checks = ["caps", "lower", "numeric", "special", "length"];
         var unpassedChecks = [];
 
         //Validate for each Regular Expression.
@@ -392,6 +393,8 @@
                 passed++;
             } else unpassedChecks.push(i);
         }
+
+        if ((8 > password.length) || (password.length > 32)) unpassedChecks.push(4);
 
         for (let j = 0; j < unpassedChecks.length; j++) {
             popupString += pswd_dict[checks[unpassedChecks[j]]];
