@@ -1,8 +1,7 @@
 package app.config;
 
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
 import javax.sql.DataSource;
 
 import app.security.CustomLoginFailureHandler;
@@ -28,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Properties;
 
@@ -78,7 +78,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/")
                     .invalidateHttpSession(true)
             );
-        
+
+
         http.authorizeRequests()
                 .antMatchers("/users/editUserInfo/*").hasAuthority("ADMIN")
                 .antMatchers("/users/listUsers").hasAuthority("ADMIN")

@@ -255,8 +255,7 @@ public class UserController {
                 .findFirst()
                 .orElse(null);
 
-        if (user == null) return false;
-        else return true;
+        return user != null;
     }
 
 
