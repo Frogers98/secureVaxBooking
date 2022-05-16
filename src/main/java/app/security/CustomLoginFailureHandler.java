@@ -55,7 +55,7 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
             String ipAddress = request.getRemoteAddr();
             System.out.println("ip is: " + ipAddress);
 
-            // Check if this login has tried to login unsuccessfuly twice previously and lock it if so
+            // Check if this login has tried to login unsuccessfully twice previously and lock it if so
             // otherwise just increment the number of attempts
             // This should maybe be wrapped in a try catch in case the db call fails and this code should
             // maybe be moved to another part of this class so it can still run even if the account being
@@ -83,7 +83,7 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
                         incorrectLogin.setIpNonLocked(false);
                         incorrectLogin.setLockTime(new Date());
                         incorrectLoginRepo.save(incorrectLogin);
-                        logger.warn("IP address locked after failing login 3 times: " + ipAddress);
+                        logger.warn("IP address locked after failing login 3 times.");
                         exception = new LockedException("Your ip address has been locked due to 3 failed attempts from this ip");
                     }
                 } else {
