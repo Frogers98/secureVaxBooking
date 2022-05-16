@@ -1,7 +1,6 @@
 package app.controller;
 
-import app.PasswordConstraintValidator;
-import app.exception.VenueNotFoundException;
+import app.dataValidation.PasswordConstraintValidator;
 import app.exception.bookAppointmentException;
 import app.model.Appointment;
 import app.model.Venue;
@@ -30,7 +29,9 @@ import java.util.Date;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Pattern;
+
+import static app.dataValidation.InputValidation.*;
+
 
 @Controller
 @RequestMapping(path = "users")
@@ -44,6 +45,7 @@ public class UserController {
     AppointmentController appointmentController;
     @Autowired
     AppointmentRepository appointmentRepository;
+
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultController.class);
 
@@ -71,48 +73,74 @@ public class UserController {
     public String registerAttempt(@ModelAttribute("user") User newUser, Model model) throws IOException {
         String pwdRequirements = PasswordConstraintValidator.CheckValid(newUser.getPassword());
 
-        if (getUserByEmail(newUser.getEmail())) {
-            String errorMessage = "An account associated with this email address has already been created.";
-            errorMessage(errorMessage, model);
+        // email format verification
+        String userEmail = newUser.getEmail();
+        if (!validateEmailFormat(userEmail)) {
+            errorMessage("Invalid email", model);
             return "register";
+        }
 
-        } else if (getUserByPPSN(newUser.getPpsn())) {
-            String errorMessage = "An account associated with this PPS number has already been created.";
-            errorMessage(errorMessage, model);
+        // unique email verification
+        if (getUserByEmail(newUser.getEmail())) {
+            errorMessage("An account associated with this email address has already been created.", model);
+            return "register";
+        }
+
+        // pps format validation
+        if (!ppsnValid(newUser.getPpsn())) {
+            errorMessage("Invalid PPSN.", model);
+            return "register";
+        }
+
+        // unique pps verification
+        if (getUserByPPSN(newUser.getPpsn())) {
+            errorMessage("An account associated with this PPS number has already been created.", model);
             logger.trace("tracing the same PPS number");
             return "register";
+        }
 
-        } else if (!pwdRequirements.equals("1")) {
-            System.out.println(pwdRequirements);
+        // password format validation
+        if (!pwdRequirements.equals("1")) {
             model.addAttribute("errorMessage", pwdRequirements);
             return "register";
-
-        } if (!ppsnValid(newUser.getPpsn())) {
-            String errorMessage = "Invalid PPSN.";
-            errorMessage(errorMessage, model);
-            return "register";
-
-        } else {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String encodedPassword = passwordEncoder.encode(newUser.getPassword());
-            newUser.setPassword(encodedPassword);
-//            Encrypted additional fields PPSN, phone number, and date of birth
-//            String encodedPPSN = passwordEncoder.encode(newUser.getPpsn());
-//            newUser.setPpsn(encodedPPSN);
-//            String encodedPhone = passwordEncoder.encode(newUser.getPhone());
-//            newUser.setPhone(encodedPhone);
-            userService.registerDefaultUser(newUser);
-            logger.info("New account has been registered.");
-            System.out.println("User saved");
-            return "success_reg";
         }
+
+        // validate phone number format
+        if (!validatePhoneNumberFormat(newUser.getPhone())) {
+            errorMessage("Phone Number Invalid - please ensure correct Irish phone number.", model);
+            return "register";
+        }
+
+        if (!ValidateAddressFormat(newUser.getAddress())) {
+            errorMessage("Address exceeds 100 characters, or contains special characters.", model);
+            return "register";
+        }
+
+        if (!ValidateForenameInput(newUser.getAddress())) {
+            errorMessage("Forename exceeds 100 characters, or contains special characters.", model);
+            return "register";
+        }
+
+        if (!ValidateSurnameInput(newUser.getAddress())) {
+            errorMessage("Surname exceeds 100 characters, or contains special characters.", model);
+            return "register";
+        }
+
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(newUser.getPassword());
+        newUser.setPassword(encodedPassword);
+        userService.registerDefaultUser(newUser);
+        logger.info("New account has been registered.");
+        System.out.println("User saved");
+        return "success_reg";
     }
 
     public void registerAdmin(User newUser) {
         if (getUserByEmail(newUser.getEmail())) {
             System.out.println("Admin: An account associated with this email address has already been created.");
             System.out.println(newUser.getDob());
-        }else if (getUserByPPSN(newUser.getPpsn())) {
+        } else if (getUserByPPSN(newUser.getPpsn())) {
             System.out.println("Admin: An account associated with this PPS number has already been created.");
         } else {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -124,6 +152,7 @@ public class UserController {
         }
     }
 
+
     @GetMapping("/listUsers")
     public String listUsers(Model model) {
         List<User> allUsers = userRepository.findAll();
@@ -131,6 +160,7 @@ public class UserController {
         logger.warn("List of Users has been Accessed.");
         return "list_users";
     }
+
 
     @GetMapping("/myInfo")
     public String showMyInfo(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
@@ -144,12 +174,14 @@ public class UserController {
         return "my_info";
     }
 
+
     public Appointment checkAptExists(User user) {
         Appointment nextApt = user.getNextApptId();
         if (nextApt == null) System.out.println("Next Apt: "  + nextApt);
         else System.out.println("Next Apt: "  + nextApt.toString());
         return nextApt;
     }
+
 
     @GetMapping("/editUserInfo/{id}")
     public String editUserInfo(@PathVariable(value = "id") Long userId, Model model) {
@@ -162,21 +194,25 @@ public class UserController {
         return "edit_user_info";
     }
 
+
     @RequestMapping("/confirmDose1/{user_id}")
     public String confirmDose1(@PathVariable(value = "user_id") Long userId,
                                @RequestParam(value = "vaccine") String vaccine,
                                Model model) {
+
         User user = userRepository.findByID(userId);
         Appointment attendedApt = user.getNextApptId();
         /* Time organising */
         String oldDate = attendedApt.getDate();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date newDate = new java.util.Date();
+
         try {
             newDate = sdf.parse(oldDate);
         } catch (ParseException pe){
             pe.printStackTrace();
         }
+
         Calendar c = Calendar.getInstance();
         c.setTime(newDate);
         c.add(Calendar.DATE, 21); // Adding 3 weeks
@@ -201,7 +237,6 @@ public class UserController {
         System.out.println("Saving New Apt");
         appointmentRepository.save(newApt); // Create new appointment 21 days in future
         System.out.println("Updating user to include new apt");
-//        userRepository.updateUser(userId, newApt.getApt_id()); // Update user's appointment
         user.setNextApptId(newApt);
         System.out.println("Updating dose info");
         userRepository.updateDose1(confirmedDose, userId); // Update dose on users table
@@ -247,6 +282,7 @@ public class UserController {
         else return true;
     }
 
+
     public Boolean getUserByPPSN(String ppsn) {
         var users = getAllUsers();
 
@@ -279,6 +315,7 @@ public class UserController {
 
         return "select_venue";
     }
+
 
     public List<String> availableAppointments(User user) {
         // get today's date
@@ -325,14 +362,11 @@ public class UserController {
         return userRepository.findByEmail(userEmail);
     }
 
-    public boolean ppsnValid(String ppsn) {
-        String letters = ppsn.substring(0, 7);
-        return ppsn.length() == 8 && Character.isLetter(ppsn.charAt(7)) && Pattern.matches("[0-9]+", letters);
-    }
 
     public void errorMessage(String errorMessage, Model model) {
         System.out.println(errorMessage);
         model.addAttribute("errorMessage", errorMessage);
         logger.error(errorMessage);
     }
+
 }

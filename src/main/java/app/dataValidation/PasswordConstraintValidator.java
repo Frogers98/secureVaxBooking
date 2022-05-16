@@ -1,4 +1,4 @@
-package app;
+package app.dataValidation;
 
 import org.passay.*;
 import java.io.FileNotFoundException;
