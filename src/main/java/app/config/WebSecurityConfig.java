@@ -1,5 +1,7 @@
 package app.config;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
 import javax.sql.DataSource;
 
 import app.security.CustomLoginFailureHandler;
@@ -20,10 +22,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.io.IOException;
+import java.security.Principal;
 import java.util.Properties;
 
 @Configuration
@@ -62,11 +67,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.headers()
                 .contentSecurityPolicy("style-src 'self'; form-action 'self'");
-        
+
+        http.logout(logout -> logout
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/")
+                    .invalidateHttpSession(true)
+            );
+
+
         http.authorizeRequests()
                 .antMatchers("/users/editUserInfo/*").hasAuthority("ADMIN")
                 .antMatchers("/users/listUsers").hasAuthority("ADMIN")
@@ -75,8 +88,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/forum").hasAnyAuthority("ADMIN", "USER")
                 .antMatchers("/users/myInfo").hasAnyAuthority( "USER")
                 .antMatchers("/users/myInfo").hasAnyAuthority( "USER")
-//                .antMatchers("/login").permitAll()
-//                .antMatchers("/").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(beforeAuthenticationFilter, BeforeAuthenticationFilter.class)
@@ -84,22 +95,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .failureHandler(loginFailureHandler)
                 .successHandler(loginSuccessHandler)
-                .permitAll()
-//                .loginPage("/login")
-//                .loginProcessingUrl("/login_process")
-//                .usernameParameter("email")
-//                .defaultSuccessUrl("/")
-//                .failureUrl("/login.html?error=true")
-//                .failureHandler(autenticationFailureHandler())
-//                .permitAll()
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/")
-                .permitAll()
-                .and()
-                .exceptionHandling().accessDeniedPage("/403");
+                .permitAll();
     }
+
 
 //    Set up bean authentication manager for 2factor authentication
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)

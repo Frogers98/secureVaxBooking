@@ -44,6 +44,9 @@ server.ssl.key-store-password=password
 #port for https/
 server.port=8443
 
+# set server timeout time. For highly sensitive applications such as this, no more the 5 minutes.
+server.servlet.session.timeout=5m
+
 * # Alternatively, create your own cert with the following command and change the credentials above to correspond:
 # keytool -genkeypair -alias springboot -keyalg RSA -keysize 4096 -storetype PKCS12 -keystore springboot.p12 -validity 3650 -storepass password
 ```
