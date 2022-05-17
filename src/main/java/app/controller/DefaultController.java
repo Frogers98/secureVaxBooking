@@ -1,9 +1,13 @@
 package app.controller;
 
 import app.model.Data;
+import app.model.User;
 import app.repository.DataDAO;
+import app.repository.UserRepository;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +21,14 @@ import java.util.Set;
 @Controller
 public class DefaultController {
 
+    private static final Logger logger = LoggerFactory.getLogger(DefaultController.class);
+
+
     @Autowired
     private DataDAO dataDAO;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("")
     public String basePage() {
@@ -75,7 +85,8 @@ public class DefaultController {
         JsonArray jsonArraySeries = new JsonArray();
         JsonObject jsonObject = new JsonObject();
 
-        List<Data> dataList = dataDAO.findAll();
+//        List<Data> dataList = dataDAO.findAll();
+        List<User> dataList = userRepository.findAll();
         Set<String> dobs = new HashSet<>();
         dataList.forEach(data->{
             dobs.add(data.getDob());
@@ -92,7 +103,23 @@ public class DefaultController {
 
     @GetMapping("/403")
     public String accessDenied() {
+        logger.error("403 - access denied");
         return "403";
+    }
+
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
+
+    @GetMapping("/error")
+    public String error(){
+        return "error";
+    }
+
+    @GetMapping("/timeout")
+    public String timeout() {
+        return "timeout";
     }
 
 }

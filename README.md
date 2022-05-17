@@ -30,7 +30,45 @@ spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDial
 spring.jpa.defer-datasource-initialization=true
 spring.sql.init.mode=always
 spring.jpa.hibernate.ddl-auto = update
+
+# enable https
+server.ssl.enabled=true
+# keystore format
+server.ssl.key-store-type=PKCS12
+# alias
+server.ssl.key-alias=springboot
+# keystore location
+server.ssl.key-store=classpath:keystore/springboot.p12
+# keystore password
+server.ssl.key-store-password=password
+#port for https/
+server.port=8443
+
+# set server timeout time. For highly sensitive applications such as this, no more the 5 minutes.
+server.servlet.session.timeout=5m
+
+* # Alternatively, create your own cert with the following command and change the credentials above to correspond:
+# keytool -genkeypair -alias springboot -keyalg RSA -keysize 4096 -storetype PKCS12 -keystore springboot.p12 -validity 3650 -storepass password
 ```
+
+- Include application.yml file, including a host, username (email address), and a password for the email address, with the following:
+```
+spring:
+  mail:
+    host: smtp.gmail.com
+    username: 
+    password: 
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+ ```
+            
+- Include a file named `resource.txt` in the `src/main/java/app/model` directory containing a string of 16 bytes (for instance 'power-rangers-f4'). This is used as a key source for your database encryption and decryption.
+
 Any accounts created through the app will be regular accounts, but an admin account is created by the application on the backend the first time it runs. This can be accessed by logging in with <alex@admin.com> with the password 'password', to access the admin functionalities of the app.
 
 Vaccine bookings can be accessed from the "Book Your Vaccine" button on the homepage or from the navbar.

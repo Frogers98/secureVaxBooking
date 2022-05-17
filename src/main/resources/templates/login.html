@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <link th:href="@{/css/style-other.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
+    <div id="wrapper">
+    </div>
+    <div class="text-center">
+        <form name="f" th:action="@{/login}" method="post" style="max-width: 600px; margin: 0 auto;">
+            <div class="m-3">
+            <fieldset>
+                <legend>Please Enter Your Details Below</legend>
+
+                <div  th:if="${param.error}" class="alert alert-error">
+                    Error: [[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]
+                </div>
+                <div  th:if="${param.otp}" class="alert alert-error">
+                    In order to protect your sensitive data, we have sent a One Time Passcode (OTP) to the address
+                    associated with this account. <br>
+                    Please check the inbox of [[${param.email}]] and enter the code you find there. <br>
+                    Passcode will expire in 5 minutes.
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success">
+                    Logout successful
+                </div>
+                <div class="form-group row">
+                    <label class="col-4 col-form-label" for="username">Email Address</label>
+                    <div class="col-8">
+                        <input type="text" id="username" name="username" th:value="${param.email}" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-4 col-form-label" for="password" th:text="${param.otp != null ? 'OTP' : 'Password'}"></label>
+                    <div class="col-8">
+                        <input type="password" id="password" name="password" th:placeholder="${param.otp != null ? 'OTP' : 'Password'}" class="form-control"/>
+                        <input type="checkbox" onclick="myFunction()">Show Password
+                    </div>
+                </div>
+
+                <div class="form-action">
+                    <button type="submit" class="btn">Login</button>
+                </div>
+            </fieldset>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+</body>
+
+<script>
+
+    function myFunction() {
+        const x = document.getElementById("password");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+        clear()
+    }
+
+    function clear() {
+        document.getElementById("perrors").innerHTML = '';
+    }
+
+</script>
+</html>
